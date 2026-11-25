@@ -2,1232 +2,1259 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TEKKEN REALISTIC 3D - 120FPS</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lash Atelier | رزرو آنلاین و پنل مدیریت کاشت مژه</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap');
+        :root {
+            --bg-main: #fff8fb;
+            --glass-bg: rgba(255, 255, 255, 0.76);
+            --glass-border: rgba(255, 255, 255, 0.92);
+            --pink-primary: #e85d9a;
+            --pink-dark: #c93b7b;
+            --pink-soft: #fce4ef;
+            --pink-glow: rgba(232, 93, 154, 0.25);
+            --text-dark: #261922;
+            --text-muted: #6e5866;
+            --shadow-soft: 0 12px 35px rgba(212, 118, 163, 0.14);
+        }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            user-select: none;
-            -webkit-user-select: none;
             font-family: 'Vazirmatn', sans-serif;
+            scroll-behavior: smooth;
         }
 
-        html, body {
-            background-color: #050508;
-            color: #fff;
-            width: 100%;
+        body {
+            background:
+                radial-gradient(circle at 12% 15%, #ffd9ea 0%, transparent 38%),
+                radial-gradient(circle at 88% 20%, #f3dcff 0%, transparent 40%),
+                radial-gradient(circle at 50% 90%, #ffe6f1 0%, transparent 45%),
+                var(--bg-main);
+            color: var(--text-dark);
             min-height: 100vh;
+            line-height: 1.7;
             overflow-x: hidden;
-            overflow-y: auto;
+        }
+
+        .container {
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1.5px solid var(--glass-border);
+            box-shadow: var(--shadow-soft);
+        }
+
+        /* هدر ناوبری */
+        header {
+            position: sticky;
+            top: 14px;
+            z-index: 100;
+            margin: 14px auto 0;
+            max-width: 1160px;
+            border-radius: 24px;
+            padding: 12px 22px;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #ff7eb6, #d9468f);
+            display: flex;
             align-items: center;
             justify-content: center;
+            color: #fff;
+            font-weight: 900;
+            font-size: 18px;
+            box-shadow: 0 6px 18px var(--pink-glow);
         }
 
-        #game-wrapper {
+        .brand-text strong {
+            display: block;
+            font-size: 16px;
+            font-weight: 900;
+        }
+
+        .brand-text span {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--pink-primary);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f062a1, #d63d82);
+            color: #fff;
+            border: none;
+            padding: 11px 22px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 13.5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 8px 22px var(--pink-glow);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-admin {
+            background: rgba(38, 25, 34, 0.08);
+            color: var(--text-dark);
+            border: 1.5px solid rgba(38, 25, 34, 0.16);
+            padding: 10px 16px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
             position: relative;
-            width: 100vw;
-            height: 56.25vw;
-            max-height: 100vh;
-            max-width: 177.78vh;
-            background: #000;
-            box-shadow: 0 0 60px rgba(0, 0, 0, 0.95);
-            overflow: hidden;
+            transition: all 0.2s;
         }
 
-        canvas {
-            width: 100% !important;
-            height: 100% !important;
+        .btn-admin:hover {
+            border-color: var(--pink-primary);
+            color: var(--pink-primary);
+        }
+
+        .badge-dot {
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            background: #e53e3e;
+            color: #fff;
+            font-size: 11px;
+            min-width: 20px;
+            height: 20px;
+            border-radius: 999px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5px;
+            font-weight: 900;
+        }
+
+        .badge-dot.show {
+            display: inline-flex;
+        }
+
+        /* بنر پیام لحظه‌ای برای ادمین وقتی لاگین کرده */
+        .live-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 999;
+            max-width: 380px;
+            border-radius: 20px;
+            padding: 16px 18px;
+            background: #231520;
+            color: #fff;
+            border: 1.5px solid rgba(255, 126, 182, 0.55);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+
+        .live-toast.show {
             display: block;
         }
 
-        .overlay-screen {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at center, rgba(20, 18, 28, 0.9) 0%, rgba(5, 5, 10, 0.97) 100%);
-            backdrop-filter: blur(15px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 20;
-            padding: 15px;
-            overflow-y: auto;
+        .live-toast strong {
+            display: block;
+            color: #ff8bc2;
+            font-size: 14px;
+            margin-bottom: 4px;
         }
 
-        .hidden { display: none !important; }
+        .live-toast p {
+            font-size: 12.5px;
+            color: #f3e8ee;
+        }
 
-        h1.game-title {
-            font-size: clamp(20px, 3.5vw, 44px);
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Hero */
+        .hero {
+            padding: 52px 0 34px;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--pink-soft);
+            color: var(--pink-primary);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 12.5px;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .hero h1 {
+            font-size: clamp(28px, 4.2vw, 46px);
             font-weight: 900;
-            background: linear-gradient(90deg, #ff3c5f, #ff8e53, #ffd200);
+            line-height: 1.25;
+            margin-bottom: 14px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(90deg, #e84a90, #9d4edd);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 4px;
         }
 
-        .char-grid {
+        .hero p {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 24px;
+            max-width: 540px;
+        }
+
+        .hero-actions {
             display: flex;
-            gap: 16px;
-            justify-content: center;
-            width: 92%;
-            max-width: 920px;
-            margin: 12px 0;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
         }
 
-        .char-card {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.06);
-            border: 2px solid rgba(255, 255, 255, 0.15);
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--text-dark);
+            border: 1.5px solid rgba(232, 93, 154, 0.3);
+            padding: 11px 22px;
             border-radius: 16px;
-            padding: 10px;
+            font-weight: 700;
+            font-size: 13.5px;
+            text-decoration: none;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item strong {
+            display: block;
+            font-size: 21px;
+            font-weight: 900;
+            color: var(--pink-primary);
+        }
+
+        .stat-item span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .hero-showcase {
+            border-radius: 30px;
+            padding: 22px;
+        }
+
+        .showcase-visual {
+            height: 290px;
+            border-radius: 22px;
+            background:
+                radial-gradient(circle at 30% 25%, rgba(255, 145, 198, 0.75), transparent 55%),
+                radial-gradient(circle at 75% 75%, rgba(183, 138, 255, 0.7), transparent 55%),
+                linear-gradient(145deg, #fff0f7, #f5eaff);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            padding: 20px;
+        }
+
+        .lash-ring {
+            width: 116px;
+            height: 116px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.88);
+            border: 2px solid rgba(232, 93, 154, 0.35);
             display: flex;
-            flex-direction: column;
             align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            box-shadow: 0 12px 30px rgba(232, 93, 154, 0.22);
+            margin-bottom: 12px;
         }
 
-        .char-card.selected {
-            border-color: #ff2a85;
-            background: linear-gradient(180deg, rgba(255, 42, 133, 0.28) 0%, rgba(15, 12, 25, 0.92) 100%);
-            box-shadow: 0 0 28px rgba(255, 42, 133, 0.5);
+        .section {
+            padding: 42px 0;
         }
 
-        .char-preview-box {
-            width: clamp(75px, 10vw, 120px);
-            height: clamp(95px, 13vw, 155px);
-            border-radius: 12px;
-            overflow: hidden;
-            background: rgba(0,0,0,0.35);
+        .section-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .section-header h2 {
+            font-size: clamp(22px, 3vw, 32px);
+            font-weight: 900;
             margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
-        .char-preview-box canvas {
-            width: 100% !important;
-            height: 100% !important;
-            object-fit: contain;
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 14px;
         }
 
-        .upload-mini-btn {
-            font-size: 11px;
-            background: rgba(255,255,255,0.14);
-            color: #eee;
-            border: 1px solid rgba(255,255,255,0.25);
-            padding: 3px 8px;
-            border-radius: 6px;
-            margin-top: 5px;
-            cursor: pointer;
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
         }
 
-        .btn-main {
-            background: linear-gradient(45deg, #ff0055, #ff5e00);
-            border: none;
-            padding: 11px 40px;
-            border-radius: 50px;
-            color: white;
-            font-size: clamp(14px, 1.6vw, 20px);
-            font-weight: 900;
-            cursor: pointer;
-            box-shadow: 0 8px 25px rgba(255, 0, 85, 0.5);
-        }
-
-        #hud {
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            padding: 12px 26px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            z-index: 10;
-            pointer-events: none;
-        }
-
-        .player-bar-box { width: 40%; }
-        .player-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: clamp(11px, 1.3vw, 16px);
-            font-weight: 900;
-            margin-bottom: 4px;
-            text-shadow: 0 2px 6px #000;
-        }
-
-        .hp-bg {
-            width: 100%;
-            height: clamp(13px, 1.7vw, 21px);
-            background: rgba(0, 0, 0, 0.75);
-            border: 2px solid rgba(255,255,255,0.85);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-
-        .hp-fill {
-            height: 100%;
-            width: 100%;
-            transition: width 0.15s ease-out;
-        }
-        #p1-hp { background: linear-gradient(90deg, #00f2fe, #0072ff); }
-        #p2-hp { background: linear-gradient(90deg, #ff0844, #ff6a00); float: left; }
-
-        .center-hud {
+        .service-card {
+            border-radius: 24px;
+            padding: 22px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 3px;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
         }
 
-        .timer-box {
-            background: rgba(0,0,0,0.85);
-            border: 2px solid #ffd200;
-            color: #ffd200;
-            font-size: clamp(16px, 2.2vw, 28px);
-            font-weight: 900;
-            padding: 2px 14px;
-            border-radius: 10px;
+        .service-card:hover {
+            transform: translateY(-5px);
         }
 
-        .arena-badge {
-            font-size: 11px;
-            background: rgba(0,0,0,0.75);
-            padding: 2px 10px;
-            border-radius: 20px;
-            color: #00f2fe;
-            border: 1px solid rgba(0,242,254,0.4);
+        .service-card.active-service {
+            border-color: var(--pink-primary);
         }
 
-        #countdown-overlay {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 15;
-            pointer-events: none;
-        }
-        #countdown-text {
-            font-size: clamp(55px, 11vw, 135px);
-            font-weight: 900;
-            color: #fff;
-            text-shadow: 0 0 35px #ff0055, 0 5px 15px #000;
-        }
-
-        #gamepad {
-            position: absolute;
-            bottom: 16px;
-            left: 20px;
-            right: 20px;
+        .service-top {
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
-            z-index: 12;
-            pointer-events: none;
+            align-items: center;
+            margin-bottom: 10px;
         }
-        .pad-group { pointer-events: auto; }
-        .dpad {
+
+        .service-tag {
+            background: var(--pink-soft);
+            color: var(--pink-primary);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 50px;
+        }
+
+        .service-card h3 {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .service-card p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .service-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px dashed rgba(232, 93, 154, 0.25);
+            padding-top: 12px;
+        }
+
+        .price {
+            font-size: 16px;
+            font-weight: 900;
+        }
+
+        .select-btn {
+            background: var(--pink-soft);
+            color: var(--pink-primary);
+            border: none;
+            padding: 7px 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .service-card.active-service .select-btn {
+            background: var(--pink-primary);
+            color: #fff;
+        }
+
+        /* رزرو نوبت */
+        .booking-box {
+            border-radius: 30px;
+            padding: 30px;
             display: grid;
-            grid-template-columns: repeat(3, clamp(40px, 5vw, 60px));
-            grid-template-rows: repeat(2, clamp(40px, 5vw, 60px));
+            grid-template-columns: 1fr 1.15fr;
+            gap: 28px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
             gap: 6px;
         }
-        .action-pad {
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        input, select, textarea {
+            background: rgba(255, 255, 255, 0.92);
+            border: 1.5px solid rgba(232, 93, 154, 0.25);
+            border-radius: 14px;
+            padding: 10px 14px;
+            font-size: 13.5px;
+            color: var(--text-dark);
+            outline: none;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--pink-primary);
+        }
+
+        .slots-grid {
             display: grid;
-            grid-template-columns: repeat(2, clamp(46px, 5.8vw, 70px));
-            grid-template-rows: repeat(2, clamp(46px, 5.8vw, 70px));
+            grid-template-columns: repeat(4, 1fr);
             gap: 8px;
         }
-        .pad-btn {
-            background: rgba(15, 15, 22, 0.58);
-            backdrop-filter: blur(8px);
-            border: 2px solid rgba(255, 255, 255, 0.35);
-            border-radius: 14px;
-            color: white;
-            font-size: clamp(12px, 1.5vw, 19px);
-            font-weight: 900;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+
+        .slot-btn {
+            padding: 8px 6px;
+            border-radius: 12px;
+            border: 1.5px solid rgba(232, 93, 154, 0.25);
+            background: rgba(255, 255, 255, 0.88);
+            color: var(--text-dark);
+            font-weight: 700;
+            font-size: 12.5px;
             cursor: pointer;
         }
-        .pad-btn:active { background: rgba(255, 0, 85, 0.75); transform: scale(0.92); }
-        .btn-punch { border-color: #00f2fe; color: #00f2fe; }
-        .btn-kick { border-color: #ffd200; color: #ffd200; }
-        .btn-block { border-color: #00e676; color: #00e676; }
-        .btn-special { border-color: #ff1744; color: #ff1744; }
 
-        .loader {
-            width: 44px; height: 44px;
-            border: 4px solid rgba(255,255,255,0.2);
-            border-top-color: #ff0055;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 14px auto;
+        .slot-btn.active {
+            background: var(--pink-primary);
+            color: #fff;
+            border-color: var(--pink-primary);
         }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .booking-result {
+            margin-top: 14px;
+            padding: 14px 16px;
+            border-radius: 16px;
+            background: #f0fff4;
+            border: 1.5px solid #48bb78;
+            display: none;
+            font-size: 13.5px;
+        }
+
+        .booking-result.show {
+            display: block;
+        }
+
+        /* مودال ورود رمز ادمین و پنل ادمین */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 8, 16, 0.65);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .modal-backdrop.show {
+            display: flex;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 390px;
+            border-radius: 26px;
+            padding: 26px;
+            background: #fff;
+            color: var(--text-dark);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+        }
+
+        .admin-panel {
+            width: 100%;
+            max-width: 1050px;
+            max-height: 88vh;
+            overflow-y: auto;
+            border-radius: 28px;
+            padding: 26px;
+            background: #fff8fb;
+            color: var(--text-dark);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .admin-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(232, 93, 154, 0.2);
+        }
+
+        .admin-kpis {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .kpi-card {
+            background: #fff;
+            border: 1.5px solid rgba(232, 93, 154, 0.2);
+            border-radius: 20px;
+            padding: 16px;
+        }
+
+        .kpi-card span {
+            display: block;
+            font-size: 12.5px;
+            color: var(--text-muted);
+        }
+
+        .kpi-card strong {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--pink-dark);
+        }
+
+        .admin-grid-2 {
+            display: grid;
+            grid-template-columns: 1.4fr 0.9fr;
+            gap: 18px;
+        }
+
+        .admin-box {
+            background: #fff;
+            border: 1.5px solid rgba(232, 93, 154, 0.18);
+            border-radius: 22px;
+            padding: 18px;
+        }
+
+        .admin-box h4 {
+            font-size: 15px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12.5px;
+        }
+
+        th, td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #f2e4ec;
+            text-align: right;
+        }
+
+        th {
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .status-pill {
+            padding: 3px 9px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .status-pending {
+            background: #fefcbf;
+            color: #975a16;
+        }
+
+        .status-confirmed {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .mini-btn {
+            border: none;
+            padding: 5px 9px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-left: 4px;
+        }
+
+        .btn-confirm {
+            background: #38a169;
+            color: #fff;
+        }
+
+        .btn-delete {
+            background: #fed7d7;
+            color: #9b2c2c;
+        }
+
+        .notif-item {
+            padding: 10px 12px;
+            border-radius: 14px;
+            background: #fff5f9;
+            border: 1px solid #fbd5e6;
+            margin-bottom: 10px;
+            font-size: 12.5px;
+        }
+
+        .notif-item.unread {
+            border-right: 4px solid var(--pink-primary);
+            background: #ffeaf3;
+        }
+
+        .notif-time {
+            display: block;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        @media (max-width: 900px) {
+            .hero, .booking-box, .services-grid, .admin-kpis, .admin-grid-2 {
+                grid-template-columns: 1fr;
+            }
+            nav {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
 
-<div id="game-wrapper">
-    <div id="select-screen" class="overlay-screen">
-        <h1 class="game-title">TEKKEN 3D REALISTIC</h1>
-        <p style="color:#ccc; font-size:13px;">مبارز خود را انتخاب کنید (در صورت نیاز عکس دلخواه را هم می‌توانید بارگذاری کنید)</p>
+    <!-- پیام شناور لحظه‌ای برای ادمین -->
+    <div id="live-toast" class="live-toast">
+        <strong id="toast-title">🔔 نوبت جدید رزرو شد!</strong>
+        <p id="toast-body"></p>
+    </div>
 
-        <div class="char-grid">
-            <div class="char-card selected" data-char="char1" onclick="selectCharacter('char1', this)">
-                <div class="char-preview-box"><canvas id="preview-char1"></canvas></div>
-                <div style="font-weight:800; font-size:15px;">لونا (Gamer)</div>
-                <label class="upload-mini-btn" onclick="event.stopPropagation()">
-                    تغییر عکس ۱
-                    <input type="file" accept="image/*" hidden onchange="handleCustomImage(event, 'char1')">
-                </label>
+    <!-- هدر -->
+    <header class="glass">
+        <a href="#" class="brand">
+            <div class="brand-logo">L</div>
+            <div class="brand-text">
+                <strong>LASH ATELIER</strong>
+                <span>رزرو تخصصی کاشت مژه</span>
             </div>
+        </a>
+        <nav>
+            <a href="#services">خدمات</a>
+            <a href="#booking">رزرو وقت</a>
+        </nav>
+        <div class="header-actions">
+            <button type="button" class="btn-admin" onclick="openAdminFlow()">
+                پنل ادمین
+                <span id="unread-badge" class="badge-dot">0</span>
+            </button>
+            <a href="#booking" class="btn-primary">رزرو نوبت</a>
+        </div>
+    </header>
 
-            <div class="char-card" data-char="char2" onclick="selectCharacter('char2', this)">
-                <div class="char-preview-box"><canvas id="preview-char2"></canvas></div>
-                <div style="font-weight:800; font-size:15px;">استاد هیهاچی</div>
-                <label class="upload-mini-btn" onclick="event.stopPropagation()">
-                    تغییر عکس ۲
-                    <input type="file" accept="image/*" hidden onchange="handleCustomImage(event, 'char2')">
-                </label>
+    <!-- بخش معرفی -->
+    <section class="container hero">
+        <div>
+            <div class="badge">✨ ظرافت، ماندگاری و سلامت مژه‌های طبیعی</div>
+            <h1>نگاهی خیره‌کننده با <span>کاشت مژه حرفه‌ای</span> و اصولی</h1>
+            <p>
+                انتخاب فر، ضخامت و طول مژه متناسب با فرم چشم شما، با متریال فوق‌سبک و رعایت کامل اصول بهداشتی در محیطی آرام.
+            </p>
+            <div class="hero-actions">
+                <a href="#booking" class="btn-primary">انتخاب روز و ساعت</a>
+                <a href="#services" class="btn-outline">مشاهده خدمات</a>
             </div>
-
-            <div class="char-card" data-char="char3" onclick="selectCharacter('char3', this)">
-                <div class="char-preview-box"><canvas id="preview-char3"></canvas></div>
-                <div style="font-weight:800; font-size:15px;">آرش (Fighter)</div>
-                <label class="upload-mini-btn" onclick="event.stopPropagation()">
-                    تغییر عکس ۳
-                    <input type="file" accept="image/*" hidden onchange="handleCustomImage(event, 'char3')">
-                </label>
+            <div class="stats-row">
+                <div class="stat-item">
+                    <strong>۳ تا ۵ هفته</strong>
+                    <span>ماندگاری اصولی</span>
+                </div>
+                <div class="stat-item">
+                    <strong>۱۰۰٪ سبک</strong>
+                    <span>بدون سنگینی و آسیب</span>
+                </div>
+                <div class="stat-item">
+                    <strong>مشاوره رایگان</strong>
+                    <span>متناسب با آناتومی چشم</span>
+                </div>
             </div>
         </div>
 
-        <button class="btn-main" onclick="startMatchmaking()">جستجوی حریف آنلاین</button>
-    </div>
-
-    <div id="search-screen" class="overlay-screen hidden">
-        <h2 style="color:#ff2a85;">در حال اتصال به حریف آنلاین...</h2>
-        <div class="loader"></div>
-        <p id="search-status" style="color:#bbb; margin-bottom:15px;">در انتظار بازیکن دوم در فایربیس...</p>
-        <button class="btn-main" style="background:#333; padding:8px 25px; font-size:14px;" onclick="cancelMatchmaking()">لغو</button>
-    </div>
-
-    <div id="gameover-screen" class="overlay-screen hidden">
-        <h1 id="winner-title" class="game-title">K.O.</h1>
-        <p id="winner-sub" style="color:#ddd; margin-bottom:20px;"></p>
-        <button class="btn-main" onclick="resetToMenu()">مبارزه مجدد</button>
-    </div>
-
-    <div id="hud" class="hidden">
-        <div class="player-bar-box">
-            <div class="player-info">
-                <span id="p1-name">بازیکن ۱</span>
-                <span id="p1-hp-text">100%</span>
-            </div>
-            <div class="hp-bg"><div id="p1-hp" class="hp-fill"></div></div>
-        </div>
-
-        <div class="center-hud">
-            <div class="timer-box" id="match-timer">99</div>
-            <div class="arena-badge" id="arena-label">میدان مبارزه • 120 FPS</div>
-        </div>
-
-        <div class="player-bar-box" style="text-align: left;">
-            <div class="player-info">
-                <span id="p2-hp-text">100%</span>
-                <span id="p2-name">بازیکن ۲</span>
-            </div>
-            <div class="hp-bg"><div id="p2-hp" class="hp-fill"></div></div>
-        </div>
-    </div>
-
-    <div id="countdown-overlay" class="hidden">
-        <div id="countdown-text">3</div>
-    </div>
-
-    <div id="gamepad" class="hidden">
-        <div class="pad-group">
-            <div class="dpad">
-                <div></div>
-                <div class="pad-btn" onpointerdown="setInput('up', true)" onpointerup="setInput('up', false)" onpointerleave="setInput('up', false)">▲</div>
-                <div></div>
-                <div class="pad-btn" onpointerdown="setInput('left', true)" onpointerup="setInput('left', false)" onpointerleave="setInput('left', false)">◀</div>
-                <div class="pad-btn" onpointerdown="setInput('down', true)" onpointerup="setInput('down', false)" onpointerleave="setInput('down', false)">▼</div>
-                <div class="pad-btn" onpointerdown="setInput('right', true)" onpointerup="setInput('right', false)" onpointerleave="setInput('right', false)">▶</div>
+        <div class="glass hero-showcase">
+            <div class="showcase-visual">
+                <div class="lash-ring">👁️</div>
+                <h3>طراحی اختصاصی فرم چشم</h3>
+                <p>کلاسیک، اسپایک، والیوم و مگاوالیوم • ترمیم دقیق و ایمن</p>
             </div>
         </div>
-        <div class="pad-group">
-            <div class="action-pad">
-                <div class="pad-btn btn-punch" onpointerdown="triggerAction('punch')">مشت</div>
-                <div class="pad-btn btn-kick" onpointerdown="triggerAction('kick')">لگد</div>
-                <div class="pad-btn btn-block" onpointerdown="setInput('block', true)" onpointerup="setInput('block', false)" onpointerleave="setInput('block', false)">دفاع</div>
-                <div class="pad-btn btn-special" onpointerdown="triggerAction('special')">ویژه</div>
+    </section>
+
+    <!-- خدمات -->
+    <section id="services" class="container section">
+        <div class="section-header">
+            <h2>مدل‌ها و خدمات کاشت مژه</h2>
+            <p>مدل مورد نظر خود را انتخاب کنید تا در فرم رزرو ثبت شود.</p>
+        </div>
+
+        <div class="services-grid">
+            <div class="glass service-card active-service" data-service="کاشت کلاسیک (تار به تار)" onclick="chooseService(this)">
+                <div>
+                    <div class="service-top">
+                        <span class="service-tag">طبیعی و ظریف</span>
+                        <span style="font-size:12px; color:var(--text-muted);">⏱ ۹۰ دقیقه</span>
+                    </div>
+                    <h3>کاشت کلاسیک</h3>
+                    <p>چسباندن یک تار مژه سبک روی هر تار طبیعی برای حالت‌دهی مرتب و نچرال روزانه.</p>
+                </div>
+                <div class="service-footer">
+                    <span class="price">۸۵۰,۰۰۰ تومان</span>
+                    <button type="button" class="select-btn">انتخاب مدل</button>
+                </div>
+            </div>
+
+            <div class="glass service-card" data-service="کاشت والیوم و اسپایک" onclick="chooseService(this)">
+                <div>
+                    <div class="service-top">
+                        <span class="service-tag">پرطرفدار</span>
+                        <span style="font-size:12px; color:var(--text-muted);">⏱ ۱۲۰ دقیقه</span>
+                    </div>
+                    <h3>کاشت والیوم و اسپایک</h3>
+                    <p>فن‌های دست‌ساز سبک با حجم‌دهی جذاب و متعادل برای چشم‌های پرپشت و خوش‌فرم.</p>
+                </div>
+                <div class="service-footer">
+                    <span class="price">۱,۲۵۰,۰۰۰ تومان</span>
+                    <button type="button" class="select-btn">انتخاب مدل</button>
+                </div>
+            </div>
+
+            <div class="glass service-card" data-service="مگاوالیوم و ترمیم تخصصی" onclick="chooseService(this)">
+                <div>
+                    <div class="service-top">
+                        <span class="service-tag">حجم بالا و ترمیم</span>
+                        <span style="font-size:12px; color:var(--text-muted);">⏱ ۱۴۰ دقیقه</span>
+                    </div>
+                    <h3>مگاوالیوم و ترمیم</h3>
+                    <p>افکت پرحجم ویژه مجالس و استایل‌های خاص به همراه ترمیم اصولی و ریموو ایمن.</p>
+                </div>
+                <div class="service-footer">
+                    <span class="price">۱,۵۵۰,۰۰۰ تومان</span>
+                    <button type="button" class="select-btn">انتخاب مدل</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- فرم رزرو -->
+    <section id="booking" class="container section">
+        <div class="glass booking-box">
+            <div>
+                <div class="badge">📅 ثبت آنلاین نوبت</div>
+                <h3 style="font-size:22px; font-weight:900; margin-bottom:10px;">رزرو وقت کاشت مژه</h3>
+                <p style="color:var(--text-muted); font-size:14px;">
+                    اطلاعات و زمان دلخواهتان را وارد کنید تا نوبت شما ثبت شود و پیام اطلاع‌رسانی فوراً برای مدیریت ارسال گردد.
+                </p>
+            </div>
+
+            <form id="booking-form" class="form-grid" onsubmit="submitBooking(event)">
+                <div class="form-group">
+                    <label for="client-name">نام و نام خانوادگی</label>
+                    <input type="text" id="client-name" placeholder="نام مشتری" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="client-phone">شماره تماس</label>
+                    <input type="tel" id="client-phone" placeholder="09123456789" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="service-select">نوع خدمت</label>
+                    <select id="service-select">
+                        <option value="کاشت کلاسیک (تار به تار)">کاشت کلاسیک (تار به تار)</option>
+                        <option value="کاشت والیوم و اسپایک">کاشت والیوم و اسپایک</option>
+                        <option value="مگاوالیوم و ترمیم تخصصی">مگاوالیوم و ترمیم تخصصی</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="booking-date">تاریخ مراجعه</label>
+                    <input type="date" id="booking-date" required>
+                </div>
+
+                <div class="form-group full">
+                    <label>ساعت نوبت</label>
+                    <div class="slots-grid">
+                        <button type="button" class="slot-btn active" onclick="selectSlot(this, '10:00')">10:00</button>
+                        <button type="button" class="slot-btn" onclick="selectSlot(this, '12:30')">12:30</button>
+                        <button type="button" class="slot-btn" onclick="selectSlot(this, '15:00')">15:00</button>
+                        <button type="button" class="slot-btn" onclick="selectSlot(this, '17:30')">17:30</button>
+                    </div>
+                </div>
+
+                <div class="form-group full">
+                    <label for="client-notes">توضیحات (اختیاری)</label>
+                    <textarea id="client-notes" rows="2" placeholder="فرم چشم، افکت دلخواه یا توضیح اضافی..."></textarea>
+                </div>
+
+                <div class="form-group full">
+                    <button type="submit" class="btn-primary" style="width:100%;">ثبت نوبت و ارسال پیام به ادمین</button>
+                </div>
+            </form>
+
+            <div id="booking-result" class="booking-result form-group full">
+                <strong style="color:#22543d;">✓ نوبت شما ثبت شد و پیام اطلاع‌رسانی برای ادمین ارسال گردید.</strong>
+                <div id="result-details" style="margin-top:6px;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- مودال ورود رمز ادمین -->
+    <div id="login-modal" class="modal-backdrop">
+        <div class="login-card">
+            <h3 style="font-size:19px; font-weight:900; margin-bottom:6px;">ورود به پنل ادمین</h3>
+            <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:14px;">
+                رمز عبور مدیریت را وارد کنید تا آمار کاربران آنلاین و لیست رزروها نمایش داده شود.
+            </p>
+            <form onsubmit="verifyAdminPassword(event)">
+                <div class="form-group" style="margin-bottom:14px;">
+                    <label for="admin-pass-input">رمز عبور پنل</label>
+                    <input type="password" id="admin-pass-input" placeholder="رمز عبور را وارد کنید" required>
+                    <span id="login-error" style="color:#c53030; font-size:12px; display:none;">رمز عبور اشتباه است!</span>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button type="submit" class="btn-primary" style="flex:1;">ورود</button>
+                    <button type="button" class="btn-outline" onclick="closeLoginModal()">بستن</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- پنل کامل ادمین -->
+    <div id="admin-modal" class="modal-backdrop">
+        <div class="admin-panel">
+            <div class="admin-top">
+                <div>
+                    <h3 style="font-size:21px; font-weight:900;">پنل مدیریت رزرو و کاربران</h3>
+                    <span style="font-size:12.5px; color:var(--text-muted);">نظارت لحظه‌ای بر کاربران سایت و نوبت‌های ثبت‌شده</span>
+                </div>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <button type="button" class="btn-outline" onclick="markAllRead()">خواندن پیام‌ها</button>
+                    <button type="button" class="btn-admin" onclick="logoutAdmin()">خروج از پنل</button>
+                </div>
+            </div>
+
+            <div class="admin-kpis">
+                <div class="kpi-card">
+                    <span>کاربران آنلاین در سایت همین الان</span>
+                    <strong id="kpi-online-count">0</strong>
+                </div>
+                <div class="kpi-card">
+                    <span>تعداد کل نوبت‌های رزرو شده</span>
+                    <strong id="kpi-bookings-count">0</strong>
+                </div>
+                <div class="kpi-card">
+                    <span>پیام‌های رزرو خوانده‌نشده</span>
+                    <strong id="kpi-unread-count">0</strong>
+                </div>
+            </div>
+
+            <div class="admin-grid-2">
+                <div class="admin-box">
+                    <h4>لیست افرادی که نوبت رزرو کرده‌اند</h4>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>نام مشتری</th>
+                                    <th>تماس</th>
+                                    <th>مدل مژه</th>
+                                    <th>تاریخ و ساعت</th>
+                                    <th>وضعیت</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bookings-tbody">
+                                <tr><td colspan="6" style="text-align:center; color:var(--text-muted);">در حال بارگذاری...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="admin-box">
+                    <h4>صندوق پیام‌های اطلاع‌رسانی رزرو</h4>
+                    <div id="notifications-list">
+                        <p style="font-size:12.5px; color:var(--text-muted);">پیامی ثبت نشده است.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <canvas id="game-canvas"></canvas>
-</div>
-
-<script>
-// ============================================================================
-// ۱. اتصال به فایربیس اختصاصی شما
-// ============================================================================
-const firebaseConfig = {
-    databaseURL: "https://crazyapp-9663a-default-rtdb.firebaseio.com"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-
-const myPlayerId = 'p_' + Math.random().toString(36).substr(2, 9);
-let selectedCharId = 'char1';
-let currentRoomId = null;
-let myRole = null;
-let opponentRole = null;
-let gameState = 'MENU';
-let roomRef = null;
-const queueRef = db.ref('tekken_realistic_queue');
-
-const CHAR_NAMES = {
-    char1: 'لونا (Gamer)',
-    char2: 'استاد هیهاچی',
-    char3: 'آرش (Fighter)'
-};
-
-const ARENA_NAMES = {
-    forest: '🌲 جنگل تاریک',
-    city: '🌃 شهر شبانه',
-    cage: '⛓️ قفس مبارزه (MMA)',
-    mat: '🤼 تشک کشتی المپیک'
-};
-
-// ============================================================================
-// ۲. تولید بافت‌های تضمین‌شده بدون خطای CORS/خالی ماندن + پشتیبانی از بارگذاری عکس
-// ============================================================================
-const processedSprites = {
-    char1: { side: null, aspect: 0.72 },
-    char2: { side: null, aspect: 0.72 },
-    char3: { side: null, aspect: 0.72 }
-};
-
-function createGuaranteedCharacterTexture(charKey) {
-    const c = document.createElement('canvas');
-    c.width = 512;
-    c.height = 720;
-    const ctx = c.getContext('2d');
-    ctx.clearRect(0, 0, c.width, c.height);
-
-    // کانتور ظریف مشترک
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
-
-    if (charKey === 'char1') {
-        // شخصیت ۱: لونا — دختر بلوند با دو کش موی صورتی، چسب روی بینی، تیشرت تای‌دای صورتی/بنفش، شلوار کارگو مشکی و دسته بازی[span_4](start_span)[span_4](end_span)
-        // موهای بلند پشت سر
-        ctx.fillStyle = '#f2cf78';
-        ctx.beginPath();
-        ctx.roundRect(175, 110, 162, 230, 45);
-        ctx.fill();
-
-        // پاها و کفش
-        ctx.fillStyle = '#25262e';
-        ctx.fillRect(198, 430, 46, 200);
-        ctx.fillRect(268, 430, 46, 200);
-        ctx.fillStyle = '#4e5263';
-        ctx.beginPath();
-        ctx.ellipse(221, 638, 34, 18, 0, 0, Math.PI * 2);
-        ctx.ellipse(291, 638, 34, 18, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        // تیشرت تای‌دای
-        const tieGrad = ctx.createLinearGradient(165, 250, 345, 445);
-        tieGrad.addColorStop(0, '#ff9ecd');
-        tieGrad.addColorStop(0.5, '#c49bff');
-        tieGrad.addColorStop(1, '#9be7ff');
-        ctx.fillStyle = tieGrad;
-        ctx.beginPath();
-        ctx.roundRect(168, 248, 176, 195, 24);
-        ctx.fill();
-
-        // بازو و گیم‌پد
-        ctx.fillStyle = '#f3c39b';
-        ctx.fillRect(132, 265, 36, 130);
-        ctx.fillRect(344, 265, 36, 130);
-        ctx.fillStyle = '#e8e4f5';
-        ctx.beginPath();
-        ctx.roundRect(334, 388, 56, 34, 10);
-        ctx.fill();
-
-        // سر، چشم، چسب بینی و کش موی صورتی
-        ctx.fillStyle = '#f3c39b';
-        ctx.beginPath();
-        ctx.arc(256, 175, 62, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = '#f2cf78';
-        ctx.beginPath();
-        ctx.arc(256, 148, 63, Math.PI, 0);
-        ctx.fill();
-
-        ctx.fillStyle = '#ff5ca8';
-        ctx.beginPath();
-        ctx.arc(198, 128, 16, 0, Math.PI * 2);
-        ctx.arc(314, 128, 16, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(244, 182, 24, 9); // چسب بینی
-
-        ctx.fillStyle = '#222';
-        ctx.beginPath();
-        ctx.arc(236, 172, 6, 0, Math.PI * 2);
-        ctx.arc(276, 172, 6, 0, Math.PI * 2);
-        ctx.fill();
-
-    } else if (charKey === 'char2') {
-        // شخصیت ۲: استاد هیهاچی — موی سفید تیغ‌تیغی دو طرف، سبیل سفید، بالاتنه عضلانی، جلیقه نارنجی-طلایی و شلوار مشکی/طلایی[span_5](start_span)[span_5](end_span)
-        // پاها و محافظ ساق طلایی
-        ctx.fillStyle = '#1b1c22';
-        ctx.fillRect(182, 430, 58, 210);
-        ctx.fillRect(272, 430, 58, 210);
-        ctx.fillStyle = '#d4af37';
-        ctx.fillRect(180, 540, 62, 75);
-        ctx.fillRect(270, 540, 62, 75);
-
-        // بالاتنه عضلانی و دست‌ها
-        ctx.fillStyle = '#c98a5b';
-        ctx.beginPath();
-        ctx.roundRect(175, 220, 162, 220, 20);
-        ctx.fill();
-        ctx.fillRect(122, 235, 52, 185);
-        ctx.fillRect(338, 235, 52, 185);
-
-        // جلیقه نارنجی و زره شانه طلایی
-        ctx.fillStyle = '#d84b16';
-        ctx.fillRect(168, 220, 42, 225);
-        ctx.fillRect(302, 220, 42, 225);
-        ctx.fillStyle = '#c59b27';
-        ctx.beginPath();
-        ctx.arc(356, 235, 38, 0, Math.PI * 2);
-        ctx.fill();
-
-        // سر، سبیل سفید و موی سیخ سفید دو طرف
-        ctx.fillStyle = '#c98a5b';
-        ctx.beginPath();
-        ctx.arc(256, 152, 56, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = '#f2f2f2';
-        // موی تیغ‌تیغی چپ و راست
-        ctx.beginPath();
-        ctx.moveTo(205, 130); ctx.lineTo(135, 85); ctx.lineTo(185, 155); ctx.closePath(); ctx.fill();
-        ctx.beginPath();
-        ctx.moveTo(307, 130); ctx.lineTo(377, 85); ctx.lineTo(327, 155); ctx.closePath(); ctx.fill();
-        // سبیل
-        ctx.fillRect(228, 174, 56, 14);
-
-    } else {
-        // شخصیت ۳: آرش — مو و ریش مشکی، تیشرت مشکی، شلوار سبز زیتونی و کتانی سفید[span_6](start_span)[span_6](end_span)
-        // پاها و کتانی سفید
-        ctx.fillStyle = '#5c7238';
-        ctx.fillRect(195, 435, 50, 195);
-        ctx.fillRect(267, 435, 50, 195);
-        ctx.fillStyle = '#ffffff';
-        ctx.beginPath();
-        ctx.roundRect(186, 620, 68, 28, 10);
-        ctx.roundRect(258, 620, 68, 28, 10);
-        ctx.fill();
-
-        // تیشرت مشکی و بازوهای تتودار
-        ctx.fillStyle = '#18181c';
-        ctx.beginPath();
-        ctx.roundRect(172, 240, 168, 200, 18);
-        ctx.fill();
-        ctx.fillStyle = '#b97a4b';
-        ctx.fillRect(130, 255, 42, 145);
-        ctx.fillRect(340, 255, 42, 145);
-
-        // سر، مو و ریش مشکی
-        ctx.fillStyle = '#b97a4b';
-        ctx.beginPath();
-        ctx.arc(256, 165, 58, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = '#141418';
-        ctx.beginPath();
-        ctx.arc(256, 138, 60, Math.PI, 0);
-        ctx.fill();
-        // ریش
-        ctx.beginPath();
-        ctx.arc(256, 178, 56, 0, Math.PI);
-        ctx.fill();
-        ctx.fillStyle = '#b97a4b';
-        ctx.beginPath();
-        ctx.arc(256, 172, 42, 0, Math.PI);
-        ctx.fill();
-    }
-
-    const tex = new THREE.CanvasTexture(c);
-    tex.minFilter = THREE.LinearFilter;
-    tex.magFilter = THREE.LinearFilter;
-    processedSprites[charKey].side = { canvas: c, texture: tex };
-    processedSprites[charKey].aspect = c.width / c.height;
-
-    const prevCanvas = document.getElementById('preview-' + charKey);
-    if (prevCanvas) {
-        prevCanvas.width = c.width;
-        prevCanvas.height = c.height;
-        prevCanvas.getContext('2d').drawImage(c, 0, 0);
-    }
-}
-
-['char1', 'char2', 'char3'].forEach(key => createGuaranteedCharacterTexture(key));
-
-// امکان بارگذاری عکس‌های شخصی کاربر در هر زمان
-function handleCustomImage(event, charKey) {
-    const file = event.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-            const temp = document.createElement('canvas');
-            temp.width = img.width;
-            temp.height = img.height;
-            const tCtx = temp.getContext('2d');
-            tCtx.drawImage(img, 0, 0);
-
-            // حذف رنگ پس‌زمینه گوشه تصویر به صورت شفاف
-            const bg = tCtx.getImageData(2, 2, 1, 1).data;
-            const idata = tCtx.getImageData(0, 0, temp.width, temp.height);
-            const d = idata.data;
-            for (let i = 0; i < d.length; i += 4) {
-                if (Math.abs(d[i] - bg[0]) < 35 && Math.abs(d[i+1] - bg[1]) < 35 && Math.abs(d[i+2] - bg[2]) < 35) {
-                    d[i+3] = 0;
-                }
-            }
-            tCtx.putImageData(idata, 0, 0);
-
-            const tex = new THREE.CanvasTexture(temp);
-            tex.minFilter = THREE.LinearFilter;
-            tex.magFilter = THREE.LinearFilter;
-            processedSprites[charKey].side = { canvas: temp, texture: tex };
-            processedSprites[charKey].aspect = img.width / img.height;
-
-            const prev = document.getElementById('preview-' + charKey);
-            prev.width = temp.width;
-            prev.height = temp.height;
-            prev.getContext('2d').drawImage(temp, 0, 0);
-
-            if (fighters.p1 && fighters.p1.charKey === charKey) fighters.p1.mat.map = tex;
-            if (fighters.p2 && fighters.p2.charKey === charKey) fighters.p2.mat.map = tex;
+    <script>
+        // =====================================================================
+        // ۱. تنظیمات فایربیس و رمز عبور ادمین
+        // =====================================================================
+        const firebaseConfig = {
+            databaseURL: "https://crazyapp-9663a-default-rtdb.firebaseio.com" //[span_1](start_span)[span_1](end_span)
         };
-        img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-}
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-function selectCharacter(charId, el) {
-    selectedCharId = charId;
-    document.querySelectorAll('.char-card').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-}
+        // رمز ورود به پنل ادمین (در صورت نیاز تغییر دهید)
+        const ADMIN_PASSWORD = "admin";
 
-// ============================================================================
-// ۳. مچ‌میکینگ فایربیس + انتخاب رندوم زمین بازی
-// ============================================================================
-function startMatchmaking() {
-    gameState = 'SEARCHING';
-    document.getElementById('select-screen').classList.add('hidden');
-    document.getElementById('search-screen').classList.remove('hidden');
+        const bookingsRef = db.ref("lash_atelier/bookings");
+        const notificationsRef = db.ref("lash_atelier/admin_notifications");
+        const onlineUsersRef = db.ref("lash_atelier/online_users");
 
-    queueRef.once('value').then((snap) => {
-        const waiting = snap.val();
-        if (waiting && waiting.playerId !== myPlayerId && (Date.now() - waiting.timestamp < 30000)) {
-            queueRef.remove().then(() => {
-                myRole = 'p2';
-                opponentRole = 'p1';
-                const newRoomId = 'room_' + waiting.playerId + '_' + myPlayerId;
-                const arenas = ['forest', 'city', 'cage', 'mat'];
-                const randomArena = arenas[Math.floor(Math.random() * arenas.length)];
+        let isAdminAuthenticated = false;
+        let selectedTimeSlot = "10:00";
+        let allBookings = [];
+        let allNotifications = [];
+        let initialNotifLoadDone = false;
 
-                const roomData = {
-                    status: 'countdown',
-                    arena: randomArena,
-                    p1: { id: waiting.playerId, char: waiting.charId, x: -2.0, z: 0, y: 0, hp: 100, action: 'idle', block: false, facing: 1 },
-                    p2: { id: myPlayerId, char: selectedCharId, x: 2.0, z: 0, y: 0, hp: 100, action: 'idle', block: false, facing: -1 }
-                };
+        // =====================================================================
+        // ۲. ردیابی تعداد کاربران آنلاین در سایت
+        // =====================================================================
+        const visitorId = "user_" + Math.random().toString(36).slice(2, 10);
+        const myPresenceRef = onlineUsersRef.child(visitorId);
 
-                db.ref('tekken_realistic_rooms/' + newRoomId).set(roomData).then(() => {
-                    db.ref('tekken_realistic_invites/' + waiting.playerId).set({ roomId: newRoomId });
-                    joinRoom(newRoomId);
+        db.ref(".info/connected").on("value", (snap) => {
+            if (snap.val() === true) {
+                myPresenceRef.onDisconnect().remove();
+                myPresenceRef.set({
+                    enteredAt: Date.now(),
+                    device: /Mobi|Android/i.test(navigator.userAgent) ? "موبایل" : "دسکتاپ"
                 });
-            });
-        } else {
-            myRole = 'p1';
-            opponentRole = 'p2';
-            queueRef.set({ playerId: myPlayerId, charId: selectedCharId, timestamp: Date.now() });
-            queueRef.onDisconnect().remove();
-            document.getElementById('search-status').innerText = 'در انتظار بازیکن دوم...';
+            }
+        });
 
-            const invRef = db.ref('tekken_realistic_invites/' + myPlayerId);
-            invRef.onDisconnect().remove();
-            invRef.on('value', (s) => {
-                if (s.val() && s.val().roomId) {
-                    invRef.off();
-                    invRef.remove();
-                    joinRoom(s.val().roomId);
+        onlineUsersRef.on("value", (snap) => {
+            const data = snap.val() || {};
+            const count = Object.keys(data).length;
+            document.getElementById("kpi-online-count").innerText = count;
+        });
+
+        // =====================================================================
+        // ۳. انتخاب سرویس، ساعت و ثبت نوبت + ارسال پیام فوری برای ادمین
+        // =====================================================================
+        const dateInput = document.getElementById("booking-date");
+        const todayStr = new Date().toISOString().split("T")[0];
+        dateInput.min = todayStr;
+        dateInput.value = todayStr;
+
+        function chooseService(cardEl) {
+            document.querySelectorAll(".service-card").forEach(c => c.classList.remove("active-service"));
+            cardEl.classList.add("active-service");
+            document.getElementById("service-select").value = cardEl.getAttribute("data-service");
+            document.getElementById("booking").scrollIntoView({ behavior: "smooth" });
+        }
+
+        function selectSlot(btnEl, time) {
+            document.querySelectorAll(".slot-btn").forEach(b => b.classList.remove("active"));
+            btnEl.classList.add("active");
+            selectedTimeSlot = time;
+        }
+
+        function playAlertTone() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                const ctx = new AudioCtx();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = "sine";
+                osc.frequency.setValueAtTime(880, ctx.currentTime);
+                gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.25);
+            } catch (_) {}
+        }
+
+        function submitBooking(e) {
+            e.preventDefault();
+
+            const clientName = document.getElementById("client-name").value.trim();
+            const clientPhone = document.getElementById("client-phone").value.trim();
+            const service = document.getElementById("service-select").value;
+            const date = document.getElementById("booking-date").value;
+            const notes = document.getElementById("client-notes").value.trim();
+            const createdAt = Date.now();
+
+            const newBooking = {
+                name: clientName,
+                phone: clientPhone,
+                service: service,
+                date: date,
+                time: selectedTimeSlot,
+                notes: notes || "-",
+                status: "در انتظار تایید",
+                createdAt: createdAt
+            };
+
+            bookingsRef.push(newBooking).then(() => {
+                // ارسال پیام اطلاع‌رسانی برای ادمین در دیتابیس
+                notificationsRef.push({
+                    title: "یک نوبت جدید رزرو شد!",
+                    message: `${clientName} (${clientPhone}) برای «${service}» در تاریخ ${date} ساعت ${selectedTimeSlot} نوبت رزرو کرد.`,
+                    read: false,
+                    createdAt: createdAt
+                });
+
+                const resBox = document.getElementById("booking-result");
+                document.getElementById("result-details").innerHTML =
+                    `نام: <strong>${clientName}</strong> | خدمت: <strong>${service}</strong> | زمان: <strong>${date} - ${selectedTimeSlot}</strong>`;
+                resBox.classList.add("show");
+                document.getElementById("booking-form").reset();
+                dateInput.value = todayStr;
+            });
+        }
+
+        // =====================================================================
+        // ۴. همگام‌سازی زنده رزروها و پیام‌های ادمین
+        // =====================================================================
+        bookingsRef.on("value", (snap) => {
+            const raw = snap.val() || {};
+            allBookings = Object.entries(raw)
+                .map(([id, item]) => ({ id, ...item }))
+                .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+            document.getElementById("kpi-bookings-count").innerText = allBookings.length;
+            renderBookingsTable();
+        });
+
+        notificationsRef.on("value", (snap) => {
+            const raw = snap.val() || {};
+            const sorted = Object.entries(raw)
+                .map(([id, item]) => ({ id, ...item }))
+                .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+            // اگر پیام کاملاً جدیدی پس از بارگذاری اولیه رسید و ادمین لاگین است، پیام شناور و صدا پخش کن
+            if (initialNotifLoadDone && sorted.length > allNotifications.length) {
+                const newest = sorted[0];
+                if (isAdminAuthenticated && newest) {
+                    showToast(newest.title, newest.message);
+                    playAlertTone();
                 }
-            });
-        }
-    });
-}
-
-function cancelMatchmaking() {
-    queueRef.remove();
-    db.ref('tekken_realistic_invites/' + myPlayerId).off();
-    db.ref('tekken_realistic_invites/' + myPlayerId).remove();
-    gameState = 'MENU';
-    document.getElementById('search-screen').classList.add('hidden');
-    document.getElementById('select-screen').classList.remove('hidden');
-}
-
-// ============================================================================
-// ۴. موتور گرافیکی سه‌بعدی Three.js
-// ============================================================================
-const canvas = document.getElementById('game-canvas');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(42, 16 / 9, 0.1, 150);
-camera.position.set(0, 2.6, 8.2);
-
-let arenaGroup = new THREE.Group();
-scene.add(arenaGroup);
-
-function buildRealisticArena(type) {
-    while (arenaGroup.children.length > 0) {
-        arenaGroup.remove(arenaGroup.children[0]);
-    }
-    scene.fog = null;
-
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x222233, 0.8);
-    arenaGroup.add(hemiLight);
-
-    const sunLight = new THREE.DirectionalLight(0xfff5e4, 1.3);
-    sunLight.position.set(6, 12, 8);
-    sunLight.castShadow = true;
-    arenaGroup.add(sunLight);
-
-    if (type === 'forest') {
-        scene.background = new THREE.Color(0x1a2e1a);
-        scene.fog = new THREE.FogExp2(0x1a2e1a, 0.04);
-
-        const ground = new THREE.Mesh(
-            new THREE.CircleGeometry(14, 48),
-            new THREE.MeshStandardMaterial({ color: 0x2d4222, roughness: 0.9 })
-        );
-        ground.rotation.x = -Math.PI / 2;
-        ground.receiveShadow = true;
-        arenaGroup.add(ground);
-
-        const trunkMat = new THREE.MeshStandardMaterial({ color: 0x3b2716, roughness: 0.9 });
-        const leafMat = new THREE.MeshStandardMaterial({ color: 0x1b4d1b, roughness: 0.8 });
-        for (let i = 0; i < 18; i++) {
-            const ang = (i / 18) * Math.PI * 2;
-            const dist = 7.8 + (i % 3) * 1.5;
-            const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.4, 7, 10), trunkMat);
-            trunk.position.set(Math.cos(ang) * dist, 3.5, Math.sin(ang) * dist);
-            arenaGroup.add(trunk);
-
-            const crown = new THREE.Mesh(new THREE.DodecahedronGeometry(1.8), leafMat);
-            crown.position.set(Math.cos(ang) * dist, 6.8, Math.sin(ang) * dist);
-            arenaGroup.add(crown);
-        }
-    } else if (type === 'city') {
-        scene.background = new THREE.Color(0x090d16);
-        scene.fog = new THREE.FogExp2(0x090d16, 0.035);
-
-        const asphalt = new THREE.Mesh(
-            new THREE.BoxGeometry(16, 0.5, 12),
-            new THREE.MeshStandardMaterial({ color: 0x1c1f26, roughness: 0.45, metalness: 0.3 })
-        );
-        asphalt.position.y = -0.25;
-        asphalt.receiveShadow = true;
-        arenaGroup.add(asphalt);
-
-        for (let i = -5; i <= 5; i++) {
-            const bHeight = 8 + Math.abs(i * 2.3) % 10;
-            const building = new THREE.Mesh(
-                new THREE.BoxGeometry(2.5, bHeight, 2.5),
-                new THREE.MeshStandardMaterial({ color: 0x101522, roughness: 0.3, metalness: 0.7 })
-            );
-            building.position.set(i * 3.2, bHeight / 2 - 2, -9 - (Math.abs(i) % 2) * 2);
-            arenaGroup.add(building);
-        }
-    } else if (type === 'cage') {
-        scene.background = new THREE.Color(0x111115);
-        const matFloor = new THREE.Mesh(
-            new THREE.CylinderGeometry(6.8, 6.8, 0.4, 8),
-            new THREE.MeshStandardMaterial({ color: 0x2b2d33, roughness: 0.7 })
-        );
-        matFloor.position.y = -0.2;
-        matFloor.receiveShadow = true;
-        arenaGroup.add(matFloor);
-
-        const fence = new THREE.Mesh(
-            new THREE.CylinderGeometry(6.75, 6.75, 2.6, 8, 1, true),
-            new THREE.MeshStandardMaterial({ color: 0x888899, wireframe: true, transparent: true, opacity: 0.45 })
-        );
-        fence.position.y = 1.3;
-        arenaGroup.add(fence);
-
-        for (let i = 0; i < 8; i++) {
-            const ang = (i / 8) * Math.PI * 2 + Math.PI / 8;
-            const post = new THREE.Mesh(
-                new THREE.CylinderGeometry(0.16, 0.16, 2.8, 12),
-                new THREE.MeshStandardMaterial({ color: 0xd90429, roughness: 0.4 })
-            );
-            post.position.set(Math.cos(ang) * 6.75, 1.4, Math.sin(ang) * 6.75);
-            arenaGroup.add(post);
-        }
-    } else {
-        scene.background = new THREE.Color(0x141824);
-        const baseMat = new THREE.Mesh(
-            new THREE.BoxGeometry(13, 0.35, 13),
-            new THREE.MeshStandardMaterial({ color: 0x1d4ed8, roughness: 0.65 })
-        );
-        baseMat.position.y = -0.175;
-        baseMat.receiveShadow = true;
-        arenaGroup.add(baseMat);
-
-        const redRing = new THREE.Mesh(
-            new THREE.RingGeometry(4.2, 4.9, 64),
-            new THREE.MeshStandardMaterial({ color: 0xdc2626, side: THREE.DoubleSide, roughness: 0.6 })
-        );
-        redRing.rotation.x = -Math.PI / 2;
-        redRing.position.y = 0.01;
-        arenaGroup.add(redRing);
-
-        const centerCircle = new THREE.Mesh(
-            new THREE.CircleGeometry(1.1, 32),
-            new THREE.MeshStandardMaterial({ color: 0xfacc15, roughness: 0.6 })
-        );
-        centerCircle.rotation.x = -Math.PI / 2;
-        centerCircle.position.y = 0.01;
-        arenaGroup.add(centerCircle);
-    }
-}
-
-let fighters = { p1: null, p2: null };
-
-function createRealPhotoFighter(charKey) {
-    const group = new THREE.Group();
-    const spriteInfo = processedSprites[charKey];
-    const height = 2.25;
-    const width = height * (spriteInfo.aspect || 0.72);
-
-    const mat = new THREE.MeshBasicMaterial({
-        map: spriteInfo.side.texture,
-        transparent: true,
-        alphaTest: 0.15,
-        side: THREE.DoubleSide
-    });
-
-    const plane = new THREE.Mesh(new THREE.PlaneGeometry(width, height), mat);
-    plane.position.y = height / 2;
-    group.add(plane);
-
-    const shadow = new THREE.Mesh(
-        new THREE.CircleGeometry(0.65, 24),
-        new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.45 })
-    );
-    shadow.rotation.x = -Math.PI / 2;
-    shadow.position.y = 0.02;
-    group.add(shadow);
-
-    const hitFlash = new THREE.Mesh(
-        new THREE.SphereGeometry(0.45, 12, 12),
-        new THREE.MeshBasicMaterial({ color: 0xffea00, transparent: true, opacity: 0 })
-    );
-    hitFlash.position.set(0, 1.3, 0.2);
-    group.add(hitFlash);
-
-    return { root: group, plane, mat, shadow, hitFlash, charKey, baseHeight: height / 2 };
-}
-
-function spawnFighters(p1Char, p2Char) {
-    if (fighters.p1) scene.remove(fighters.p1.root);
-    if (fighters.p2) scene.remove(fighters.p2.root);
-
-    fighters.p1 = createRealPhotoFighter(p1Char);
-    fighters.p1.root.position.set(-2.0, 0, 0);
-    scene.add(fighters.p1.root);
-
-    fighters.p2 = createRealPhotoFighter(p2Char);
-    fighters.p2.root.position.set(2.0, 0, 0);
-    scene.add(fighters.p2.root);
-}
-
-// ============================================================================
-// ۵. کنترل بازی، برخورد فیزیکی و واکنش به ضربه
-// ============================================================================
-let playersData = { p1: null, p2: null };
-
-function joinRoom(roomId) {
-    currentRoomId = roomId;
-    roomRef = db.ref('tekken_realistic_rooms/' + roomId);
-    roomRef.onDisconnect().remove();
-
-    roomRef.once('value').then((snap) => {
-        const roomData = snap.val();
-        if (!roomData) return;
-
-        playersData.p1 = roomData.p1;
-        playersData.p2 = roomData.p2;
-
-        buildRealisticArena(roomData.arena || 'cage');
-        document.getElementById('arena-label').innerText = (ARENA_NAMES[roomData.arena] || 'میدان مبارزه') + ' • 120 FPS';
-
-        document.getElementById('p1-name').innerText = CHAR_NAMES[playersData.p1.char] + (myRole === 'p1' ? ' (شما)' : '');
-        document.getElementById('p2-name').innerText = CHAR_NAMES[playersData.p2.char] + (myRole === 'p2' ? ' (شما)' : '');
-
-        spawnFighters(playersData.p1.char, playersData.p2.char);
-
-        document.getElementById('search-screen').classList.add('hidden');
-        document.getElementById('hud').classList.remove('hidden');
-        document.getElementById('gamepad').classList.remove('hidden');
-
-        startCountdown();
-        listenToRoom();
-    });
-}
-
-function startCountdown() {
-    gameState = 'COUNTDOWN';
-    const overlay = document.getElementById('countdown-overlay');
-    const text = document.getElementById('countdown-text');
-    overlay.classList.remove('hidden');
-
-    const steps = ['3', '2', '1', 'FIGHT!'];
-    let idx = 0;
-    function next() {
-        if (idx < steps.length) {
-            text.innerText = steps[idx++];
-            setTimeout(next, 800);
-        } else {
-            overlay.classList.add('hidden');
-            gameState = 'PLAYING';
-            startTimer();
-        }
-    }
-    next();
-}
-
-let matchTime = 99;
-let timerInt = null;
-function startTimer() {
-    matchTime = 99;
-    clearInterval(timerInt);
-    timerInt = setInterval(() => {
-        if (gameState !== 'PLAYING') return;
-        matchTime--;
-        document.getElementById('match-timer').innerText = matchTime;
-        if (matchTime <= 0) {
-            clearInterval(timerInt);
-            finishMatch(playersData.p1.hp >= playersData.p2.hp ? 'p1' : 'p2');
-        }
-    }, 1000);
-}
-
-const inputState = { left: false, right: false, up: false, down: false, block: false };
-let localState = {
-    x: 0, z: 0, y: 0, vy: 0,
-    action: 'idle', actionTimer: 0,
-    hitStunTimer: 0, knockbackVx: 0,
-    block: false, facing: 1
-};
-
-function setInput(key, val) {
-    inputState[key] = val;
-    if (key === 'block') {
-        localState.block = val;
-        syncState(true);
-    }
-}
-
-window.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft' || e.key === 'a') setInput('left', true);
-    if (e.key === 'ArrowRight' || e.key === 'd') setInput('right', true);
-    if (e.key === 'ArrowUp' || e.key === 'w') setInput('up', true);
-    if (e.key === 'ArrowDown' || e.key === 's') setInput('down', true);
-    if (e.key === ' ') setInput('block', true);
-    if (e.key === 'j' || e.key === 'z') triggerAction('punch');
-    if (e.key === 'k' || e.key === 'x') triggerAction('kick');
-    if (e.key === 'l' || e.key === 'c') triggerAction('special');
-});
-
-window.addEventListener('keyup', (e) => {
-    if (e.key === 'ArrowLeft' || e.key === 'a') setInput('left', false);
-    if (e.key === 'ArrowRight' || e.key === 'd') setInput('right', false);
-    if (e.key === 'ArrowUp' || e.key === 'w') setInput('up', false);
-    if (e.key === 'ArrowDown' || e.key === 's') setInput('down', false);
-    if (e.key === ' ') setInput('block', false);
-});
-
-function triggerAction(type) {
-    if (gameState !== 'PLAYING') return;
-    if (localState.actionTimer > 0 || localState.hitStunTimer > 0 || localState.block) return;
-
-    localState.action = type;
-    localState.actionTimer = type === 'special' ? 0.5 : 0.32;
-
-    const oppData = playersData[opponentRole];
-    if (oppData) {
-        const dx = Math.abs(localState.x - oppData.x);
-        const dz = Math.abs(localState.z - (oppData.z || 0));
-        const reach = type === 'special' ? 2.1 : (type === 'kick' ? 1.65 : 1.35);
-
-        if (dx <= reach && dz <= 0.85) {
-            let dmg = type === 'special' ? 20 : (type === 'kick' ? 12 : 8);
-            if (oppData.block) dmg = Math.floor(dmg * 0.2);
-
-            const newHp = Math.max(0, oppData.hp - dmg);
-            roomRef.child(opponentRole).update({
-                hp: newHp,
-                hitTimestamp: Date.now(),
-                hitPower: type === 'special' ? 2 : 1
-            });
-        }
-    }
-    syncState(true);
-}
-
-let lastHitHandled = 0;
-function listenToRoom() {
-    localState.x = myRole === 'p1' ? -2.0 : 2.0;
-    localState.facing = myRole === 'p1' ? 1 : -1;
-
-    roomRef.on('value', (snap) => {
-        const data = snap.val();
-        if (!data) return;
-        playersData.p1 = data.p1;
-        playersData.p2 = data.p2;
-
-        document.getElementById('p1-hp').style.width = data.p1.hp + '%';
-        document.getElementById('p1-hp-text').innerText = data.p1.hp + '%';
-        document.getElementById('p2-hp').style.width = data.p2.hp + '%';
-        document.getElementById('p2-hp-text').innerText = data.p2.hp + '%';
-
-        const myServerData = data[myRole];
-        if (myServerData && myServerData.hitTimestamp && myServerData.hitTimestamp > lastHitHandled) {
-            lastHitHandled = myServerData.hitTimestamp;
-            localState.hitStunTimer = 0.35;
-            localState.action = 'hurt';
-            const pushDir = localState.facing === 1 ? -1 : 1;
-            localState.knockbackVx = pushDir * (myServerData.hitPower === 2 ? 7.5 : 4.5);
-            if (myServerData.hitPower === 2) localState.vy = 3.2;
-            shakeIntensity = 0.25;
-        }
-
-        if (gameState === 'PLAYING' && (data.p1.hp <= 0 || data.p2.hp <= 0)) {
-            finishMatch(data.p2.hp <= 0 ? 'p1' : 'p2');
-        }
-    });
-}
-
-let shakeIntensity = 0;
-let lastSync = 0;
-function syncState(force = false) {
-    if (!roomRef || !myRole) return;
-    const now = Date.now();
-    if (!force && now - lastSync < 35) return;
-    lastSync = now;
-
-    roomRef.child(myRole).update({
-        x: Number(localState.x.toFixed(3)),
-        y: Number(localState.y.toFixed(3)),
-        z: Number(localState.z.toFixed(3)),
-        action: localState.action,
-        block: localState.block,
-        facing: localState.facing
-    });
-}
-
-function finishMatch(winner) {
-    gameState = 'GAMEOVER';
-    clearInterval(timerInt);
-    document.getElementById('gamepad').classList.add('hidden');
-    document.getElementById('gameover-screen').classList.remove('hidden');
-    const win = (winner === myRole);
-    document.getElementById('winner-title').innerText = win ? 'K.O. - شما برنده شدید!' : 'K.O. - شکست خوردید!';
-    document.getElementById('winner-sub').innerText = win ? 'ضربه نهایی حریف را از پای درآورد' : 'حریف برنده این مبارزه شد';
-}
-
-function resetToMenu() {
-    if (roomRef) { roomRef.off(); roomRef.remove(); roomRef = null; }
-    gameState = 'MENU';
-    document.getElementById('gameover-screen').classList.add('hidden');
-    document.getElementById('hud').classList.add('hidden');
-    document.getElementById('select-screen').classList.remove('hidden');
-}
-
-// ============================================================================
-// ۶. حلقه رندر 120FPS
-// ============================================================================
-let lastFrameTime = performance.now();
-
-function gameLoop(now) {
-    requestAnimationFrame(gameLoop);
-
-    const dt = Math.min((now - lastFrameTime) / 1000, 0.05);
-    lastFrameTime = now;
-
-    if (gameState === 'PLAYING' && fighters[myRole] && fighters[opponentRole]) {
-        const oppData = playersData[opponentRole];
-        const oppX = oppData ? oppData.x : 0;
-        const oppZ = oppData ? (oppData.z || 0) : 0;
-
-        if (localState.hitStunTimer > 0) {
-            localState.hitStunTimer -= dt;
-            localState.x += localState.knockbackVx * dt;
-            localState.knockbackVx *= 0.88;
-            if (localState.hitStunTimer <= 0) {
-                localState.action = 'idle';
-                syncState(true);
             }
-        } else {
-            const moveSpeed = 4.6;
-            if (inputState.left) localState.x -= moveSpeed * dt;
-            if (inputState.right) localState.x += moveSpeed * dt;
-            if (inputState.down) localState.z += moveSpeed * 0.75 * dt;
-            if (inputState.up && localState.y === 0) localState.vy = 6.8;
+
+            allNotifications = sorted;
+            initialNotifLoadDone = true;
+
+            const unreadCount = allNotifications.filter(n => !n.read).length;
+            document.getElementById("kpi-unread-count").innerText = unreadCount;
+
+            const badge = document.getElementById("unread-badge");
+            if (isAdminAuthenticated && unreadCount > 0) {
+                badge.innerText = unreadCount;
+                badge.classList.add("show");
+            } else {
+                badge.classList.remove("show");
+            }
+
+            renderNotifications();
+        });
+
+        function showToast(title, body) {
+            const toast = document.getElementById("live-toast");
+            document.getElementById("toast-title").innerText = "🔔 " + title;
+            document.getElementById("toast-body").innerText = body;
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 6000);
         }
 
-        if (localState.y > 0 || localState.vy !== 0) {
-            localState.y += localState.vy * dt;
-            localState.vy -= 19 * dt;
-            if (localState.y <= 0) { localState.y = 0; localState.vy = 0; }
+        function renderBookingsTable() {
+            const tbody = document.getElementById("bookings-tbody");
+            if (!allBookings.length) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">هنوز نوبتی ثبت نشده است.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = allBookings.map(b => {
+                const isConfirmed = b.status === "تایید شد";
+                return `
+                    <tr>
+                        <td><strong>${escapeHtml(b.name)}</strong><br><span style="color:var(--text-muted); font-size:11px;">${escapeHtml(b.notes || "")}</span></td>
+                        <td>${escapeHtml(b.phone)}</td>
+                        <td>${escapeHtml(b.service)}</td>
+                        <td>${escapeHtml(b.date)}<br><strong>${escapeHtml(b.time)}</strong></td>
+                        <td><span class="status-pill ${isConfirmed ? "status-confirmed" : "status-pending"}">${escapeHtml(b.status)}</span></td>
+                        <td>
+                            ${!isConfirmed ? `<button type="button" class="mini-btn btn-confirm" onclick="confirmBooking('${b.id}')">تایید</button>` : ""}
+                            <button type="button" class="mini-btn btn-delete" onclick="deleteBooking('${b.id}')">حذف</button>
+                        </td>
+                    </tr>
+                `;
+            }).join("");
         }
 
-        const minSeparation = 0.95;
-        const dx = localState.x - oppX;
-        const dz = localState.z - oppZ;
-        const dist2D = Math.hypot(dx, dz);
+        function renderNotifications() {
+            const container = document.getElementById("notifications-list");
+            if (!allNotifications.length) {
+                container.innerHTML = `<p style="font-size:12.5px; color:var(--text-muted);">پیامی ثبت نشده است.</p>`;
+                return;
+            }
 
-        if (dist2D < minSeparation && localState.y < 1.2) {
-            const pushAngle = dist2D > 0.001 ? Math.atan2(dz, dx) : (myRole === 'p1' ? Math.PI : 0);
-            localState.x = oppX + Math.cos(pushAngle) * minSeparation;
-            localState.z = oppZ + Math.sin(pushAngle) * minSeparation;
+            container.innerHTML = allNotifications.map(n => {
+                const timeStr = n.createdAt ? new Date(n.createdAt).toLocaleString("fa-IR") : "";
+                return `
+                    <div class="notif-item ${n.read ? "" : "unread"}">
+                        <strong>${escapeHtml(n.title)}</strong>
+                        <p style="margin-top:3px;">${escapeHtml(n.message)}</p>
+                        <span class="notif-time">${timeStr}</span>
+                    </div>
+                `;
+            }).join("");
         }
 
-        localState.x = Math.max(-5.8, Math.min(5.8, localState.x));
-        localState.z = Math.max(-4.5, Math.min(4.5, localState.z));
+        function confirmBooking(id) {
+            bookingsRef.child(id).update({ status: "تایید شد" });
+        }
 
-        if (localState.actionTimer > 0) {
-            localState.actionTimer -= dt;
-            if (localState.actionTimer <= 0 && localState.action !== 'hurt') {
-                localState.action = 'idle';
-                syncState(true);
+        function deleteBooking(id) {
+            bookingsRef.child(id).remove();
+        }
+
+        function markAllRead() {
+            allNotifications.forEach(n => {
+                if (!n.read) notificationsRef.child(n.id).update({ read: true });
+            });
+        }
+
+        // =====================================================================
+        // ۵. احراز هویت رمز ادمین و باز/بسته کردن پنل
+        // =====================================================================
+        function openAdminFlow() {
+            if (isAdminAuthenticated) {
+                document.getElementById("admin-modal").classList.add("show");
+            } else {
+                document.getElementById("login-error").style.display = "none";
+                document.getElementById("admin-pass-input").value = "";
+                document.getElementById("login-modal").classList.add("show");
             }
         }
 
-        localState.facing = localState.x <= oppX ? 1 : -1;
-        syncState();
-
-        updateFighterVisuals(fighters[myRole], localState, (inputState.left || inputState.right || inputState.down));
-
-        if (oppData) {
-            const oppMesh = fighters[opponentRole];
-            oppMesh.root.position.lerp(new THREE.Vector3(oppData.x, oppData.y || 0, oppData.z || 0), 0.35);
-            updateFighterVisuals(oppMesh, oppData, false, true);
+        function closeLoginModal() {
+            document.getElementById("login-modal").classList.remove("show");
         }
 
-        const p1Pos = fighters.p1.root.position;
-        const p2Pos = fighters.p2.root.position;
-        const midX = (p1Pos.x + p2Pos.x) / 2;
-        const sep = Math.abs(p1Pos.x - p2Pos.x);
-        const targetZ = Math.max(5.8, Math.min(9.8, sep * 1.1 + 4.2));
-
-        let shakeX = 0, shakeY = 0;
-        if (shakeIntensity > 0) {
-            shakeX = (Math.random() - 0.5) * shakeIntensity;
-            shakeY = (Math.random() - 0.5) * shakeIntensity;
-            shakeIntensity *= 0.85;
-            if (shakeIntensity < 0.01) shakeIntensity = 0;
+        function verifyAdminPassword(e) {
+            e.preventDefault();
+            const entered = document.getElementById("admin-pass-input").value;
+            if (entered === ADMIN_PASSWORD) {
+                isAdminAuthenticated = true;
+                closeLoginModal();
+                document.getElementById("admin-modal").classList.add("show");
+                const unreadCount = allNotifications.filter(n => !n.read).length;
+                const badge = document.getElementById("unread-badge");
+                if (unreadCount > 0) {
+                    badge.innerText = unreadCount;
+                    badge.classList.add("show");
+                }
+            } else {
+                document.getElementById("login-error").style.display = "block";
+            }
         }
 
-        camera.position.x += (midX - camera.position.x) * 0.15 + shakeX;
-        camera.position.y = 2.4 + shakeY;
-        camera.position.z += (targetZ - camera.position.z) * 0.15;
-        camera.lookAt(midX, 1.25, 0);
-    }
+        function logoutAdmin() {
+            isAdminAuthenticated = false;
+            document.getElementById("admin-modal").classList.remove("show");
+            document.getElementById("unread-badge").classList.remove("show");
+        }
 
-    renderer.render(scene, camera);
-}
-
-function updateFighterVisuals(fighterObj, state, isMoving, isRemote = false) {
-    if (!isRemote) {
-        fighterObj.root.position.set(state.x, state.y, state.z);
-    }
-
-    const dirScale = state.facing === 1 ? 1 : -1;
-    fighterObj.plane.scale.x = dirScale;
-    fighterObj.plane.rotation.z = 0;
-    fighterObj.plane.position.x = 0;
-    fighterObj.mat.color.setHex(0xffffff);
-    fighterObj.hitFlash.material.opacity = 0;
-
-    const shadowScale = Math.max(0.4, 1 - (state.y || 0) * 0.25);
-    fighterObj.shadow.scale.set(shadowScale, shadowScale, 1);
-    fighterObj.shadow.position.y = -(state.y || 0) + 0.02;
-
-    if (state.action === 'hurt') {
-        fighterObj.mat.color.setHex(0xff5555);
-        fighterObj.plane.rotation.z = dirScale * 0.35;
-        fighterObj.plane.position.x = -dirScale * 0.15;
-        fighterObj.hitFlash.material.opacity = 0.85;
-    } else if (state.action === 'punch' || state.action === 'kick') {
-        fighterObj.plane.position.x = dirScale * 0.35;
-        fighterObj.plane.rotation.z = -dirScale * 0.15;
-    } else if (state.action === 'special') {
-        fighterObj.mat.color.setHex(0xffe066);
-        fighterObj.plane.position.x = dirScale * 0.45;
-        fighterObj.hitFlash.material.opacity = 0.6;
-    } else if (state.block) {
-        fighterObj.mat.color.setHex(0x88ccff);
-        fighterObj.plane.rotation.z = dirScale * 0.12;
-    } else if (isMoving) {
-        fighterObj.plane.position.y = fighterObj.baseHeight + Math.abs(Math.sin(performance.now() * 0.015)) * 0.08;
-    } else {
-        fighterObj.plane.position.y = fighterObj.baseHeight + Math.sin(performance.now() * 0.005) * 0.02;
-    }
-}
-
-function onResize() {
-    const wrapper = document.getElementById('game-wrapper');
-    renderer.setSize(wrapper.clientWidth, wrapper.clientHeight);
-    camera.aspect = 16 / 9;
-    camera.updateProjectionMatrix();
-}
-window.addEventListener('resize', onResize);
-onResize();
-requestAnimationFrame(gameLoop);
-</script>
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;");
+        }
+    </script>
 </body>
 </html>
