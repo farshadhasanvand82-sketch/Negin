@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lash Atelier | رزرو آنلاین و پنل مدیریت کاشت مژه</title>
+    <title>Negin Lash | رزرو آنلاین و پنل مدیریت کاشت مژه</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -12,8 +12,8 @@
     <style>
         :root {
             --bg-main: #fff8fb;
-            --glass-bg: rgba(255, 255, 255, 0.76);
-            --glass-border: rgba(255, 255, 255, 0.92);
+            --glass-bg: rgba(255, 255, 255, 0.78);
+            --glass-border: rgba(255, 255, 255, 0.94);
             --pink-primary: #e85d9a;
             --pink-dark: #c93b7b;
             --pink-soft: #fce4ef;
@@ -44,9 +44,9 @@
         }
 
         .container {
-            max-width: 1160px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
         }
 
         .glass {
@@ -57,33 +57,33 @@
             box-shadow: var(--shadow-soft);
         }
 
-        /* هدر ناوبری */
+        /* هدر استاندارد */
         header {
             position: sticky;
-            top: 14px;
+            top: 16px;
             z-index: 100;
-            margin: 14px auto 0;
-            max-width: 1160px;
+            margin: 16px auto 0;
+            max-width: 1200px;
             border-radius: 24px;
-            padding: 12px 22px;
+            padding: 12px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 12px;
+            gap: 14px;
             flex-wrap: wrap;
         }
 
         .brand {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             text-decoration: none;
             color: var(--text-dark);
         }
 
         .brand-logo {
-            width: 42px;
-            height: 42px;
+            width: 44px;
+            height: 44px;
             border-radius: 14px;
             background: linear-gradient(135deg, #ff7eb6, #d9468f);
             display: flex;
@@ -97,18 +97,18 @@
 
         .brand-text strong {
             display: block;
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 900;
         }
 
         .brand-text span {
-            font-size: 11px;
+            font-size: 11.5px;
             color: var(--text-muted);
         }
 
         nav {
             display: flex;
-            gap: 20px;
+            gap: 22px;
         }
 
         nav a {
@@ -152,9 +152,9 @@
         }
 
         .btn-admin {
-            background: rgba(38, 25, 34, 0.08);
+            background: rgba(38, 25, 34, 0.07);
             color: var(--text-dark);
-            border: 1.5px solid rgba(38, 25, 34, 0.16);
+            border: 1.5px solid rgba(38, 25, 34, 0.15);
             padding: 10px 16px;
             border-radius: 16px;
             font-weight: 700;
@@ -190,11 +190,11 @@
             display: inline-flex;
         }
 
-        /* بنر پیام لحظه‌ای برای ادمین وقتی لاگین کرده */
+        /* بنر پیام لحظه‌ای برای ادمین */
         .live-toast {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
+            bottom: 22px;
+            left: 22px;
             z-index: 999;
             max-width: 380px;
             border-radius: 20px;
@@ -228,12 +228,12 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
-        /* Hero */
+        /* بخش معرفی (Hero) */
         .hero {
-            padding: 52px 0 34px;
+            padding: 56px 0 38px;
             display: grid;
             grid-template-columns: 1.15fr 0.85fr;
-            gap: 32px;
+            gap: 36px;
             align-items: center;
         }
 
@@ -251,9 +251,9 @@
         }
 
         .hero h1 {
-            font-size: clamp(28px, 4.2vw, 46px);
+            font-size: clamp(28px, 3.8vw, 44px);
             font-weight: 900;
-            line-height: 1.25;
+            line-height: 1.28;
             margin-bottom: 14px;
         }
 
@@ -267,18 +267,18 @@
             color: var(--text-muted);
             font-size: 15px;
             margin-bottom: 24px;
-            max-width: 540px;
+            max-width: 550px;
         }
 
         .hero-actions {
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
-            margin-bottom: 24px;
+            margin-bottom: 26px;
         }
 
         .btn-outline {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.85);
             color: var(--text-dark);
             border: 1.5px solid rgba(232, 93, 154, 0.3);
             padding: 11px 22px;
@@ -286,11 +286,12 @@
             font-weight: 700;
             font-size: 13.5px;
             text-decoration: none;
+            cursor: pointer;
         }
 
         .stats-row {
             display: flex;
-            gap: 24px;
+            gap: 26px;
             flex-wrap: wrap;
         }
 
@@ -302,7 +303,7 @@
         }
 
         .stat-item span {
-            font-size: 12px;
+            font-size: 12.5px;
             color: var(--text-muted);
         }
 
@@ -312,7 +313,7 @@
         }
 
         .showcase-visual {
-            height: 290px;
+            height: 295px;
             border-radius: 22px;
             background:
                 radial-gradient(circle at 30% 25%, rgba(255, 145, 198, 0.75), transparent 55%),
@@ -340,14 +341,15 @@
             margin-bottom: 12px;
         }
 
+        /* خدمات */
         .section {
-            padding: 42px 0;
+            padding: 46px 0;
         }
 
         .section-header {
             text-align: center;
-            max-width: 600px;
-            margin: 0 auto 30px;
+            max-width: 620px;
+            margin: 0 auto 32px;
         }
 
         .section-header h2 {
@@ -364,12 +366,12 @@
         .services-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
+            gap: 20px;
         }
 
         .service-card {
             border-radius: 24px;
-            padding: 22px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -445,10 +447,10 @@
         /* رزرو نوبت */
         .booking-box {
             border-radius: 30px;
-            padding: 30px;
+            padding: 32px;
             display: grid;
             grid-template-columns: 1fr 1.15fr;
-            gap: 28px;
+            gap: 30px;
         }
 
         .form-grid {
@@ -523,6 +525,68 @@
             display: block;
         }
 
+        /* فوتر استاندارد با راه‌های ارتباطی و آیکون صورتی اینستاگرام */
+        footer.site-footer {
+            margin: 34px auto 28px;
+            max-width: 1200px;
+            border-radius: 28px;
+            padding: 28px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr 1fr;
+            gap: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed rgba(232, 93, 154, 0.28);
+        }
+
+        .footer-col h4 {
+            font-size: 15px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .footer-col p, .footer-col li {
+            font-size: 13px;
+            color: var(--text-muted);
+            list-style: none;
+            margin-bottom: 6px;
+        }
+
+        .insta-pink-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 6px;
+            padding: 10px 18px;
+            border-radius: 16px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 800;
+            font-size: 13px;
+            background: linear-gradient(135deg, #ff7eb6, #e84a90, #d63384);
+            box-shadow: 0 8px 22px rgba(232, 74, 144, 0.35);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .insta-pink-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 26px rgba(232, 74, 144, 0.48);
+        }
+
+        .footer-bottom {
+            padding-top: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 12.5px;
+            color: var(--text-muted);
+        }
+
         /* مودال ورود رمز ادمین و پنل ادمین */
         .modal-backdrop {
             position: fixed;
@@ -552,7 +616,7 @@
 
         .admin-panel {
             width: 100%;
-            max-width: 1050px;
+            max-width: 1080px;
             max-height: 88vh;
             overflow-y: auto;
             border-radius: 28px;
@@ -699,7 +763,7 @@
         }
 
         @media (max-width: 900px) {
-            .hero, .booking-box, .services-grid, .admin-kpis, .admin-grid-2 {
+            .hero, .booking-box, .services-grid, .admin-kpis, .admin-grid-2, .footer-grid {
                 grid-template-columns: 1fr;
             }
             nav {
@@ -719,15 +783,16 @@
     <!-- هدر -->
     <header class="glass">
         <a href="#" class="brand">
-            <div class="brand-logo">L</div>
+            <div class="brand-logo">NL</div>
             <div class="brand-text">
-                <strong>LASH ATELIER</strong>
+                <strong>Negin Lash</strong>
                 <span>رزرو تخصصی کاشت مژه</span>
             </div>
         </a>
         <nav>
             <a href="#services">خدمات</a>
             <a href="#booking">رزرو وقت</a>
+            <a href="#contact">راه‌های ارتباطی</a>
         </nav>
         <div class="header-actions">
             <button type="button" class="btn-admin" onclick="openAdminFlow()">
@@ -742,9 +807,9 @@
     <section class="container hero">
         <div>
             <div class="badge">✨ ظرافت، ماندگاری و سلامت مژه‌های طبیعی</div>
-            <h1>نگاهی خیره‌کننده با <span>کاشت مژه حرفه‌ای</span> و اصولی</h1>
+            <h1>نگاهی خیره‌کننده در <span>Negin Lash</span> با کاشت مژه اصولی</h1>
             <p>
-                انتخاب فر، ضخامت و طول مژه متناسب با فرم چشم شما، با متریال فوق‌سبک و رعایت کامل اصول بهداشتی در محیطی آرام.
+                انتخاب فر، ضخامت و طول مژه متناسب با فرم چشم شما، با متریال فوق‌سبک، چسب کم‌حساسیت و رعایت کامل اصول بهداشتی در محیطی آرام.
             </p>
             <div class="hero-actions">
                 <a href="#booking" class="btn-primary">انتخاب روز و ساعت</a>
@@ -769,8 +834,8 @@
         <div class="glass hero-showcase">
             <div class="showcase-visual">
                 <div class="lash-ring">👁️</div>
-                <h3>طراحی اختصاصی فرم چشم</h3>
-                <p>کلاسیک، اسپایک، والیوم و مگاوالیوم • ترمیم دقیق و ایمن</p>
+                <h3>Negin Lash Studio</h3>
+                <p>طراحی اختصاصی فرم چشم • کلاسیک، اسپایک، والیوم و مگاوالیوم</p>
             </div>
         </div>
     </section>
@@ -835,9 +900,9 @@
         <div class="glass booking-box">
             <div>
                 <div class="badge">📅 ثبت آنلاین نوبت</div>
-                <h3 style="font-size:22px; font-weight:900; margin-bottom:10px;">رزرو وقت کاشت مژه</h3>
+                <h3 style="font-size:22px; font-weight:900; margin-bottom:10px;">رزرو وقت در Negin Lash</h3>
                 <p style="color:var(--text-muted); font-size:14px;">
-                    اطلاعات و زمان دلخواهتان را وارد کنید تا نوبت شما ثبت شود و پیام اطلاع‌رسانی فوراً برای مدیریت ارسال گردد.
+                    اطلاعات و زمان دلخواهتان را وارد کنید تا نوبت شما ثبت شود و پیام اطلاع‌رسانی فوراً برای ادمین ارسال گردد.
                 </p>
             </div>
 
@@ -893,10 +958,53 @@
         </div>
     </section>
 
+    <!-- فوتر و راه‌های ارتباطی پایین صفحه -->
+    <footer id="contact" class="glass site-footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Negin Lash</h4>
+                <p>
+                    مرکز تخصصی کاشت، اکستنشن و ترمیم مژه با تمرکز بر سلامت تارهای طبیعی و طراحی اختصاصی فرم چشم.
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <h4>راه‌های ارتباطی و ساعات کاری</h4>
+                <ul>
+                    <li>📞 پشتیبانی و هماهنگی: ۰۹۱۲-۰۰۰-۰۰۰۰</li>
+                    <li>🕒 ساعات پذیرش: شنبه تا پنجشنبه (۱۰:۰۰ تا ۱۹:۰۰)</li>
+                    <li>📍 نوبت‌دهی: آنلاین و با هماهنگی قبلی</li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>شبکه اجتماعی ما</h4>
+                <p>برای دیدن جدیدترین نمونه‌کارها و استوری‌های روزانه وارد پیج شوید:</p>
+                <a
+                    href="https://www.instagram.com/eyelash_nigino?avpt=MXJlems0cWlyZWl6Mw=="
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="insta-pink-link"
+                    aria-label="اینستاگرام Negin Lash"
+                >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zm8.88 2.25a1.12 1.12 0 1 1 0 2.24 1.12 1.12 0 0 1 0-2.24zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"/>
+                    </svg>
+                    <span>اینستاگرام Negin Lash</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© ۲۰۲۵ Negin Lash — تمامی حقوق محفوظ است.</span>
+            <span>رزرو آنلاین و مدیریت لحظه‌ای نوبت‌ها</span>
+        </div>
+    </footer>
+
     <!-- مودال ورود رمز ادمین -->
     <div id="login-modal" class="modal-backdrop">
         <div class="login-card">
-            <h3 style="font-size:19px; font-weight:900; margin-bottom:6px;">ورود به پنل ادمین</h3>
+            <h3 style="font-size:19px; font-weight:900; margin-bottom:6px;">ورود به پنل ادمین Negin Lash</h3>
             <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:14px;">
                 رمز عبور مدیریت را وارد کنید تا آمار کاربران آنلاین و لیست رزروها نمایش داده شود.
             </p>
@@ -919,7 +1027,7 @@
         <div class="admin-panel">
             <div class="admin-top">
                 <div>
-                    <h3 style="font-size:21px; font-weight:900;">پنل مدیریت رزرو و کاربران</h3>
+                    <h3 style="font-size:21px; font-weight:900;">پنل مدیریت Negin Lash</h3>
                     <span style="font-size:12.5px; color:var(--text-muted);">نظارت لحظه‌ای بر کاربران سایت و نوبت‌های ثبت‌شده</span>
                 </div>
                 <div style="display:flex; gap:8px; flex-wrap:wrap;">
@@ -980,17 +1088,16 @@
         // ۱. تنظیمات فایربیس و رمز عبور ادمین
         // =====================================================================
         const firebaseConfig = {
-            databaseURL: "https://crazyapp-9663a-default-rtdb.firebaseio.com" //[span_1](start_span)[span_1](end_span)
+            databaseURL: "https://crazyapp-9663a-default-rtdb.firebaseio.com"
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // رمز ورود به پنل ادمین (در صورت نیاز تغییر دهید)
-        const ADMIN_PASSWORD = "admin";
+        const ADMIN_PASSWORD = "negfer8679";
 
-        const bookingsRef = db.ref("lash_atelier/bookings");
-        const notificationsRef = db.ref("lash_atelier/admin_notifications");
-        const onlineUsersRef = db.ref("lash_atelier/online_users");
+        const bookingsRef = db.ref("negin_lash/bookings");
+        const notificationsRef = db.ref("negin_lash/admin_notifications");
+        const onlineUsersRef = db.ref("negin_lash/online_users");
 
         let isAdminAuthenticated = false;
         let selectedTimeSlot = "10:00";
@@ -1079,7 +1186,6 @@
             };
 
             bookingsRef.push(newBooking).then(() => {
-                // ارسال پیام اطلاع‌رسانی برای ادمین در دیتابیس
                 notificationsRef.push({
                     title: "یک نوبت جدید رزرو شد!",
                     message: `${clientName} (${clientPhone}) برای «${service}» در تاریخ ${date} ساعت ${selectedTimeSlot} نوبت رزرو کرد.`,
@@ -1115,7 +1221,6 @@
                 .map(([id, item]) => ({ id, ...item }))
                 .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
-            // اگر پیام کاملاً جدیدی پس از بارگذاری اولیه رسید و ادمین لاگین است، پیام شناور و صدا پخش کن
             if (initialNotifLoadDone && sorted.length > allNotifications.length) {
                 const newest = sorted[0];
                 if (isAdminAuthenticated && newest) {
