@@ -2,8 +2,8 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Negin Lash | رزرو آنلاین و پنل مدیریت کاشت مژه</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Negin Lash | رزرو آنلاین کاشت مژه</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -11,16 +11,16 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
         :root {
-            --bg-main: #fff8fb;
-            --glass-bg: rgba(255, 255, 255, 0.78);
-            --glass-border: rgba(255, 255, 255, 0.94);
+            --bg-main: #fff7fb;
+            --glass-bg: rgba(255, 255, 255, 0.84);
+            --glass-border: rgba(255, 255, 255, 0.96);
             --pink-primary: #e85d9a;
-            --pink-dark: #c93b7b;
-            --pink-soft: #fce4ef;
-            --pink-glow: rgba(232, 93, 154, 0.25);
-            --text-dark: #261922;
-            --text-muted: #6e5866;
-            --shadow-soft: 0 12px 35px rgba(212, 118, 163, 0.14);
+            --pink-dark: #c43273;
+            --pink-soft: #fce3ef;
+            --pink-glow: rgba(232, 93, 154, 0.28);
+            --text-dark: #251721;
+            --text-muted: #6c5564;
+            --shadow-card: 0 10px 28px rgba(214, 112, 160, 0.14);
         }
 
         * {
@@ -28,25 +28,20 @@
             margin: 0;
             padding: 0;
             font-family: 'Vazirmatn', sans-serif;
-            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        body {
+        html, body {
             background:
-                radial-gradient(circle at 12% 15%, #ffd9ea 0%, transparent 38%),
-                radial-gradient(circle at 88% 20%, #f3dcff 0%, transparent 40%),
-                radial-gradient(circle at 50% 90%, #ffe6f1 0%, transparent 45%),
+                radial-gradient(circle at 15% 10%, #ffd8ea 0%, transparent 42%),
+                radial-gradient(circle at 88% 18%, #f2d9ff 0%, transparent 42%),
+                radial-gradient(circle at 50% 88%, #ffe4f0 0%, transparent 48%),
                 var(--bg-main);
             color: var(--text-dark);
             min-height: 100vh;
-            line-height: 1.7;
+            line-height: 1.65;
             overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
+            padding-bottom: 92px; /* جا برای تولبار پایین در گوشی */
         }
 
         .glass {
@@ -54,371 +49,278 @@
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
             border: 1.5px solid var(--glass-border);
-            box-shadow: var(--shadow-soft);
+            box-shadow: var(--shadow-card);
         }
 
-        /* هدر */
-        header {
+        /* هدر جمع‌وجور مخصوص گوشی */
+        .mobile-top-header {
             position: sticky;
-            top: 16px;
-            z-index: 100;
-            margin: 16px auto 0;
-            max-width: 1200px;
-            border-radius: 24px;
-            padding: 12px 24px;
+            top: 0;
+            z-index: 80;
+            padding: 12px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 14px;
-            flex-wrap: wrap;
+            border-bottom-left-radius: 22px;
+            border-bottom-right-radius: 22px;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: var(--text-dark);
-        }
-
-        .brand-logo {
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #ff7eb6, #d9468f);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-weight: 900;
-            font-size: 18px;
-            box-shadow: 0 6px 18px var(--pink-glow);
-        }
-
-        .brand-text strong {
-            display: block;
-            font-size: 17px;
-            font-weight: 900;
-        }
-
-        .brand-text span {
-            font-size: 11.5px;
-            color: var(--text-muted);
-        }
-
-        nav {
-            display: flex;
-            gap: 20px;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: var(--text-dark);
-            font-weight: 600;
-            font-size: 14px;
-            transition: color 0.2s;
-        }
-
-        nav a:hover {
-            color: var(--pink-primary);
-        }
-
-        .header-actions {
+        .brand-box {
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #f062a1, #d63d82);
+        .brand-mark {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ff7eb6, #d4387e);
+            color: #fff;
+            font-weight: 900;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 16px var(--pink-glow);
+        }
+
+        .brand-box strong {
+            display: block;
+            font-size: 16px;
+            font-weight: 900;
+        }
+
+        .brand-box span {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .online-pill {
+            background: var(--pink-soft);
+            color: var(--pink-dark);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 5px 10px;
+            border-radius: 999px;
+        }
+
+        /* کانتینر صفحات موبایلی */
+        .page-view {
+            display: none;
+            padding: 16px;
+            max-width: 560px;
+            margin: 0 auto;
+            animation: fadeIn 0.22s ease;
+        }
+
+        .page-view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* بنر خوشامدگویی */
+        .hero-card {
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 16px;
+            background:
+                radial-gradient(circle at 85% 20%, rgba(255, 140, 196, 0.35), transparent 55%),
+                var(--glass-bg);
+        }
+
+        .tag-pill {
+            display: inline-block;
+            background: var(--pink-soft);
+            color: var(--pink-dark);
+            font-size: 11.5px;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 999px;
+            margin-bottom: 10px;
+        }
+
+        .hero-card h1 {
+            font-size: 22px;
+            font-weight: 900;
+            line-height: 1.35;
+            margin-bottom: 8px;
+        }
+
+        .hero-card p {
+            font-size: 13.5px;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+        }
+
+        .btn-pink {
+            background: linear-gradient(135deg, #f264a3, #cf367b);
             color: #fff;
             border: none;
-            padding: 11px 22px;
+            padding: 13px 18px;
             border-radius: 16px;
-            font-weight: 700;
-            font-size: 13.5px;
+            font-size: 14px;
+            font-weight: 800;
             cursor: pointer;
-            text-decoration: none;
+            width: 100%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            box-shadow: 0 8px 22px var(--pink-glow);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 8px 20px var(--pink-glow);
+            transition: transform 0.15s;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
+        .btn-pink:active {
+            transform: scale(0.98);
         }
 
-        .btn-admin {
-            background: rgba(38, 25, 34, 0.07);
+        .btn-light {
+            background: #fff;
             color: var(--text-dark);
-            border: 1.5px solid rgba(38, 25, 34, 0.15);
-            padding: 10px 16px;
-            border-radius: 16px;
-            font-weight: 700;
+            border: 1.5px solid rgba(232, 93, 154, 0.28);
+            padding: 11px 14px;
+            border-radius: 15px;
             font-size: 13px;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.2s;
-        }
-
-        .btn-admin:hover {
-            border-color: var(--pink-primary);
-            color: var(--pink-primary);
-        }
-
-        .btn-outline {
-            background: rgba(255, 255, 255, 0.88);
-            color: var(--text-dark);
-            border: 1.5px solid rgba(232, 93, 154, 0.3);
-            padding: 10px 18px;
-            border-radius: 14px;
             font-weight: 700;
-            font-size: 13px;
-            text-decoration: none;
             cursor: pointer;
         }
 
-        .badge-dot {
-            position: absolute;
-            top: -5px;
-            left: -5px;
-            background: #e53e3e;
-            color: #fff;
-            font-size: 11px;
-            min-width: 20px;
-            height: 20px;
-            border-radius: 999px;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 0 5px;
-            font-weight: 900;
-        }
-
-        .badge-dot.show {
-            display: inline-flex;
-        }
-
-        /* پیام شناور لحظه‌ای برای ادمین */
-        .live-toast {
-            position: fixed;
-            bottom: 22px;
-            left: 22px;
-            z-index: 999;
-            max-width: 380px;
-            border-radius: 20px;
-            padding: 16px 18px;
-            background: #231520;
-            color: #fff;
-            border: 1.5px solid rgba(255, 126, 182, 0.55);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
-            display: none;
-            animation: slideUp 0.3s ease;
-        }
-
-        .live-toast.show {
-            display: block;
-        }
-
-        .live-toast strong {
-            display: block;
-            color: #ff8bc2;
-            font-size: 14px;
-            margin-bottom: 4px;
-        }
-
-        .live-toast p {
-            font-size: 12.5px;
-            color: #f3e8ee;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        /* Hero */
-        .hero {
-            padding: 52px 0 34px;
-            display: grid;
-            grid-template-columns: 1.15fr 0.85fr;
-            gap: 36px;
-            align-items: center;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--pink-soft);
-            color: var(--pink-primary);
-            padding: 6px 14px;
-            border-radius: 50px;
-            font-size: 12.5px;
-            font-weight: 700;
-            margin-bottom: 14px;
-        }
-
-        .hero h1 {
-            font-size: clamp(28px, 3.8vw, 44px);
-            font-weight: 900;
-            line-height: 1.28;
-            margin-bottom: 14px;
-        }
-
-        .hero h1 span {
-            background: linear-gradient(90deg, #e84a90, #9d4edd);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            color: var(--text-muted);
-            font-size: 15px;
-            margin-bottom: 24px;
-            max-width: 550px;
-        }
-
-        .hero-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .hero-showcase {
-            border-radius: 30px;
-            padding: 22px;
-        }
-
-        .showcase-visual {
-            height: 270px;
+        /* کارت وضعیت تایید نوبت و تایمر شمارش معکوس برای کاربر */
+        .appointment-tracker-card {
             border-radius: 22px;
-            background:
-                radial-gradient(circle at 30% 25%, rgba(255, 145, 198, 0.75), transparent 55%),
-                radial-gradient(circle at 75% 75%, rgba(183, 138, 255, 0.7), transparent 55%),
-                linear-gradient(145deg, #fff0f7, #f5eaff);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 20px;
+            padding: 18px;
+            margin-bottom: 18px;
+            border: 1.5px solid rgba(232, 93, 154, 0.35);
+            display: none;
         }
 
-        .lash-ring {
-            width: 108px;
-            height: 108px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.88);
-            border: 2px solid rgba(232, 93, 154, 0.35);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            box-shadow: 0 12px 30px rgba(232, 93, 154, 0.22);
+        .appointment-tracker-card.show {
+            display: block;
+        }
+
+        .status-banner {
+            padding: 10px 12px;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 800;
             margin-bottom: 12px;
         }
 
-        /* سکشن‌ها و اسلایدرهای اسکرولی چپ و راست */
-        .section {
-            padding: 42px 0;
+        .status-banner.waiting {
+            background: #fefcbf;
+            color: #975a16;
         }
 
-        .section-head-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            gap: 16px;
-            flex-wrap: wrap;
-            margin-bottom: 22px;
+        .status-banner.approved {
+            background: #c6f6d5;
+            color: #22543d;
         }
 
-        .section-head-row h2 {
-            font-size: clamp(22px, 3vw, 30px);
-            font-weight: 900;
-        }
-
-        .section-head-row p {
-            color: var(--text-muted);
-            font-size: 13.5px;
-        }
-
-        .scroll-controls {
-            display: flex;
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
             gap: 8px;
-            align-items: center;
+            margin-top: 12px;
+            text-align: center;
         }
 
-        .scroll-btn {
-            width: 40px;
-            height: 40px;
+        .time-box {
+            background: #fff;
+            border: 1.5px solid rgba(232, 93, 154, 0.25);
             border-radius: 14px;
-            border: 1.5px solid rgba(232, 93, 154, 0.35);
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--pink-dark);
-            font-size: 16px;
-            font-weight: 900;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
+            padding: 10px 4px;
         }
 
-        .scroll-btn:hover {
+        .time-box strong {
+            display: block;
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--pink-dark);
+        }
+
+        .time-box span {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* سکشن خدمات و اسکرول افقی صفحه به صفحه */
+        .block-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .block-header h2 {
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        .arrow-btns {
+            display: flex;
+            gap: 6px;
+        }
+
+        .arrow-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            border: 1.5px solid rgba(232, 93, 154, 0.35);
+            background: #fff;
+            color: var(--pink-dark);
+            font-weight: 900;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .arrow-btn:active {
             background: var(--pink-primary);
             color: #fff;
-            border-color: var(--pink-primary);
         }
 
-        /* اسکرول افقی صفحه به صفحه (Scroll Snap) برای خدمات */
-        .paged-carousel {
+        .h-scroll-paged {
             display: flex;
-            gap: 18px;
+            gap: 12px;
             overflow-x: auto;
             scroll-snap-type: x mandatory;
             scroll-behavior: smooth;
-            padding: 6px 2px 16px;
-            scrollbar-width: thin;
-            scrollbar-color: var(--pink-primary) transparent;
+            padding-bottom: 10px;
+            scrollbar-width: none;
         }
 
-        .service-slide-card {
-            flex: 0 0 calc((100% - 36px) / 3);
-            scroll-snap-align: start;
-            border-radius: 24px;
-            padding: 22px;
+        .h-scroll-paged::-webkit-scrollbar {
+            display: none;
+        }
+
+        .service-item-card {
+            flex: 0 0 88%;
+            scroll-snap-align: center;
+            border-radius: 22px;
+            padding: 18px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            cursor: pointer;
-            transition: transform 0.2s, border-color 0.2s;
         }
 
-        .service-slide-card:hover {
-            transform: translateY(-4px);
-        }
-
-        .service-slide-card.active-service {
-            border-color: var(--pink-primary);
-        }
-
-        .service-slide-card h3 {
-            font-size: 18px;
+        .service-item-card h3 {
+            font-size: 17px;
             font-weight: 800;
-            margin: 8px 0 6px;
+            margin-bottom: 6px;
         }
 
-        .service-slide-card p {
+        .service-item-card p {
             font-size: 13px;
             color: var(--text-muted);
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
-        .service-footer {
+        .service-bottom {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -426,971 +328,1096 @@
             padding-top: 12px;
         }
 
-        .price-tag {
-            font-size: 15.5px;
+        .service-price {
+            font-size: 15px;
             font-weight: 900;
             color: var(--pink-dark);
         }
 
-        .select-btn {
+        .mini-pick-btn {
             background: var(--pink-soft);
-            color: var(--pink-primary);
+            color: var(--pink-dark);
             border: none;
             padding: 7px 14px;
             border-radius: 12px;
-            font-weight: 700;
+            font-weight: 800;
             font-size: 12px;
             cursor: pointer;
         }
 
-        .service-slide-card.active-service .select-btn {
-            background: var(--pink-primary);
-            color: #fff;
-        }
-
-        /* اسکرول افقی نمونه‌کارها */
-        .portfolio-carousel {
-            display: flex;
-            gap: 18px;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scroll-behavior: smooth;
-            padding: 6px 2px 16px;
-            scrollbar-width: thin;
-            scrollbar-color: var(--pink-primary) transparent;
-        }
-
-        .portfolio-card {
-            flex: 0 0 285px;
-            scroll-snap-align: start;
-            border-radius: 24px;
+        /* کارت‌های نمونه‌کار با اسکرول افقی چپ و راست */
+        .portfolio-item-card {
+            flex: 0 0 82%;
+            scroll-snap-align: center;
+            border-radius: 22px;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
         }
 
-        .portfolio-img-box {
+        .portfolio-photo {
             width: 100%;
-            height: 230px;
-            background: #fceef5;
-            overflow: hidden;
+            height: 240px;
+            background: #fcebf3;
         }
 
-        .portfolio-img-box img {
+        .portfolio-photo img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
         }
 
-        .portfolio-caption {
-            padding: 14px 16px;
+        .portfolio-title {
+            padding: 13px 16px;
+            font-size: 15px;
             font-weight: 800;
-            font-size: 14.5px;
-            color: var(--text-dark);
         }
 
-        .empty-state {
+        .empty-box {
             width: 100%;
-            border-radius: 24px;
-            padding: 34px 20px;
+            border-radius: 20px;
+            padding: 24px 16px;
             text-align: center;
+            font-size: 13px;
             color: var(--text-muted);
-            font-size: 14px;
         }
 
-        /* فرم رزرو نوبت */
-        .booking-box {
-            border-radius: 30px;
-            padding: 32px;
-            display: grid;
-            grid-template-columns: 1fr 1.15fr;
-            gap: 30px;
+        /* فرم رزرو */
+        .form-card {
+            border-radius: 24px;
+            padding: 20px;
         }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-        }
-
-        .form-group {
+        .field {
             display: flex;
             flex-direction: column;
             gap: 6px;
+            margin-bottom: 13px;
         }
 
-        .form-group.full {
-            grid-column: 1 / -1;
-        }
-
-        label {
+        .field label {
             font-size: 13px;
-            font-weight: 700;
+            font-weight: 800;
         }
 
-        input, select, textarea {
-            background: rgba(255, 255, 255, 0.92);
-            border: 1.5px solid rgba(232, 93, 154, 0.25);
+        .field input, .field select, .field textarea {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1.5px solid rgba(232, 93, 154, 0.28);
             border-radius: 14px;
-            padding: 10px 14px;
-            font-size: 13.5px;
+            padding: 12px 14px;
+            font-size: 14px;
             color: var(--text-dark);
             outline: none;
+            width: 100%;
         }
 
-        input:focus, select:focus, textarea:focus {
+        .field input:focus, .field select:focus, .field textarea:focus {
             border-color: var(--pink-primary);
         }
 
-        .slots-grid {
+        .time-chips {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 8px;
         }
 
-        .slot-btn {
-            padding: 8px 6px;
+        .chip-btn {
+            padding: 10px 4px;
             border-radius: 12px;
-            border: 1.5px solid rgba(232, 93, 154, 0.25);
-            background: rgba(255, 255, 255, 0.88);
+            border: 1.5px solid rgba(232, 93, 154, 0.28);
+            background: #fff;
             color: var(--text-dark);
-            font-weight: 700;
-            font-size: 12.5px;
+            font-weight: 800;
+            font-size: 13px;
             cursor: pointer;
         }
 
-        .slot-btn.active {
+        .chip-btn.active {
             background: var(--pink-primary);
             color: #fff;
             border-color: var(--pink-primary);
         }
 
-        .booking-result {
-            margin-top: 14px;
-            padding: 14px 16px;
-            border-radius: 16px;
-            background: #f0fff4;
-            border: 1.5px solid #48bb78;
-            display: none;
-            font-size: 13.5px;
-        }
-
-        .booking-result.show {
-            display: block;
-        }
-
-        /* فوتر استاندارد با راه‌های ارتباطی و آیکون صورتی اینستاگرام */
-        footer.site-footer {
-            margin: 34px auto 28px;
-            max-width: 1200px;
-            border-radius: 28px;
-            padding: 28px;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 1.3fr 1fr 1fr;
-            gap: 24px;
-            padding-bottom: 20px;
-            border-bottom: 1px dashed rgba(232, 93, 154, 0.28);
-        }
-
-        .footer-col h4 {
-            font-size: 15px;
-            font-weight: 900;
-            margin-bottom: 10px;
-        }
-
-        .footer-col p, .footer-col li {
-            font-size: 13px;
-            color: var(--text-muted);
-            list-style: none;
-            margin-bottom: 6px;
-        }
-
-        .insta-pink-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 6px;
-            padding: 10px 18px;
-            border-radius: 16px;
-            text-decoration: none;
-            color: #fff;
-            font-weight: 800;
-            font-size: 13px;
-            background: linear-gradient(135deg, #ff7eb6, #e84a90, #d63384);
-            box-shadow: 0 8px 22px rgba(232, 74, 144, 0.35);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .insta-pink-link:hover {
-            transform: translateY(-2px);
-        }
-
-        .footer-bottom {
-            padding-top: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            font-size: 12.5px;
-            color: var(--text-muted);
-        }
-
-        /* مودال ورود رمز ادمین و پنل ادمین */
-        .modal-backdrop {
-            position: fixed;
-            inset: 0;
-            background: rgba(15, 8, 16, 0.65);
-            backdrop-filter: blur(8px);
-            z-index: 200;
-            display: none;
-            align-items: center;
-            justify-content: center;
+        /* پنل ادمین و ورود رمز */
+        .admin-section-box {
+            border-radius: 22px;
             padding: 16px;
+            margin-bottom: 14px;
         }
 
-        .modal-backdrop.show {
-            display: flex;
-        }
-
-        .login-card {
-            width: 100%;
-            max-width: 390px;
-            border-radius: 26px;
-            padding: 26px;
-            background: #fff;
-            color: var(--text-dark);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
-        }
-
-        .admin-panel {
-            width: 100%;
-            max-width: 1120px;
-            max-height: 90vh;
-            overflow-y: auto;
-            border-radius: 28px;
-            padding: 26px;
-            background: #fff8fb;
-            color: var(--text-dark);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
-        }
-
-        .admin-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid rgba(232, 93, 154, 0.2);
-        }
-
-        .admin-kpis {
+        .admin-stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
-            margin-bottom: 22px;
+            gap: 8px;
+            margin-bottom: 14px;
         }
 
-        .kpi-card {
-            background: #fff;
-            border: 1.5px solid rgba(232, 93, 154, 0.2);
-            border-radius: 20px;
-            padding: 16px;
+        .stat-box {
+            border-radius: 18px;
+            padding: 12px 8px;
+            text-align: center;
         }
 
-        .kpi-card span {
+        .stat-box strong {
             display: block;
-            font-size: 12.5px;
-            color: var(--text-muted);
-        }
-
-        .kpi-card strong {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 900;
             color: var(--pink-dark);
         }
 
-        .post-creator-box {
-            background: #fff;
+        .stat-box span {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .booking-admin-item {
+            background: rgba(255, 255, 255, 0.95);
             border: 1.5px solid rgba(232, 93, 154, 0.22);
-            border-radius: 22px;
-            padding: 20px;
-            margin-bottom: 22px;
-        }
-
-        .post-creator-box h4 {
-            font-size: 16px;
-            font-weight: 900;
+            border-radius: 18px;
+            padding: 14px;
             margin-bottom: 12px;
+            font-size: 13px;
         }
 
-        .admin-grid-2 {
+        .approve-controls {
             display: grid;
-            grid-template-columns: 1.35fr 0.95fr;
-            gap: 18px;
-            margin-bottom: 20px;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px;
         }
 
-        .admin-box {
-            background: #fff;
-            border: 1.5px solid rgba(232, 93, 154, 0.18);
-            border-radius: 22px;
-            padding: 18px;
-        }
-
-        .admin-box h4 {
-            font-size: 15px;
+        .btn-approve {
+            background: #2f855a;
+            color: #fff;
+            border: none;
+            padding: 9px 10px;
+            border-radius: 12px;
+            font-size: 12px;
             font-weight: 800;
-            margin-bottom: 12px;
+            cursor: pointer;
+            margin-top: 8px;
+            width: 100%;
         }
 
-        .managed-post-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            padding: 10px 12px;
+        .btn-remove {
+            background: #fed7d7;
+            color: #9b2c2c;
+            border: none;
+            padding: 7px 10px;
+            border-radius: 10px;
+            font-size: 11.5px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .notif-card {
+            background: #fff5f9;
+            border: 1px solid #f9cde1;
             border-radius: 14px;
-            background: #fff7fb;
-            border: 1px solid #f7d6e6;
+            padding: 10px 12px;
             margin-bottom: 8px;
             font-size: 12.5px;
         }
 
-        .table-wrap {
-            overflow-x: auto;
+        .notif-card.unread {
+            border-right: 4px solid var(--pink-primary);
+            background: #ffe6f1;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 12.5px;
+        /* نوار تولبار ثابت پایین گوشی */
+        .bottom-toolbar {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            max-width: 540px;
+            margin: 0 auto;
+            height: 68px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1.5px solid rgba(255, 255, 255, 0.98);
+            box-shadow: 0 12px 32px rgba(40, 15, 32, 0.16);
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            align-items: center;
+            z-index: 150;
+            padding: 0 4px;
         }
 
-        th, td {
-            padding: 10px 8px;
-            border-bottom: 1px solid #f2e4ec;
-            text-align: right;
-        }
-
-        th {
-            color: var(--text-muted);
-            font-weight: 700;
-        }
-
-        .status-pill {
-            padding: 3px 9px;
-            border-radius: 999px;
-            font-size: 11px;
-            font-weight: 700;
-            display: inline-block;
-        }
-
-        .status-pending {
-            background: #fefcbf;
-            color: #975a16;
-        }
-
-        .status-confirmed {
-            background: #c6f6d5;
-            color: #22543d;
-        }
-
-        .mini-btn {
+        .tb-item {
+            background: none;
             border: none;
-            padding: 5px 9px;
-            border-radius: 8px;
-            font-size: 11px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            color: var(--text-muted);
+            font-size: 10.5px;
             font-weight: 700;
             cursor: pointer;
-            margin-left: 4px;
+            position: relative;
+            padding: 6px 2px;
         }
 
-        .btn-confirm {
-            background: #38a169;
+        .tb-item svg {
+            width: 21px;
+            height: 21px;
+        }
+
+        .tb-item.active {
+            color: var(--pink-dark);
+        }
+
+        /* دکمه خانه در وسط تولبار */
+        .tb-home-btn {
+            transform: translateY(-10px);
+        }
+
+        .tb-home-btn .home-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #ff7eb6, #d4387e);
             color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px var(--pink-glow);
         }
 
-        .btn-delete {
-            background: #fed7d7;
-            color: #9b2c2c;
+        .tb-home-btn span {
+            color: var(--pink-dark);
+            font-weight: 900;
         }
 
-        .notif-item {
-            padding: 10px 12px;
-            border-radius: 14px;
-            background: #fff5f9;
-            border: 1px solid #fbd5e6;
-            margin-bottom: 10px;
-            font-size: 12.5px;
+        .tb-badge {
+            position: absolute;
+            top: 2px;
+            right: 12px;
+            background: #e53e3e;
+            color: #fff;
+            font-size: 10px;
+            min-width: 17px;
+            height: 17px;
+            border-radius: 999px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            font-weight: 900;
         }
 
-        .notif-item.unread {
-            border-right: 4px solid var(--pink-primary);
-            background: #ffeaf3;
+        .tb-badge.show {
+            display: inline-flex;
         }
 
-        .notif-time {
+        /* اعلان لحظه‌ای برای ادمین */
+        .toast-alert {
+            position: fixed;
+            top: 66px;
+            left: 14px;
+            right: 14px;
+            max-width: 520px;
+            margin: 0 auto;
+            z-index: 250;
+            background: #24131e;
+            color: #fff;
+            border: 1.5px solid #ff7eb6;
+            border-radius: 18px;
+            padding: 13px 15px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+            display: none;
+        }
+
+        .toast-alert.show {
             display: block;
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-
-        @media (max-width: 900px) {
-            .hero, .booking-box, .admin-kpis, .admin-grid-2, .footer-grid {
-                grid-template-columns: 1fr;
-            }
-            .service-slide-card {
-                flex: 0 0 88%;
-            }
-            nav {
-                display: none;
-            }
         }
     </style>
 </head>
 <body>
 
-    <!-- پیام شناور لحظه‌ای برای ادمین -->
-    <div id="live-toast" class="live-toast">
-        <strong id="toast-title">🔔 نوبت جدید رزرو شد!</strong>
-        <p id="toast-body"></p>
-    </div>
-
-    <!-- هدر -->
-    <header class="glass">
-        <a href="#" class="brand">
-            <div class="brand-logo">NL</div>
-            <div class="brand-text">
+    <!-- هدر موبایلی -->
+    <header class="glass mobile-top-header">
+        <div class="brand-box">
+            <div class="brand-mark">NL</div>
+            <div>
                 <strong>Negin Lash</strong>
-                <span>رزرو تخصصی کاشت مژه</span>
+                <span>استودیو تخصصی کاشت مژه</span>
             </div>
-        </a>
-        <nav>
-            <a href="#services">خدمات</a>
-            <a href="#portfolio">نمونه‌کارها</a>
-            <a href="#booking">رزرو وقت</a>
-            <a href="#contact">تماس با ما</a>
-        </nav>
-        <div class="header-actions">
-            <button type="button" class="btn-admin" onclick="openAdminFlow()">
-                پنل ادمین
-                <span id="unread-badge" class="badge-dot">0</span>
-            </button>
-            <a href="#booking" class="btn-primary">رزرو نوبت</a>
         </div>
+        <div class="online-pill" id="header-online-pill">آنلاین: ۰</div>
     </header>
 
-    <!-- بخش معرفی -->
-    <section class="container hero">
-        <div>
-            <div class="badge">✨ ظرافت، ماندگاری و سلامت مژه‌های طبیعی</div>
-            <h1>نگاهی خیره‌کننده در <span>Negin Lash</span> با کاشت مژه اصولی</h1>
-            <p>
-                انتخاب فر، ضخامت و طول مژه متناسب با فرم چشم شما، با متریال فوق‌سبک و رعایت کامل اصول بهداشتی در محیطی آرام.
-            </p>
-            <div class="hero-actions">
-                <a href="#booking" class="btn-primary">رزرو نوبت آنلاین</a>
-                <a href="#portfolio" class="btn-outline">مشاهده نمونه‌کارها</a>
+    <!-- اعلان لحظه‌ای جدید برای ادمین -->
+    <div id="toast-alert" class="toast-alert">
+        <strong style="color:#ff8ec4; font-size:13.5px; display:block;" id="toast-head">🔔 نوبت جدید ثبت شد</strong>
+        <span style="font-size:12.5px;" id="toast-msg"></span>
+    </div>
+
+    <!-- ======================= صفحه ۱: خانه (صفحه اصلی) ======================= -->
+    <main id="page-home" class="page-view active">
+        <div class="glass hero-card">
+            <span class="tag-pill">✨ Negin Lash Mobile</span>
+            <h1>زیبایی و سلامت مژه‌هایتان در دستان شما</h1>
+            <p>خدمات کاشت مژه را ببینید، نمونه‌کارها را بررسی کنید و نوبت خود را به صورت آنلاین رزرو نمایید.</p>
+            <button type="button" class="btn-pink" onclick="switchTab('booking')">رزرو نوبت آنلاین</button>
+        </div>
+
+        <!-- کارت پیگیری و تایمر شمارش معکوس نوبت کاربر -->
+        <div id="user-appointment-card" class="glass appointment-tracker-card">
+            <div id="user-status-banner" class="status-banner waiting">در انتظار تایید نوبت توسط ادمین...</div>
+            <div style="font-size:13px;" id="user-appt-summary"></div>
+
+            <div id="user-countdown-box" style="display:none; margin-top:12px;">
+                <div style="font-size:12.5px; font-weight:800; color:var(--pink-dark);">
+                    ⏳ شمارش معکوس تا زمان تاییدشده نوبت شما:
+                </div>
+                <div class="countdown-grid">
+                    <div class="time-box"><strong id="cd-days">0</strong><span>روز</span></div>
+                    <div class="time-box"><strong id="cd-hours">00</strong><span>ساعت</span></div>
+                    <div class="time-box"><strong id="cd-mins">00</strong><span>دقیقه</span></div>
+                    <div class="time-box"><strong id="cd-secs">00</strong><span>ثانیه</span></div>
+                </div>
             </div>
         </div>
 
-        <div class="glass hero-showcase">
-            <div class="showcase-visual">
-                <div class="lash-ring">👁️</div>
-                <h3>Negin Lash Studio</h3>
-                <p>طراحی اختصاصی فرم چشم • انتشار لحظه‌ای خدمات و نمونه‌کارها</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- منوی خدمات (خالی در ابتدا + اسکرول صفحه به صفحه چپ و راست) -->
-    <section id="services" class="container section">
-        <div class="section-head-row">
-            <div>
+        <!-- منوی خدمات (خالی در ابتدا + اسکرول صفحه به صفحه چپ و راست) -->
+        <section>
+            <div class="block-header">
                 <h2>خدمات کاشت مژه</h2>
-                <p>با دکمه‌های چپ و راست صفحه به صفحه اسکرول کنید یا روی خدمت دلخواه بزنید.</p>
+                <div class="arrow-btns">
+                    <button type="button" class="arrow-btn" onclick="scrollPaged('home-services-scroll', -1)">→</button>
+                    <button type="button" class="arrow-btn" onclick="scrollPaged('home-services-scroll', 1)">←</button>
+                </div>
             </div>
-            <div class="scroll-controls">
-                <button type="button" class="scroll-btn" onclick="scrollPaged('services-carousel', -1)" aria-label="صفحه قبلی خدمات">→</button>
-                <button type="button" class="scroll-btn" onclick="scrollPaged('services-carousel', 1)" aria-label="صفحه بعدی خدمات">←</button>
+            <div id="home-services-scroll" class="h-scroll-paged">
+                <div class="glass empty-box">هنوز خدمتی توسط ادمین ثبت نشده است.</div>
             </div>
-        </div>
+        </section>
+    </main>
 
-        <div id="services-carousel" class="paged-carousel">
-            <div class="glass empty-state">هنوز خدمتی توسط ادمین ثبت نشده است.</div>
-        </div>
-    </section>
+    <!-- ======================= صفحه ۲: رزرو نوبت ======================= -->
+    <section id="page-booking" class="page-view">
+        <div class="glass form-card">
+            <span class="tag-pill">📅 رزرو نوبت</span>
+            <h2 style="font-size:20px; font-weight:900; margin-bottom:12px;">ثبت درخواست نوبت</h2>
 
-    <!-- منوی نمونه‌کارها (عکس‌های ثبت‌شده توسط ادمین + اسکرول به چپ و راست) -->
-    <section id="portfolio" class="container section">
-        <div class="section-head-row">
-            <div>
-                <h2>نمونه‌کارهای Negin Lash</h2>
-                <p>عکس‌های نمونه‌کار ثبت‌شده توسط ادمین را به چپ و راست اسکرول کنید.</p>
-            </div>
-            <div class="scroll-controls">
-                <button type="button" class="scroll-btn" onclick="scrollPaged('portfolio-carousel', -1)" aria-label="اسکرول راست نمونه‌کارها">→</button>
-                <button type="button" class="scroll-btn" onclick="scrollPaged('portfolio-carousel', 1)" aria-label="اسکرول چپ نمونه‌کارها">←</button>
-            </div>
-        </div>
-
-        <div id="portfolio-carousel" class="portfolio-carousel">
-            <div class="glass empty-state">هنوز نمونه‌کاری توسط ادمین منتشر نشده است.</div>
-        </div>
-    </section>
-
-    <!-- فرم رزرو نوبت -->
-    <section id="booking" class="container section">
-        <div class="glass booking-box">
-            <div>
-                <div class="badge">📅 ثبت آنلاین نوبت</div>
-                <h3 style="font-size:22px; font-weight:900; margin-bottom:10px;">رزرو وقت در Negin Lash</h3>
-                <p style="color:var(--text-muted); font-size:14px;">
-                    خدمت مورد نظر، تاریخ و ساعت دلخواهتان را انتخاب کنید تا نوبت شما ثبت شود و پیام اطلاع‌رسانی فوراً برای ادمین ارسال گردد.
-                </p>
-            </div>
-
-            <form id="booking-form" class="form-grid" onsubmit="submitBooking(event)">
-                <div class="form-group">
+            <form id="booking-form" onsubmit="submitBooking(event)">
+                <div class="field">
                     <label for="client-name">نام و نام خانوادگی</label>
-                    <input type="text" id="client-name" placeholder="نام مشتری" required>
+                    <input type="text" id="client-name" placeholder="نام شما" required>
                 </div>
 
-                <div class="form-group">
+                <div class="field">
                     <label for="client-phone">شماره تماس</label>
                     <input type="tel" id="client-phone" placeholder="09123456789" required>
                 </div>
 
-                <div class="form-group">
+                <div class="field">
                     <label for="service-select">انتخاب خدمت</label>
                     <select id="service-select" required>
-                        <option value="">ابتدا خدمتی انتخاب کنید یا بنویسید</option>
+                        <option value="">ابتدا خدمتی انتخاب کنید</option>
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label for="booking-date">تاریخ مراجعه</label>
+                <div class="field">
+                    <label for="booking-date">تاریخ پیشنهادی</label>
                     <input type="date" id="booking-date" required>
                 </div>
 
-                <div class="form-group full">
-                    <label>ساعت نوبت</label>
-                    <div class="slots-grid">
-                        <button type="button" class="slot-btn active" onclick="selectSlot(this, '10:00')">10:00</button>
-                        <button type="button" class="slot-btn" onclick="selectSlot(this, '12:30')">12:30</button>
-                        <button type="button" class="slot-btn" onclick="selectSlot(this, '15:00')">15:00</button>
-                        <button type="button" class="slot-btn" onclick="selectSlot(this, '17:30')">17:30</button>
+                <div class="field">
+                    <label>ساعت پیشنهادی</label>
+                    <div class="time-chips">
+                        <button type="button" class="chip-btn active" onclick="pickTimeChip(this, '10:00')">10:00</button>
+                        <button type="button" class="chip-btn" onclick="pickTimeChip(this, '12:30')">12:30</button>
+                        <button type="button" class="chip-btn" onclick="pickTimeChip(this, '15:00')">15:00</button>
+                        <button type="button" class="chip-btn" onclick="pickTimeChip(this, '17:30')">17:30</button>
                     </div>
                 </div>
 
-                <div class="form-group full">
+                <div class="field">
                     <label for="client-notes">توضیحات (اختیاری)</label>
-                    <textarea id="client-notes" rows="2" placeholder="فرم چشم، افکت دلخواه یا توضیح اضافی..."></textarea>
+                    <textarea id="client-notes" rows="2" placeholder="فرم چشم یا توضیح اضافی..."></textarea>
                 </div>
 
-                <div class="form-group full">
-                    <button type="submit" class="btn-primary" style="width:100%;">ثبت نوبت و ارسال پیام به ادمین</button>
-                </div>
+                <button type="submit" class="btn-pink">ارسال درخواست نوبت به ادمین</button>
             </form>
 
-            <div id="booking-result" class="booking-result form-group full">
-                <strong style="color:#22543d;">✓ نوبت شما ثبت شد و پیام اطلاع‌رسانی برای ادمین ارسال گردید.</strong>
-                <div id="result-details" style="margin-top:6px;"></div>
+            <div id="booking-success-msg" style="display:none; margin-top:14px; padding:12px; border-radius:14px; background:#e6fffa; border:1px solid #38b2ac; font-size:13px; color:#234e52;">
+                ✓ درخواست نوبت شما ارسال شد. پس از تایید و تعیین روز و ساعت توسط ادمین، در صفحه اصلی نمایش داده می‌شود.
             </div>
         </div>
     </section>
 
-    <!-- فوتر و راه‌های ارتباطی پایین صفحه -->
-    <footer id="contact" class="glass site-footer">
-        <div class="footer-grid">
-            <div class="footer-col">
-                <h4>Negin Lash</h4>
-                <p>
-                    مرکز تخصصی کاشت و ترمیم مژه با تمرکز بر سلامت مژه‌های طبیعی و طراحی اختصاصی فرم چشم.
-                </p>
-            </div>
-
-            <div class="footer-col">
-                <h4>راه‌های ارتباطی و ساعات کاری</h4>
-                <ul>
-                    <li>📞 پشتیبانی و هماهنگی: ۰۹۱۲-۰۰۰-۰۰۰۰</li>
-                    <li>🕒 ساعات پذیرش: شنبه تا پنجشنبه (۱۰:۰۰ تا ۱۹:۰۰)</li>
-                    <li>📍 نوبت‌دهی: آنلاین و با هماهنگی قبلی</li>
-                </ul>
-            </div>
-
-            <div class="footer-col">
-                <h4>شبکه اجتماعی ما</h4>
-                <p>برای دیدن جدیدترین نمونه‌کارها و استوری‌های روزانه وارد پیج شوید:</p>
-                <a
-                    href="https://www.instagram.com/eyelash_nigino?avpt=MXJlems0cWlyZWl6Mw=="
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="insta-pink-link"
-                    aria-label="اینستاگرام Negin Lash"
-                >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zm8.88 2.25a1.12 1.12 0 1 1 0 2.24 1.12 1.12 0 0 1 0-2.24zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"/>
-                    </svg>
-                    <span>اینستاگرام Negin Lash</span>
-                </a>
+    <!-- ======================= صفحه ۳: نمونه کار ======================= -->
+    <section id="page-portfolio" class="page-view">
+        <div class="block-header">
+            <h2>نمونه‌کارهای Negin Lash</h2>
+            <div class="arrow-btns">
+                <button type="button" class="arrow-btn" onclick="scrollPaged('portfolio-scroll', -1)">→</button>
+                <button type="button" class="arrow-btn" onclick="scrollPaged('portfolio-scroll', 1)">←</button>
             </div>
         </div>
-
-        <div class="footer-bottom">
-            <span>© ۲۰۲۵ Negin Lash — تمامی حقوق محفوظ است.</span>
-            <span>رزرو آنلاین و مدیریت لحظه‌ای نوبت‌ها</span>
+        <div id="portfolio-scroll" class="h-scroll-paged">
+            <div class="glass empty-box">هنوز نمونه‌کاری توسط ادمین منتشر نشده است.</div>
         </div>
-    </footer>
+    </section>
 
-    <!-- مودال ورود رمز ادمین -->
-    <div id="login-modal" class="modal-backdrop">
-        <div class="login-card">
-            <h3 style="font-size:19px; font-weight:900; margin-bottom:6px;">ورود به پنل ادمین Negin Lash</h3>
-            <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:14px;">
-                رمز عبور مدیریت را وارد کنید تا بتوانید پست منتشر کنید، آمار کاربران آنلاین را ببینید و رزروها را مدیریت نمایید.
-            </p>
-            <form onsubmit="verifyAdminPassword(event)">
-                <div class="form-group" style="margin-bottom:14px;">
-                    <label for="admin-pass-input">رمز عبور پنل</label>
-                    <input type="password" id="admin-pass-input" placeholder="رمز عبور را وارد کنید" required>
-                    <span id="login-error" style="color:#c53030; font-size:12px; display:none;">رمز عبور اشتباه است!</span>
+    <!-- ======================= صفحه ۴: ادمین ======================= -->
+    <section id="page-admin" class="page-view">
+        <!-- فرم رمز ورود ادمین -->
+        <div id="admin-login-box" class="glass form-card">
+            <span class="tag-pill">🔐 ورود مدیریت</span>
+            <h2 style="font-size:19px; font-weight:900; margin-bottom:8px;">ورود به پنل ادمین Negin Lash</h2>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px;">رمز عبور پنل ادمین را وارد کنید.</p>
+            <form onsubmit="loginAdmin(event)">
+                <div class="field">
+                    <label for="admin-password-input">رمز عبور</label>
+                    <input type="password" id="admin-password-input" placeholder="رمز عبور" required>
+                    <span id="admin-pass-err" style="color:#c53030; font-size:12px; display:none;">رمز عبور اشتباه است!</span>
                 </div>
-                <div style="display:flex; gap:10px;">
-                    <button type="submit" class="btn-primary" style="flex:1;">ورود</button>
-                    <button type="button" class="btn-outline" onclick="closeLoginModal()">بستن</button>
-                </div>
+                <button type="submit" class="btn-pink">ورود به پنل</button>
             </form>
         </div>
-    </div>
 
-    <!-- پنل کامل ادمین -->
-    <div id="admin-modal" class="modal-backdrop">
-        <div class="admin-panel">
-            <div class="admin-top">
+        <!-- داشبورد کامل ادمین پس از ورود -->
+        <div id="admin-dashboard-box" style="display:none;">
+            <div class="glass admin-section-box" style="display:flex; justify-content:space-between; align-items:center;">
                 <div>
-                    <h3 style="font-size:21px; font-weight:900;">پنل مدیریت Negin Lash</h3>
-                    <span style="font-size:12.5px; color:var(--text-muted);">انتشار پست در منوی خدمات یا نمونه‌کارها، مشاهده کاربران آنلاین و نوبت‌ها</span>
+                    <strong style="font-size:17px; font-weight:900;">پنل مدیریت Negin Lash</strong>
+                    <span style="display:block; font-size:12px; color:var(--text-muted);">کنترل نوبت‌ها، تایید وقت و انتشار پست</span>
                 </div>
-                <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                    <button type="button" class="btn-outline" onclick="markAllRead()">خواندن پیام‌ها</button>
-                    <button type="button" class="btn-admin" onclick="logoutAdmin()">خروج از پنل</button>
+                <button type="button" class="btn-light" onclick="logoutAdmin()">خروج</button>
+            </div>
+
+            <!-- آمار لحظه‌ای -->
+            <div class="admin-stats-grid">
+                <div class="glass stat-box">
+                    <strong id="adm-online">0</strong>
+                    <span>کاربران آنلاین</span>
+                </div>
+                <div class="glass stat-box">
+                    <strong id="adm-bookings">0</strong>
+                    <span>نوبت‌ها</span>
+                </div>
+                <div class="glass stat-box">
+                    <strong id="adm-unread">0</strong>
+                    <span>پیام جدید</span>
                 </div>
             </div>
 
-            <!-- شاخص‌های لحظه‌ای -->
-            <div class="admin-kpis">
-                <div class="kpi-card">
-                    <span>کاربران آنلاین در سایت همین الان</span>
-                    <strong id="kpi-online-count">0</strong>
+            <!-- پیام‌های دریافتی رزرو برای ادمین -->
+            <div class="glass admin-section-box">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <h3 style="font-size:15px; font-weight:900;">پیام‌های رزرو دریافت‌شده</h3>
+                    <button type="button" class="mini-pick-btn" onclick="markNotificationsRead()">خوانده شد</button>
                 </div>
-                <div class="kpi-card">
-                    <span>تعداد نوبت‌های رزرو شده</span>
-                    <strong id="kpi-bookings-count">0</strong>
-                </div>
-                <div class="kpi-card">
-                    <span>پیام‌های رزرو خوانده‌نشده</span>
-                    <strong id="kpi-unread-count">0</strong>
+                <div id="admin-notifs-container">
+                    <p style="font-size:12.5px; color:var(--text-muted);">پیامی وجود ندارد.</p>
                 </div>
             </div>
 
-            <!-- فرم ثبت پست جدید و انتخاب منو (خدمات / نمونه‌کار) -->
-            <div class="post-creator-box">
-                <h4>انتشار پست جدید در سایت (قابل مشاهده برای همه کاربران)</h4>
-                <form id="create-post-form" class="form-grid" onsubmit="publishAdminPost(event)">
-                    <div class="form-group">
-                        <label for="post-menu-select">انتخاب منوی مقصد</label>
-                        <select id="post-menu-select" onchange="togglePostFields()">
+            <!-- لیست نوبت‌ها + تعیین روز و ساعت قطعی و تایید توسط ادمین -->
+            <div class="glass admin-section-box">
+                <h3 style="font-size:15px; font-weight:900; margin-bottom:10px;">مدیریت و تایید نوبت‌ها</h3>
+                <div id="admin-bookings-container">
+                    <p style="font-size:12.5px; color:var(--text-muted);">نوبتی ثبت نشده است.</p>
+                </div>
+            </div>
+
+            <!-- انتشار پست جدید در خدمات یا نمونه کار -->
+            <div class="glass admin-section-box">
+                <h3 style="font-size:15px; font-weight:900; margin-bottom:10px;">انتشار پست جدید در سایت</h3>
+                <form onsubmit="publishPost(event)">
+                    <div class="field">
+                        <label for="post-menu-type">انتخاب منو</label>
+                        <select id="post-menu-type" onchange="onPostMenuChange()">
                             <option value="service">منوی خدمات</option>
-                            <option value="portfolio">منوی نمونه‌کار</option>
+                            <option value="portfolio">منوی نمونه کار</option>
                         </select>
                     </div>
 
-                    <!-- فیلدهای مخصوص منوی خدمات -->
-                    <div id="service-fields-group" class="form-group" style="grid-column: span 1;">
-                        <label for="service-title-input">اسم خدمات</label>
-                        <input type="text" id="service-title-input" placeholder="مثلاً: کاشت والیوم ابریشمی">
+                    <div id="adm-service-fields">
+                        <div class="field">
+                            <label for="adm-service-name">اسم خدمات</label>
+                            <input type="text" id="adm-service-name" placeholder="مثلاً: کاشت والیوم">
+                        </div>
+                        <div class="field">
+                            <label for="adm-service-price">قیمت خدمات</label>
+                            <input type="text" id="adm-service-price" placeholder="مثلاً: ۱,۲۰۰,۰۰۰ تومان">
+                        </div>
+                        <div class="field">
+                            <label for="adm-service-desc">توضیح خدمات (اختیاری)</label>
+                            <input type="text" id="adm-service-desc" placeholder="توضیح کوتاه">
+                        </div>
                     </div>
 
-                    <div id="service-price-group" class="form-group">
-                        <label for="service-price-input">قیمت خدمات (تومان)</label>
-                        <input type="text" id="service-price-input" placeholder="مثلاً: ۱,۲۵۰,۰۰۰ تومان">
+                    <div id="adm-portfolio-fields" style="display:none;">
+                        <div class="field">
+                            <label for="adm-portfolio-title">اسم نمونه کار</label>
+                            <input type="text" id="adm-portfolio-title" placeholder="مثلاً: اکستنشن کلاسیک">
+                        </div>
+                        <div class="field">
+                            <label for="adm-portfolio-file">عکس نمونه کار (آپلود یا لینک)</label>
+                            <input type="file" id="adm-portfolio-file" accept="image/*">
+                            <input type="url" id="adm-portfolio-url" placeholder="یا لینک مستقیم عکس" style="margin-top:8px;">
+                        </div>
                     </div>
 
-                    <div id="service-desc-group" class="form-group">
-                        <label for="service-desc-input">توضیح کوتاه خدمات (اختیاری)</label>
-                        <input type="text" id="service-desc-input" placeholder="مثلاً: ماندگاری بالا و فوق‌سبک">
-                    </div>
-
-                    <!-- فیلدهای مخصوص منوی نمونه‌کار -->
-                    <div id="portfolio-title-group" class="form-group" style="display:none;">
-                        <label for="portfolio-title-input">اسم نمونه‌کار</label>
-                        <input type="text" id="portfolio-title-input" placeholder="مثلاً: لیفت و اکستنشن گربه‌ای">
-                    </div>
-
-                    <div id="portfolio-image-group" class="form-group full" style="display:none;">
-                        <label for="portfolio-file-input">عکس نمونه‌کار (آپلود فایل عکس یا وارد کردن لینک عکس)</label>
-                        <input type="file" id="portfolio-file-input" accept="image/*">
-                        <input type="url" id="portfolio-url-input" placeholder="یا لینک مستقیم عکس (https://...)" style="margin-top:8px;">
-                    </div>
-
-                    <div class="form-group full">
-                        <button type="submit" class="btn-primary" style="width:100%;">انتشار پست در سایت</button>
-                    </div>
+                    <button type="submit" class="btn-pink">انتشار در سایت</button>
                 </form>
             </div>
 
-            <div class="admin-grid-2">
-                <!-- لیست رزروها -->
-                <div class="admin-box">
-                    <h4>لیست افرادی که نوبت رزرو کرده‌اند</h4>
-                    <div class="table-wrap">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>نام مشتری</th>
-                                    <th>تماس</th>
-                                    <th>مدل مژه</th>
-                                    <th>تاریخ و ساعت</th>
-                                    <th>وضعیت</th>
-                                    <th>عملیات</th>
-                                </tr>
-                            </thead>
-                            <tbody id="bookings-tbody">
-                                <tr><td colspan="6" style="text-align:center; color:var(--text-muted);">در حال بارگذاری...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- پیام‌های اطلاع‌رسانی رزرو -->
-                <div class="admin-box">
-                    <h4>پیام‌های اطلاع‌رسانی رزرو جدید</h4>
-                    <div id="notifications-list">
-                        <p style="font-size:12.5px; color:var(--text-muted);">پیامی ثبت نشده است.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- مدیریت پست‌های منتشرشده در خدمات و نمونه‌کارها -->
-            <div class="admin-grid-2">
-                <div class="admin-box">
-                    <h4>خدمات منتشرشده فعلی</h4>
-                    <div id="admin-services-list">
-                        <p style="font-size:12.5px; color:var(--text-muted);">خدمتی ثبت نشده است.</p>
-                    </div>
-                </div>
-                <div class="admin-box">
-                    <h4>نمونه‌کارهای منتشرشده فعلی</h4>
-                    <div id="admin-portfolio-list">
-                        <p style="font-size:12.5px; color:var(--text-muted);">نمونه‌کاری ثبت نشده است.</p>
-                    </div>
-                </div>
+            <!-- حذف آیتم‌های منتشرشده -->
+            <div class="glass admin-section-box">
+                <h3 style="font-size:15px; font-weight:900; margin-bottom:8px;">خدمات منتشرشده</h3>
+                <div id="adm-services-list"></div>
+                <h3 style="font-size:15px; font-weight:900; margin:14px 0 8px;">نمونه‌کارهای منتشرشده</h3>
+                <div id="adm-portfolio-list"></div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- ======================= تولبار ثابت پایین گوشی ======================= -->
+    <nav class="bottom-toolbar" aria-label="منوی پایین">
+        <!-- ۱. اینستاگرام -->
+        <a
+            href="https://www.instagram.com/eyelash_nigino?avpt=MXJlems0cWlyZWl6Mw=="
+            target="_blank"
+            rel="noopener noreferrer"
+            class="tb-item"
+            style="text-decoration:none; color:#d63384;"
+        >
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zm8.88 2.25a1.12 1.12 0 1 1 0 2.24 1.12 1.12 0 0 1 0-2.24zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"/>
+            </svg>
+            <span>اینستاگرام</span>
+        </a>
+
+        <!-- ۲. نمونه کار -->
+        <button type="button" id="tb-portfolio" class="tb-item" onclick="switchTab('portfolio')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="4"/>
+                <circle cx="9" cy="9" r="2"/>
+                <path d="m21 15-5-5L5 21"/>
+            </svg>
+            <span>نمونه کار</span>
+        </button>
+
+        <!-- ۳. خانه (وسط تولبار) -->
+        <button type="button" id="tb-home" class="tb-item tb-home-btn active" onclick="switchTab('home')">
+            <div class="home-circle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                    <path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5z"/>
+                </svg>
+            </div>
+            <span>خانه</span>
+        </button>
+
+        <!-- ۴. رزرو نوبت -->
+        <button type="button" id="tb-booking" class="tb-item" onclick="switchTab('booking')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="4"/>
+                <path d="M16 2v4M8 2v4M3 10h18"/>
+            </svg>
+            <span>رزرو نوبت</span>
+        </button>
+
+        <!-- ۵. ادمین -->
+        <button type="button" id="tb-admin" class="tb-item" onclick="switchTab('admin')">
+            <span id="tb-admin-badge" class="tb-badge">0</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"/>
+                <path d="M4 20a8 8 0 0 1 16 0"/>
+            </svg>
+            <span>ادمین</span>
+        </button>
+    </nav>
 
     <script>
         // =====================================================================
-        // ۱. تنظیمات فایربیس و رمز عبور ادمین
+        // ۱. تنظیمات فایربیس و رمز ادمین
         // =====================================================================
         const firebaseConfig = {
-            databaseURL: "https://crazyapp-9663a-default-rtdb.firebaseio.com"
+            databaseURL: "https://crazyapp-9663a-default-rtdb.firebaseio.com[span_1](start_span)"[span_1](end_span)
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        const ADMIN_PASSWORD = "negfer8679";
+        const ADMIN_PASS = "negfer8679";
 
-        const servicesRef = db.ref("negin_lash/services");
-        const portfolioRef = db.ref("negin_lash/portfolio");
-        const bookingsRef = db.ref("negin_lash/bookings");
-        const notificationsRef = db.ref("negin_lash/admin_notifications");
-        const onlineUsersRef = db.ref("negin_lash/online_users");
+        const servicesRef = db.ref("negin_lash_mobile/services");
+        const portfolioRef = db.ref("negin_lash_mobile/portfolio");
+        const bookingsRef = db.ref("negin_lash_mobile/bookings");
+        const notifsRef = db.ref("negin_lash_mobile/notifications");
+        const onlineRef = db.ref("negin_lash_mobile/online_users");
 
-        let isAdminAuthenticated = false;
-        let selectedTimeSlot = "10:00";
-        let servicesList = [];
-        let portfolioList = [];
-        let allBookings = [];
-        let allNotifications = [];
-        let initialNotifLoadDone = false;
+        let isAdminLoggedIn = false;
+        let chosenSlot = "10:00";
+        let servicesData = [];
+        let portfolioData = [];
+        let bookingsData = [];
+        let notifsData = [];
+        let initialNotifsLoaded = false;
 
-        // =====================================================================
-        // ۲. ردیابی تعداد کاربران آنلاین در سایت
-        // =====================================================================
-        const visitorId = "user_" + Math.random().toString(36).slice(2, 10);
-        const myPresenceRef = onlineUsersRef.child(visitorId);
-
-        db.ref(".info/connected").on("value", (snap) => {
-            if (snap.val() === true) {
-                myPresenceRef.onDisconnect().remove();
-                myPresenceRef.set({
-                    enteredAt: Date.now(),
-                    device: /Mobi|Android/i.test(navigator.userAgent) ? "موبایل" : "دسکتاپ"
-                });
-            }
-        });
-
-        onlineUsersRef.on("value", (snap) => {
-            const data = snap.val() || {};
-            document.getElementById("kpi-online-count").innerText = Object.keys(data).length;
-        });
+        // شناسه آخرین نوبت ثبت‌شده توسط همین کاربر برای نمایش وضعیت تایید و تایمر
+        const LAST_BOOKING_KEY = "negin_lash_my_booking_id";
+        let myBookingId = localStorage.getItem(LAST_BOOKING_KEY) || null;
 
         // =====================================================================
-        // ۳. اسکرول صفحه به صفحه چپ و راست برای خدمات و نمونه‌کارها
+        // ۲. جابه‌جایی بین صفحات تولبار پایین
         // =====================================================================
-        function scrollPaged(containerId, direction) {
-            const el = document.getElementById(containerId);
-            if (!el) return;
-            const step = Math.max(280, el.clientWidth * 0.85);
-            el.scrollBy({
-                left: direction * step,
+        function switchTab(tabName) {
+            document.querySelectorAll(".page-view").forEach(p => p.classList.remove("active"));
+            document.getElementById("page-" + tabName).classList.add("active");
+
+            document.querySelectorAll(".tb-item").forEach(btn => btn.classList.remove("active"));
+            const activeBtn = document.getElementById("tb-" + tabName);
+            if (activeBtn) activeBtn.classList.add("active");
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function scrollPaged(elId, dir) {
+            const box = document.getElementById(elId);
+            if (!box) return;
+            box.scrollBy({
+                left: dir * Math.max(240, box.clientWidth * 0.9),
                 behavior: "smooth"
             });
         }
 
         // =====================================================================
-        // ۴. نمایش زنده خدمات و نمونه‌کارها برای همه کاربران
+        // ۳. شمارش کاربران آنلاین در سایت
+        // =====================================================================
+        const clientSessionId = "m_" + Math.random().toString(36).slice(2, 10);
+        const myOnlineRef = onlineRef.child(clientSessionId);
+
+        db.ref(".info/connected").on("value", (snap) => {
+            if (snap.val() === true) {
+                myOnlineRef.onDisconnect().remove();
+                myOnlineRef.set({ joinedAt: Date.now() });
+            }
+        });
+
+        onlineRef.on("value", (snap) => {
+            const count = Object.keys(snap.val() || {}).length;
+            document.getElementById("header-online-pill").innerText = "آنلاین: " + count;
+            document.getElementById("adm-online").innerText = count;
+        });
+
+        // =====================================================================
+        // ۴. نمایش خدمات و نمونه‌کارها برای کاربران
         // =====================================================================
         servicesRef.on("value", (snap) => {
             const raw = snap.val() || {};
-            servicesList = Object.entries(raw)
+            servicesData = Object.entries(raw)
                 .map(([id, item]) => ({ id, ...item }))
                 .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
-            renderPublicServices();
-            renderBookingServiceOptions();
-            renderAdminServicesList();
+            renderHomeServices();
+            renderBookingSelect();
+            renderAdminPublishedLists();
         });
 
         portfolioRef.on("value", (snap) => {
             const raw = snap.val() || {};
-            portfolioList = Object.entries(raw)
+            portfolioData = Object.entries(raw)
                 .map(([id, item]) => ({ id, ...item }))
                 .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
-            renderPublicPortfolio();
-            renderAdminPortfolioList();
+            renderPortfolioTab();
+            renderAdminPublishedLists();
         });
 
-        function renderPublicServices() {
-            const carousel = document.getElementById("services-carousel");
-            if (!servicesList.length) {
-                carousel.innerHTML = `<div class="glass empty-state">هنوز خدمتی توسط ادمین ثبت نشده است.</div>`;
+        function renderHomeServices() {
+            const container = document.getElementById("home-services-scroll");
+            if (!servicesData.length) {
+                container.innerHTML = `<div class="glass empty-box">هنوز خدمتی توسط ادمین ثبت نشده است.</div>`;
                 return;
             }
-
-            carousel.innerHTML = servicesList.map((srv, idx) => `
-                <div class="glass service-slide-card ${idx === 0 ? "active-service" : ""}" data-service-name="${escapeAttr(srv.name)}" onclick="selectServiceForBooking(this)">
+            container.innerHTML = servicesData.map(s => `
+                <div class="glass service-item-card">
                     <div>
-                        <div class="badge" style="margin-bottom:6px;">✨ خدمت کاشت مژه</div>
-                        <h3>${escapeHtml(srv.name)}</h3>
-                        <p>${escapeHtml(srv.desc || "طراحی حرفه‌ای و اصولی متناسب با فرم چشم شما")}</p>
+                        <span class="tag-pill">✨ خدمت</span>
+                        <h3>${esc(s.name)}</h3>
+                        <p>${esc(s.desc || "طراحی حرفه‌ای و اصولی متناسب با فرم چشم")}</p>
                     </div>
-                    <div class="service-footer">
-                        <span class="price-tag">${escapeHtml(srv.price)}</span>
-                        <button type="button" class="select-btn">رزرو این خدمت</button>
+                    <div class="service-bottom">
+                        <span class="service-price">${esc(s.price)}</span>
+                        <button type="button" class="mini-pick-btn" onclick="pickServiceAndGoBooking('${escAttr(s.name)}')">رزرو این خدمت</button>
                     </div>
                 </div>
             `).join("");
         }
 
-        function renderBookingServiceOptions() {
-            const selectEl = document.getElementById("service-select");
-            if (!servicesList.length) {
-                selectEl.innerHTML = `<option value="">خدمتی ثبت نشده است</option>`;
+        function renderBookingSelect() {
+            const sel = document.getElementById("service-select");
+            if (!servicesData.length) {
+                sel.innerHTML = `<option value="">خدمتی ثبت نشده است</option>`;
                 return;
             }
-            const currentVal = selectEl.value;
-            selectEl.innerHTML = servicesList.map(srv =>
-                `<option value="${escapeAttr(srv.name)}">${escapeHtml(srv.name)} (${escapeHtml(srv.price)})</option>`
+            const prev = sel.value;
+            sel.innerHTML = servicesData.map(s =>
+                `<option value="${escAttr(s.name)}">${esc(s.name)} (${esc(s.price)})</option>`
             ).join("");
-            if (currentVal && servicesList.some(s => s.name === currentVal)) {
-                selectEl.value = currentVal;
+            if (prev && servicesData.some(s => s.name === prev)) {
+                sel.value = prev;
             }
         }
 
-        function selectServiceForBooking(cardEl) {
-            document.querySelectorAll(".service-slide-card").forEach(c => c.classList.remove("active-service"));
-            cardEl.classList.add("active-service");
-            const name = cardEl.getAttribute("data-service-name");
-            const selectEl = document.getElementById("service-select");
-            if (selectEl) selectEl.value = name;
-            document.getElementById("booking").scrollIntoView({ behavior: "smooth" });
+        function pickServiceAndGoBooking(serviceName) {
+            const sel = document.getElementById("service-select");
+            if (sel) sel.value = serviceName;
+            switchTab("booking");
         }
 
-        function renderPublicPortfolio() {
-            const carousel = document.getElementById("portfolio-carousel");
-            if (!portfolioList.length) {
-                carousel.innerHTML = `<div class="glass empty-state">هنوز نمونه‌کاری توسط ادمین منتشر نشده است.</div>`;
+        function renderPortfolioTab() {
+            const container = document.getElementById("portfolio-scroll");
+            if (!portfolioData.length) {
+                container.innerHTML = `<div class="glass empty-box">هنوز نمونه‌کاری توسط ادمین منتشر نشده است.</div>`;
                 return;
             }
-
-            carousel.innerHTML = portfolioList.map(item => `
-                <div class="glass portfolio-card">
-                    <div class="portfolio-img-box">
-                        <img src="${escapeAttr(item.image)}" alt="${escapeAttr(item.title)}" loading="lazy">
+            container.innerHTML = portfolioData.map(item => `
+                <div class="glass portfolio-item-card">
+                    <div class="portfolio-photo">
+                        <img src="${escAttr(item.image)}" alt="${escAttr(item.title)}" loading="lazy">
                     </div>
-                    <div class="portfolio-caption">${escapeHtml(item.title)}</div>
+                    <div class="portfolio-title">${esc(item.title)}</div>
                 </div>
             `).join("");
         }
 
         // =====================================================================
-        // ۵. فرم انتشار پست جدید توسط ادمین (انتخاب منوی خدمات یا نمونه‌کار)
+        // ۵. ثبت نوبت توسط کاربر + نمایش تایید و تایمر شمارش معکوس برای کاربر
         // =====================================================================
-        function togglePostFields() {
-            const menu = document.getElementById("post-menu-select").value;
-            const isService = menu === "service";
+        const dateField = document.getElementById("booking-date");
+        const todayISO = new Date().toISOString().split("T")[0];
+        dateField.min = todayISO;
+        dateField.value = todayISO;
 
-            document.getElementById("service-fields-group").style.display = isService ? "flex" : "none";
-            document.getElementById("service-price-group").style.display = isService ? "flex" : "none";
-            document.getElementById("service-desc-group").style.display = isService ? "flex" : "none";
-
-            document.getElementById("portfolio-title-group").style.display = isService ? "none" : "flex";
-            document.getElementById("portfolio-image-group").style.display = isService ? "none" : "flex";
+        function pickTimeChip(btn, time) {
+            document.querySelectorAll(".chip-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            chosenSlot = time;
         }
 
-        function fileToCompressedDataUrl(file) {
+        function submitBooking(e) {
+            e.preventDefault();
+            const name = document.getElementById("client-name").value.trim();
+            const phone = document.getElementById("client-phone").value.trim();
+            const service = document.getElementById("service-select").value;
+            const date = document.getElementById("booking-date").value;
+            const notes = document.getElementById("client-notes").value.trim();
+
+            if (!service) {
+                alert("لطفاً یک خدمت انتخاب کنید.");
+                return;
+            }
+
+            const now = Date.now();
+            const newRef = bookingsRef.push();
+            myBookingId = newRef.key;
+            localStorage.setItem(LAST_BOOKING_KEY, myBookingId);
+
+            newRef.set({
+                name,
+                phone,
+                service,
+                requestedDate: date,
+                requestedTime: chosenSlot,
+                approvedDate: "",
+                approvedTime: "",
+                notes: notes || "-",
+                status: "pending",
+                createdAt: now
+            }).then(() => {
+                notifsRef.push({
+                    title: "نوبت جدید رزرو شد!",
+                    message: `${name} (${phone}) برای «${service}» در تاریخ ${date} ساعت ${chosenSlot} نوبت رزرو کرد.`,
+                    read: false,
+                    createdAt: now
+                });
+
+                document.getElementById("booking-form").reset();
+                dateField.value = todayISO;
+                renderBookingSelect();
+                document.getElementById("booking-success-msg").style.display = "block";
+                updateUserAppointmentUI();
+            });
+        }
+
+        bookingsRef.on("value", (snap) => {
+            const raw = snap.val() || {};
+            bookingsData = Object.entries(raw)
+                .map(([id, item]) => ({ id, ...item }))
+                .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+            document.getElementById("adm-bookings").innerText = bookingsData.length;
+            renderAdminBookings();
+            updateUserAppointmentUI();
+        });
+
+        let countdownTimerHandle = null;
+
+        function updateUserAppointmentUI() {
+            const card = document.getElementById("user-appointment-card");
+            const banner = document.getElementById("user-status-banner");
+            const summary = document.getElementById("user-appt-summary");
+            const cdBox = document.getElementById("user-countdown-box");
+
+            if (!myBookingId) {
+                card.classList.remove("show");
+                return;
+            }
+
+            const mine = bookingsData.find(b => b.id === myBookingId);
+            if (!mine) {
+                card.classList.remove("show");
+                return;
+            }
+
+            card.classList.add("show");
+
+            if (mine.status === "approved") {
+                const finalDate = mine.approvedDate || mine.requestedDate;
+                const finalTime = mine.approvedTime || mine.requestedTime;
+
+                banner.className = "status-banner approved";
+                banner.innerText = "✓ نوبت شما توسط ادمین تایید شد!";
+                summary.innerHTML =
+                    `مشتری گرامی <strong>${esc(mine.name)}</strong>، نوبت <strong>${esc(mine.service)}</strong> شما در روز <strong>${esc(finalDate)}</strong> ساعت <strong>${esc(finalTime)}</strong> قطعی شد.`;
+
+                const targetDateTime = new Date(`${finalDate}T${finalTime}:00`).getTime();
+                if (!Number.isNaN(targetDateTime)) {
+                    cdBox.style.display = "block";
+                    startCountdownTicker(targetDateTime);
+                } else {
+                    cdBox.style.display = "none";
+                }
+            } else {
+                banner.className = "status-banner waiting";
+                banner.innerText = "⏳ درخواست نوبت شما ثبت شد؛ در انتظار تایید ادمین...";
+                summary.innerHTML =
+                    `خدمت: <strong>${esc(mine.service)}</strong> | تاریخ پیشنهادی: <strong>${esc(mine.requestedDate)}</strong> ساعت <strong>${esc(mine.requestedTime)}</strong>`;
+                cdBox.style.display = "none";
+                if (countdownTimerHandle) clearInterval(countdownTimerHandle);
+            }
+        }
+
+        function startCountdownTicker(targetMs) {
+            if (countdownTimerHandle) clearInterval(countdownTimerHandle);
+
+            const tick = () => {
+                const diff = Math.max(0, targetMs - Date.now());
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const mins = Math.floor((diff / (1000 * 60)) % 60);
+                const secs = Math.floor((diff / 1000) % 60);
+
+                document.getElementById("cd-days").innerText = days;
+                document.getElementById("cd-hours").innerText = String(hours).padStart(2, "0");
+                document.getElementById("cd-mins").innerText = String(mins).padStart(2, "0");
+                document.getElementById("cd-secs").innerText = String(secs).padStart(2, "0");
+            };
+
+            tick();
+            countdownTimerHandle = setInterval(tick, 1000);
+        }
+
+        // =====================================================================
+        // ۶. پیام‌های لحظه‌ای و پنل مدیریت ادمین
+        // =====================================================================
+        notifsRef.on("value", (snap) => {
+            const raw = snap.val() || {};
+            const sorted = Object.entries(raw)
+                .map(([id, item]) => ({ id, ...item }))
+                .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+            if (initialNotifsLoaded && sorted.length > notifsData.length && isAdminLoggedIn) {
+                const latest = sorted[0];
+                if (latest) showAdminToast(latest.title, latest.message);
+            }
+
+            notifsData = sorted;
+            initialNotifsLoaded = true;
+
+            const unread = notifsData.filter(n => !n.read).length;
+            document.getElementById("adm-unread").innerText = unread;
+
+            const badge = document.getElementById("tb-admin-badge");
+            if (isAdminLoggedIn && unread > 0) {
+                badge.innerText = unread;
+                badge.classList.add("show");
+            } else {
+                badge.classList.remove("show");
+            }
+
+            renderAdminNotifs();
+        });
+
+        function showAdminToast(head, msg) {
+            const el = document.getElementById("toast-alert");
+            document.getElementById("toast-head").innerText = "🔔 " + head;
+            document.getElementById("toast-msg").innerText = msg;
+            el.classList.add("show");
+            setTimeout(() => el.classList.remove("show"), 5500);
+        }
+
+        function loginAdmin(e) {
+            e.preventDefault();
+            const val = document.getElementById("admin-password-input").value;
+            if (val === ADMIN_PASS) {
+                isAdminLoggedIn = true;
+                document.getElementById("admin-pass-err").style.display = "none";
+                document.getElementById("admin-login-box").style.display = "none";
+                document.getElementById("admin-dashboard-box").style.display = "block";
+                const unread = notifsData.filter(n => !n.read).length;
+                const badge = document.getElementById("tb-admin-badge");
+                if (unread > 0) {
+                    badge.innerText = unread;
+                    badge.classList.add("show");
+                }
+            } else {
+                document.getElementById("admin-pass-err").style.display = "block";
+            }
+        }
+
+        function logoutAdmin() {
+            isAdminLoggedIn = false;
+            document.getElementById("admin-password-input").value = "";
+            document.getElementById("admin-dashboard-box").style.display = "none";
+            document.getElementById("admin-login-box").style.display = "block";
+            document.getElementById("tb-admin-badge").classList.remove("show");
+        }
+
+        function renderAdminNotifs() {
+            const box = document.getElementById("admin-notifs-container");
+            if (!notifsData.length) {
+                box.innerHTML = `<p style="font-size:12.5px; color:var(--text-muted);">پیامی وجود ندارد.</p>`;
+                return;
+            }
+            box.innerHTML = notifsData.map(n => `
+                <div class="notif-card ${n.read ? "" : "unread"}">
+                    <strong>${esc(n.title)}</strong>
+                    <div style="margin-top:3px;">${esc(n.message)}</div>
+                </div>
+            `).join("");
+        }
+
+        function markNotificationsRead() {
+            notifsData.forEach(n => {
+                if (!n.read) notifsRef.child(n.id).update({ read: true });
+            });
+        }
+
+        function renderAdminBookings() {
+            const box = document.getElementById("admin-bookings-container");
+            if (!bookingsData.length) {
+                box.innerHTML = `<p style="font-size:12.5px; color:var(--text-muted);">نوبتی ثبت نشده است.</p>`;
+                return;
+            }
+
+            box.innerHTML = bookingsData.map(b => {
+                const isApp = b.status === "approved";
+                const dVal = b.approvedDate || b.requestedDate || todayISO;
+                const tVal = b.approvedTime || b.requestedTime || "10:00";
+
+                return `
+                    <div class="booking-admin-item">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <strong>${esc(b.name)} (${esc(b.phone)})</strong>
+                            <span style="font-size:11.5px; font-weight:800; color:${isApp ? "#2f855a" : "#b7791f"};">
+                                ${isApp ? "تایید شده" : "در انتظار تایید"}
+                            </span>
+                        </div>
+                        <div style="color:var(--text-muted); font-size:12px; margin-top:4px;">
+                            خدمت: <strong>${esc(b.service)}</strong> | پیشنهادی: ${esc(b.requestedDate)} (${esc(b.requestedTime)})
+                        </div>
+                        ${b.notes && b.notes !== "-" ? `<div style="font-size:12px; margin-top:3px;">توضیح: ${esc(b.notes)}</div>` : ""}
+
+                        <div class="approve-controls">
+                            <div class="field" style="margin-bottom:0;">
+                                <label style="font-size:11px;">روز تایید نوبت</label>
+                                <input type="date" id="app-date-${b.id}" value="${escAttr(dVal)}">
+                            </div>
+                            <div class="field" style="margin-bottom:0;">
+                                <label style="font-size:11px;">ساعت تایید نوبت</label>
+                                <input type="time" id="app-time-${b.id}" value="${escAttr(tVal)}">
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn-approve" onclick="approveBookingWithTime('${b.id}')">
+                            تایید نوبت و ارسال وقت به کاربر
+                        </button>
+                        <div style="margin-top:6px; text-align:left;">
+                            <button type="button" class="btn-remove" onclick="deleteBookingItem('${b.id}')">حذف نوبت</button>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function approveBookingWithTime(id) {
+            const dEl = document.getElementById("app-date-" + id);
+            const tEl = document.getElementById("app-time-" + id);
+            const approvedDate = dEl ? dEl.value : todayISO;
+            const approvedTime = tEl ? tEl.value : "10:00";
+
+            bookingsRef.child(id).update({
+                status: "approved",
+                approvedDate,
+                approvedTime
+            }).then(() => {
+                alert("نوبت تایید شد و زمان قطعی برای کاربر ارسال گردید.");
+            });
+        }
+
+        function deleteBookingItem(id) {
+            bookingsRef.child(id).remove();
+        }
+
+        // =====================================================================
+        // ۷. انتشار پست جدید توسط ادمین (خدمات یا نمونه کار)
+        // =====================================================================
+        function onPostMenuChange() {
+            const type = document.getElementById("post-menu-type").value;
+            document.getElementById("adm-service-fields").style.display = type === "service" ? "block" : "none";
+            document.getElementById("adm-portfolio-fields").style.display = type === "portfolio" ? "block" : "none";
+        }
+
+        function readImageCompressed(file) {
             return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = (ev) => {
+                const fr = new FileReader();
+                fr.onload = (ev) => {
                     const img = new Image();
                     img.onload = () => {
-                        const maxW = 800;
-                        const scale = img.width > maxW ? maxW / img.width : 1;
+                        const maxSide = 760;
+                        const ratio = Math.min(1, maxSide / Math.max(img.width, img.height));
                         const c = document.createElement("canvas");
-                        c.width = Math.round(img.width * scale);
-                        c.height = Math.round(img.height * scale);
-                        const ctx = c.getContext("2d");
-                        ctx.drawImage(img, 0, 0, c.width, c.height);
-                        resolve(c.toDataURL("image/jpeg", 0.78));
+                        c.width = Math.round(img.width * ratio);
+                        c.height = Math.round(img.height * ratio);
+                        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+                        resolve(c.toDataURL("image/jpeg", 0.75));
                     };
                     img.onerror = reject;
                     img.src = ev.target.result;
                 };
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
+                fr.onerror = reject;
+                fr.readAsDataURL(file);
             });
         }
 
-        async function publishAdminPost(e) {
+        async function publishPost(e) {
             e.preventDefault();
-            const menu = document.getElementById("post-menu-select").value;
+            const type = document.getElementById("post-menu-type").value;
 
-            if (menu === "service") {
-                const name = document.getElementById("service-title-input").value.trim();
-                const price = document.getElementById("service-price-input").value.trim();
-                const desc = document.getElementById("service-desc-input").value.trim();
+            if (type === "service") {
+                const name = document.getElementById("adm-service-name").value.trim();
+                const price = document.getElementById("adm-service-price").value.trim();
+                const desc = document.getElementById("adm-service-desc").value.trim();
 
                 if (!name || !price) {
                     alert("لطفاً اسم خدمات و قیمت را وارد کنید.");
@@ -1398,313 +1425,79 @@
                 }
 
                 await servicesRef.push({
-                    name: name,
-                    price: price,
-                    desc: desc,
+                    name,
+                    price,
+                    desc,
                     createdAt: Date.now()
                 });
 
-                document.getElementById("service-title-input").value = "";
-                document.getElementById("service-price-input").value = "";
-                document.getElementById("service-desc-input").value = "";
-                alert("خدمت جدید با موفقیت در منوی خدمات منتشر شد.");
+                document.getElementById("adm-service-name").value = "";
+                document.getElementById("adm-service-price").value = "";
+                document.getElementById("adm-service-desc").value = "";
+                alert("خدمت جدید منتشر شد.");
             } else {
-                const title = document.getElementById("portfolio-title-input").value.trim();
-                const fileInput = document.getElementById("portfolio-file-input");
-                const urlVal = document.getElementById("portfolio-url-input").value.trim();
+                const title = document.getElementById("adm-portfolio-title").value.trim();
+                const fileEl = document.getElementById("adm-portfolio-file");
+                const urlVal = document.getElementById("adm-portfolio-url").value.trim();
 
                 if (!title) {
-                    alert("لطفاً اسم نمونه‌کار را وارد کنید.");
+                    alert("لطفاً اسم نمونه کار را وارد کنید.");
                     return;
                 }
 
-                let imageSrc = urlVal;
-                if (fileInput.files && fileInput.files[0]) {
-                    imageSrc = await fileToCompressedDataUrl(fileInput.files[0]);
+                let imgSrc = urlVal;
+                if (fileEl.files && fileEl.files[0]) {
+                    imgSrc = await readImageCompressed(fileEl.files[0]);
                 }
 
-                if (!imageSrc) {
-                    alert("لطفاً یک عکس آپلود کنید یا لینک عکس را وارد نمایید.");
+                if (!imgSrc) {
+                    alert("لطفاً عکس نمونه کار را آپلود کنید یا لینک آن را وارد نمایید.");
                     return;
                 }
 
                 await portfolioRef.push({
-                    title: title,
-                    image: imageSrc,
+                    title,
+                    image: imgSrc,
                     createdAt: Date.now()
                 });
 
-                document.getElementById("portfolio-title-input").value = "";
-                fileInput.value = "";
-                document.getElementById("portfolio-url-input").value = "";
-                alert("نمونه‌کار جدید با موفقیت در منوی نمونه‌کارها منتشر شد.");
+                document.getElementById("adm-portfolio-title").value = "";
+                fileEl.value = "";
+                document.getElementById("adm-portfolio-url").value = "";
+                alert("نمونه کار جدید منتشر شد.");
             }
         }
 
-        function renderAdminServicesList() {
-            const box = document.getElementById("admin-services-list");
-            if (!servicesList.length) {
-                box.innerHTML = `<p style="font-size:12.5px; color:var(--text-muted);">خدمتی ثبت نشده است.</p>`;
-                return;
-            }
-            box.innerHTML = servicesList.map(s => `
-                <div class="managed-post-row">
-                    <div>
-                        <strong>${escapeHtml(s.name)}</strong> — <span style="color:var(--pink-dark); font-weight:700;">${escapeHtml(s.price)}</span>
+        function renderAdminPublishedLists() {
+            const sBox = document.getElementById("adm-services-list");
+            const pBox = document.getElementById("adm-portfolio-list");
+
+            sBox.innerHTML = servicesData.length
+                ? servicesData.map(s => `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #f7e4ee; font-size:12.5px;">
+                        <span><strong>${esc(s.name)}</strong> — ${esc(s.price)}</span>
+                        <button type="button" class="btn-remove" onclick="servicesRef.child('${s.id}').remove()">حذف</button>
                     </div>
-                    <button type="button" class="mini-btn btn-delete" onclick="deleteServicePost('${s.id}')">حذف</button>
-                </div>
-            `).join("");
-        }
+                `).join("")
+                : `<p style="font-size:12px; color:var(--text-muted);">خدمتی ثبت نشده است.</p>`;
 
-        function renderAdminPortfolioList() {
-            const box = document.getElementById("admin-portfolio-list");
-            if (!portfolioList.length) {
-                box.innerHTML = `<p style="font-size:12.5px; color:var(--text-muted);">نمونه‌کاری ثبت نشده است.</p>`;
-                return;
-            }
-            box.innerHTML = portfolioList.map(p => `
-                <div class="managed-post-row">
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <img src="${escapeAttr(p.image)}" alt="" style="width:38px; height:38px; border-radius:8px; object-fit:cover;">
-                        <strong>${escapeHtml(p.title)}</strong>
+            pBox.innerHTML = portfolioData.length
+                ? portfolioData.map(p => `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #f7e4ee; font-size:12.5px;">
+                        <span style="display:flex; align-items:center; gap:8px;">
+                            <img src="${escAttr(p.image)}" alt="" style="width:36px; height:36px; border-radius:8px; object-fit:cover;">
+                            <strong>${esc(p.title)}</strong>
+                        </span>
+                        <button type="button" class="btn-remove" onclick="portfolioRef.child('${p.id}').remove()">حذف</button>
                     </div>
-                    <button type="button" class="mini-btn btn-delete" onclick="deletePortfolioPost('${p.id}')">حذف</button>
-                </div>
-            `).join("");
-        }
-
-        function deleteServicePost(id) {
-            servicesRef.child(id).remove();
-        }
-
-        function deletePortfolioPost(id) {
-            portfolioRef.child(id).remove();
+                `).join("")
+                : `<p style="font-size:12px; color:var(--text-muted);">نمونه‌کاری ثبت نشده است.</p>`;
         }
 
         // =====================================================================
-        // ۶. رزرو نوبت و ارسال پیام لحظه‌ای برای ادمین
+        // ۸. توابع کمکی امن‌سازی متن
         // =====================================================================
-        const dateInput = document.getElementById("booking-date");
-        const todayStr = new Date().toISOString().split("T")[0];
-        dateInput.min = todayStr;
-        dateInput.value = todayStr;
-
-        function selectSlot(btnEl, time) {
-            document.querySelectorAll(".slot-btn").forEach(b => b.classList.remove("active"));
-            btnEl.classList.add("active");
-            selectedTimeSlot = time;
-        }
-
-        function playAlertTone() {
-            try {
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                const ctx = new AudioCtx();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = "sine";
-                osc.frequency.setValueAtTime(880, ctx.currentTime);
-                gain.gain.setValueAtTime(0.12, ctx.currentTime);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start();
-                osc.stop(ctx.currentTime + 0.25);
-            } catch (_) {}
-        }
-
-        function submitBooking(e) {
-            e.preventDefault();
-
-            const clientName = document.getElementById("client-name").value.trim();
-            const clientPhone = document.getElementById("client-phone").value.trim();
-            const service = document.getElementById("service-select").value;
-            const date = document.getElementById("booking-date").value;
-            const notes = document.getElementById("client-notes").value.trim();
-            const createdAt = Date.now();
-
-            if (!service) {
-                alert("لطفاً یک خدمت انتخاب کنید.");
-                return;
-            }
-
-            const newBooking = {
-                name: clientName,
-                phone: clientPhone,
-                service: service,
-                date: date,
-                time: selectedTimeSlot,
-                notes: notes || "-",
-                status: "در انتظار تایید",
-                createdAt: createdAt
-            };
-
-            bookingsRef.push(newBooking).then(() => {
-                notificationsRef.push({
-                    title: "یک نوبت جدید رزرو شد!",
-                    message: `${clientName} (${clientPhone}) برای «${service}» در تاریخ ${date} ساعت ${selectedTimeSlot} نوبت رزرو کرد.`,
-                    read: false,
-                    createdAt: createdAt
-                });
-
-                const resBox = document.getElementById("booking-result");
-                document.getElementById("result-details").innerHTML =
-                    `نام: <strong>${escapeHtml(clientName)}</strong> | خدمت: <strong>${escapeHtml(service)}</strong> | زمان: <strong>${escapeHtml(date)} - ${escapeHtml(selectedTimeSlot)}</strong>`;
-                resBox.classList.add("show");
-                document.getElementById("booking-form").reset();
-                dateInput.value = todayStr;
-                renderBookingServiceOptions();
-            });
-        }
-
-        bookingsRef.on("value", (snap) => {
-            const raw = snap.val() || {};
-            allBookings = Object.entries(raw)
-                .map(([id, item]) => ({ id, ...item }))
-                .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-
-            document.getElementById("kpi-bookings-count").innerText = allBookings.length;
-            renderBookingsTable();
-        });
-
-        notificationsRef.on("value", (snap) => {
-            const raw = snap.val() || {};
-            const sorted = Object.entries(raw)
-                .map(([id, item]) => ({ id, ...item }))
-                .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-
-            if (initialNotifLoadDone && sorted.length > allNotifications.length) {
-                const newest = sorted[0];
-                if (isAdminAuthenticated && newest) {
-                    showToast(newest.title, newest.message);
-                    playAlertTone();
-                }
-            }
-
-            allNotifications = sorted;
-            initialNotifLoadDone = true;
-
-            const unreadCount = allNotifications.filter(n => !n.read).length;
-            document.getElementById("kpi-unread-count").innerText = unreadCount;
-
-            const badge = document.getElementById("unread-badge");
-            if (isAdminAuthenticated && unreadCount > 0) {
-                badge.innerText = unreadCount;
-                badge.classList.add("show");
-            } else {
-                badge.classList.remove("show");
-            }
-
-            renderNotifications();
-        });
-
-        function showToast(title, body) {
-            const toast = document.getElementById("live-toast");
-            document.getElementById("toast-title").innerText = "🔔 " + title;
-            document.getElementById("toast-body").innerText = body;
-            toast.classList.add("show");
-            setTimeout(() => toast.classList.remove("show"), 6000);
-        }
-
-        function renderBookingsTable() {
-            const tbody = document.getElementById("bookings-tbody");
-            if (!allBookings.length) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">هنوز نوبتی ثبت نشده است.</td></tr>`;
-                return;
-            }
-
-            tbody.innerHTML = allBookings.map(b => {
-                const isConfirmed = b.status === "تایید شد";
-                return `
-                    <tr>
-                        <td><strong>${escapeHtml(b.name)}</strong><br><span style="color:var(--text-muted); font-size:11px;">${escapeHtml(b.notes || "")}</span></td>
-                        <td>${escapeHtml(b.phone)}</td>
-                        <td>${escapeHtml(b.service)}</td>
-                        <td>${escapeHtml(b.date)}<br><strong>${escapeHtml(b.time)}</strong></td>
-                        <td><span class="status-pill ${isConfirmed ? "status-confirmed" : "status-pending"}">${escapeHtml(b.status)}</span></td>
-                        <td>
-                            ${!isConfirmed ? `<button type="button" class="mini-btn btn-confirm" onclick="confirmBooking('${b.id}')">تایید</button>` : ""}
-                            <button type="button" class="mini-btn btn-delete" onclick="deleteBooking('${b.id}')">حذف</button>
-                        </td>
-                    </tr>
-                `;
-            }).join("");
-        }
-
-        function renderNotifications() {
-            const container = document.getElementById("notifications-list");
-            if (!allNotifications.length) {
-                container.innerHTML = `<p style="font-size:12.5px; color:var(--text-muted);">پیامی ثبت نشده است.</p>`;
-                return;
-            }
-
-            container.innerHTML = allNotifications.map(n => {
-                const timeStr = n.createdAt ? new Date(n.createdAt).toLocaleString("fa-IR") : "";
-                return `
-                    <div class="notif-item ${n.read ? "" : "unread"}">
-                        <strong>${escapeHtml(n.title)}</strong>
-                        <p style="margin-top:3px;">${escapeHtml(n.message)}</p>
-                        <span class="notif-time">${timeStr}</span>
-                    </div>
-                `;
-            }).join("");
-        }
-
-        function confirmBooking(id) {
-            bookingsRef.child(id).update({ status: "تایید شد" });
-        }
-
-        function deleteBooking(id) {
-            bookingsRef.child(id).remove();
-        }
-
-        function markAllRead() {
-            allNotifications.forEach(n => {
-                if (!n.read) notificationsRef.child(n.id).update({ read: true });
-            });
-        }
-
-        // =====================================================================
-        // ۷. ورود با رمز ادمین و مدیریت پنل
-        // =====================================================================
-        function openAdminFlow() {
-            if (isAdminAuthenticated) {
-                document.getElementById("admin-modal").classList.add("show");
-            } else {
-                document.getElementById("login-error").style.display = "none";
-                document.getElementById("admin-pass-input").value = "";
-                document.getElementById("login-modal").classList.add("show");
-            }
-        }
-
-        function closeLoginModal() {
-            document.getElementById("login-modal").classList.remove("show");
-        }
-
-        function verifyAdminPassword(e) {
-            e.preventDefault();
-            const entered = document.getElementById("admin-pass-input").value;
-            if (entered === ADMIN_PASSWORD) {
-                isAdminAuthenticated = true;
-                closeLoginModal();
-                document.getElementById("admin-modal").classList.add("show");
-                const unreadCount = allNotifications.filter(n => !n.read).length;
-                const badge = document.getElementById("unread-badge");
-                if (unreadCount > 0) {
-                    badge.innerText = unreadCount;
-                    badge.classList.add("show");
-                }
-            } else {
-                document.getElementById("login-error").style.display = "block";
-            }
-        }
-
-        function logoutAdmin() {
-            isAdminAuthenticated = false;
-            document.getElementById("admin-modal").classList.remove("show");
-            document.getElementById("unread-badge").classList.remove("show");
-        }
-
-        function escapeHtml(str) {
+        function esc(str) {
             return String(str)
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
@@ -1712,7 +1505,7 @@
                 .replace(/"/g, "&quot;");
         }
 
-        function escapeAttr(str) {
+        function escAttr(str) {
             return String(str)
                 .replace(/&/g, "&amp;")
                 .replace(/"/g, "&quot;")
