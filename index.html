@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TEKKEN 3D ONLINE - Arena</title>
-    <!-- Three.js & Firebase SDK -->
+    <title>TEKKEN REALISTIC 3D - 120FPS</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -20,28 +19,29 @@
             font-family: 'Vazirmatn', sans-serif;
         }
 
-        body {
+        /* اجازه اسکرول در صورت نیاز در صفحات کوچک و نمایش تمام صفحه 16:9 */
+        html, body {
             background-color: #050508;
             color: #fff;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
+            width: 100%;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
         }
 
-        /* کانتینر اصلی با نسبت تصویر دقیق 16:9 و تمام صفحه */
         #game-wrapper {
             position: relative;
             width: 100vw;
-            height: 56.25vw; /* 16:9 */
+            height: 56.25vw; /* نسبت دقیق 16:9 */
             max-height: 100vh;
-            max-width: 177.78vh; /* 16:9 */
-            background: radial-gradient(circle at center, #1a1025 0%, #09060e 100%);
-            box-shadow: 0 0 50px rgba(255, 0, 128, 0.3);
+            max-width: 177.78vh;
+            background: #000;
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.95);
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         canvas {
@@ -50,193 +50,170 @@
             display: block;
         }
 
-        /* صفحات منو و انتخاب شخصیت */
+        /* منوی انتخاب شخصیت با پیش‌نمایش واقعی عکس‌های شما */
         .overlay-screen {
             position: absolute;
             inset: 0;
-            background: rgba(10, 8, 18, 0.85);
-            backdrop-filter: blur(12px);
+            background: radial-gradient(circle at center, rgba(20, 18, 28, 0.88) 0%, rgba(5, 5, 10, 0.96) 100%);
+            backdrop-filter: blur(15px);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 20;
-            padding: 20px;
-            transition: opacity 0.4s ease;
+            padding: 15px;
+            overflow-y: auto;
         }
 
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
 
         h1.game-title {
-            font-size: clamp(24px, 4vw, 52px);
+            font-size: clamp(22px, 3.5vw, 46px);
             font-weight: 900;
-            background: linear-gradient(90deg, #ff416c, #ff4b2b, #f9d423);
+            background: linear-gradient(90deg, #ff3c5f, #ff8e53, #ffd200);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 20px rgba(255, 65, 108, 0.4);
-            margin-bottom: 10px;
-            letter-spacing: 2px;
+            margin-bottom: 6px;
         }
 
-        .subtitle {
-            font-size: clamp(12px, 1.5vw, 18px);
-            color: #ccc;
-            margin-bottom: 25px;
-        }
-
-        /* کارت‌های انتخاب شخصیت */
         .char-grid {
             display: flex;
-            gap: 20px;
+            gap: 18px;
             justify-content: center;
-            width: 90%;
-            max-width: 900px;
-            margin-bottom: 25px;
+            width: 92%;
+            max-width: 950px;
+            margin: 15px 0;
         }
 
         .char-card {
             flex: 1;
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.05);
             border: 2px solid rgba(255, 255, 255, 0.15);
             border-radius: 16px;
-            padding: 15px;
+            padding: 12px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.25s ease;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .char-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.12);
-        }
-
+        .char-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.4); }
         .char-card.selected {
             border-color: #ff2a85;
-            background: linear-gradient(180deg, rgba(255, 42, 133, 0.25) 0%, rgba(20, 15, 30, 0.8) 100%);
-            box-shadow: 0 0 25px rgba(255, 42, 133, 0.5);
+            background: linear-gradient(180deg, rgba(255, 42, 133, 0.25) 0%, rgba(15, 12, 25, 0.9) 100%);
+            box-shadow: 0 0 30px rgba(255, 42, 133, 0.5);
         }
 
-        .char-avatar {
-            width: clamp(60px, 8vw, 100px);
-            height: clamp(60px, 8vw, 100px);
-            margin: 0 auto 10px;
-            border-radius: 50%;
+        .char-preview-box {
+            width: clamp(80px, 11vw, 130px);
+            height: clamp(100px, 14vw, 165px);
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.4);
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
-            font-weight: bold;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            position: relative;
         }
 
-        .char-name {
-            font-size: clamp(14px, 1.8vw, 22px);
-            font-weight: 800;
-            margin-bottom: 5px;
+        .char-preview-box canvas {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain;
         }
 
-        .char-style {
-            font-size: clamp(10px, 1.2vw, 14px);
-            color: #aaa;
+        .upload-mini-btn {
+            font-size: 11px;
+            background: rgba(255,255,255,0.12);
+            color: #ddd;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-top: 5px;
+            cursor: pointer;
         }
 
         .btn-main {
-            background: linear-gradient(45deg, #ff007f, #7928ca);
+            background: linear-gradient(45deg, #ff0055, #ff5e00);
             border: none;
-            padding: 14px 45px;
+            padding: 12px 42px;
             border-radius: 50px;
             color: white;
-            font-size: clamp(14px, 1.8vw, 22px);
+            font-size: clamp(14px, 1.6vw, 20px);
             font-weight: 900;
             cursor: pointer;
-            box-shadow: 0 8px 25px rgba(255, 0, 127, 0.5);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 8px 25px rgba(255, 0, 85, 0.5);
         }
 
-        .btn-main:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 35px rgba(255, 0, 127, 0.8);
-        }
-
-        .btn-main:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* اسپینر جستجو */
-        .loader {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255,255,255,0.2);
-            border-top-color: #ff007f;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 15px auto;
-        }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        /* رابط کاربری داخل مبارزه (HUD) */
+        /* HUD و شمارنده 120 FPS */
         #hud {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            padding: 15px 30px;
+            top: 0; left: 0; right: 0;
+            padding: 14px 28px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             z-index: 10;
             pointer-events: none;
         }
 
-        .player-bar-box {
-            width: 40%;
-        }
-
+        .player-bar-box { width: 40%; }
         .player-info {
             display: flex;
             justify-content: space-between;
-            font-size: clamp(12px, 1.5vw, 18px);
-            font-weight: 800;
-            margin-bottom: 6px;
-            text-shadow: 0 2px 4px #000;
+            font-size: clamp(12px, 1.4vw, 17px);
+            font-weight: 900;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 6px #000;
         }
 
         .hp-bg {
             width: 100%;
-            height: clamp(14px, 2vw, 24px);
-            background: rgba(0, 0, 0, 0.7);
-            border: 2px solid #fff;
-            border-radius: 8px;
+            height: clamp(14px, 1.8vw, 22px);
+            background: rgba(0, 0, 0, 0.75);
+            border: 2px solid rgba(255,255,255,0.85);
+            border-radius: 6px;
             overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
         }
 
         .hp-fill {
             height: 100%;
             width: 100%;
-            transition: width 0.2s ease-out;
+            transition: width 0.15s ease-out;
         }
+        #p1-hp { background: linear-gradient(90deg, #00f2fe, #0072ff); }
+        #p2-hp { background: linear-gradient(90deg, #ff0844, #ff6a00); float: left; }
 
-        #p1-hp { background: linear-gradient(90deg, #00f2fe, #4facfe); }
-        #p2-hp { background: linear-gradient(90deg, #ff0844, #ffb199); float: left; }
+        .center-hud {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
 
         .timer-box {
-            background: rgba(0,0,0,0.8);
-            border: 2px solid #f9d423;
-            color: #f9d423;
-            font-size: clamp(18px, 2.5vw, 32px);
+            background: rgba(0,0,0,0.85);
+            border: 2px solid #ffd200;
+            color: #ffd200;
+            font-size: clamp(18px, 2.3vw, 30px);
             font-weight: 900;
-            padding: 5px 18px;
-            border-radius: 12px;
+            padding: 3px 16px;
+            border-radius: 10px;
         }
 
-        /* شمارش معکوس وسط صفحه */
+        .arena-badge {
+            font-size: 11px;
+            background: rgba(0,0,0,0.7);
+            padding: 2px 10px;
+            border-radius: 20px;
+            color: #00f2fe;
+            border: 1px solid rgba(0,242,254,0.4);
+        }
+
+        /* شمارش معکوس */
         #countdown-overlay {
             position: absolute;
             inset: 0;
@@ -246,158 +223,127 @@
             z-index: 15;
             pointer-events: none;
         }
-
         #countdown-text {
-            font-size: clamp(50px, 10vw, 130px);
+            font-size: clamp(55px, 11vw, 140px);
             font-weight: 900;
             color: #fff;
-            text-shadow: 0 0 30px #ff007f, 0 0 60px #7928ca;
-            animation: popIn 0.4s ease;
+            text-shadow: 0 0 35px #ff0055, 0 5px 15px #000;
         }
 
-        @keyframes popIn {
-            0% { transform: scale(0.3); opacity: 0; }
-            80% { transform: scale(1.1); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* دسته بازی (Gamepad) لمسی روی صفحه */
+        /* دسته بازی (Gamepad) */
         #gamepad {
             position: absolute;
-            bottom: 20px;
-            left: 25px;
-            right: 25px;
+            bottom: 18px;
+            left: 22px;
+            right: 22px;
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
             z-index: 12;
             pointer-events: none;
         }
-
-        .pad-group {
-            pointer-events: auto;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
-        /* D-Pad حرکتی */
+        .pad-group { pointer-events: auto; }
         .dpad {
             display: grid;
-            grid-template-columns: repeat(3, clamp(42px, 5.5vw, 65px));
-            grid-template-rows: repeat(2, clamp(42px, 5.5vw, 65px));
+            grid-template-columns: repeat(3, clamp(42px, 5.2vw, 62px));
+            grid-template-rows: repeat(2, clamp(42px, 5.2vw, 62px));
             gap: 6px;
         }
-
+        .action-pad {
+            display: grid;
+            grid-template-columns: repeat(2, clamp(48px, 6vw, 72px));
+            grid-template-rows: repeat(2, clamp(48px, 6vw, 72px));
+            gap: 8px;
+        }
         .pad-btn {
-            background: rgba(255, 255, 255, 0.14);
-            backdrop-filter: blur(6px);
+            background: rgba(15, 15, 22, 0.55);
+            backdrop-filter: blur(8px);
             border: 2px solid rgba(255, 255, 255, 0.35);
             border-radius: 14px;
             color: white;
-            font-size: clamp(14px, 1.8vw, 22px);
+            font-size: clamp(13px, 1.6vw, 20px);
             font-weight: 900;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-            transition: background 0.1s, transform 0.1s;
         }
-
-        .pad-btn:active, .pad-btn.active {
-            background: rgba(255, 0, 128, 0.65);
-            transform: scale(0.92);
-            border-color: #fff;
-        }
-
-        /* دکمه‌های اکشن (مشت، لگد، دفاع، ویژه) */
-        .action-pad {
-            display: grid;
-            grid-template-columns: repeat(2, clamp(50px, 6.5vw, 75px));
-            grid-template-rows: repeat(2, clamp(50px, 6.5vw, 75px));
-            gap: 10px;
-        }
-
+        .pad-btn:active { background: rgba(255, 0, 85, 0.75); transform: scale(0.92); }
         .btn-punch { border-color: #00f2fe; color: #00f2fe; }
-        .btn-kick { border-color: #f9d423; color: #f9d423; }
-        .btn-block { border-color: #43e97b; color: #43e97b; }
-        .btn-special { border-color: #ff0844; color: #ff0844; background: rgba(255, 8, 68, 0.2); }
+        .btn-kick { border-color: #ffd200; color: #ffd200; }
+        .btn-block { border-color: #00e676; color: #00e676; }
+        .btn-special { border-color: #ff1744; color: #ff1744; }
 
-        /* هشدار چرخش صفحه در موبایل عمودی */
-        #rotate-warning {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: #09060e;
-            z-index: 9999;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 20px;
+        .loader {
+            width: 45px; height: 45px;
+            border: 4px solid rgba(255,255,255,0.2);
+            border-top-color: #ff0055;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 15px auto;
         }
-
-        @media (orientation: portrait) and (max-width: 768px) {
-            #rotate-warning { display: flex; }
-        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-<div id="rotate-warning">
-    <h2 style="color:#ff007f; margin-bottom:10px;">لطفاً گوشی را افقی (Landscape) بچرخانید</h2>
-    <p>این بازی در ابعاد تمام‌صفحه ۱۶:۹ اجرا می‌شود.</p>
-</div>
-
 <div id="game-wrapper">
-    <!-- صفحه ۱: انتخاب شخصیت -->
+    <!-- صفحه انتخاب شخصیت -->
     <div id="select-screen" class="overlay-screen">
-        <h1 class="game-title">TEKKEN 3D ONLINE</h1>
-        <p class="subtitle">مبارز خود را انتخاب کنید و وارد میدان آنلاین شوید</p>
+        <h1 class="game-title">TEKKEN 3D REALISTIC</h1>
+        <p style="color:#ccc; font-size:14px;">مبارز خود را انتخاب کنید (تصاویر اصلی شما با حذف خودکار پس‌زمینه)</p>
 
         <div class="char-grid">
-            <!-- شخصیت ۱: دختر بلوند با تیشرت تای‌دای و گیم‌پد -->
-            <div class="char-card selected" data-char="gamer_girl" onclick="selectCharacter('gamer_girl', this)">
-                <div class="char-avatar" style="background: linear-gradient(135deg, #ff9a9e, #a18cd1);">🎮</div>
-                <div class="char-name">لونا (Luna)</div>
-                <div class="char-style">سرعتی • ضربات ترکیبی سریع</div>
+            <!-- شخصیت ۱ -->
+            <div class="char-card selected" data-char="char1" onclick="selectCharacter('char1', this)">
+                <div class="char-preview-box"><canvas id="preview-char1"></canvas></div>
+                <div style="font-weight:800; font-size:16px;">لونا (Gamer)</div>
+                <label class="upload-mini-btn" onclick="event.stopPropagation()">
+                    بارگذاری عکس ۱
+                    <input type="file" accept="image/*" hidden onchange="handleCustomImage(event, 'char1')">
+                </label>
             </div>
 
-            <!-- شخصیت ۲: استاد پیر شبیه هیهاچی با زره اژدها -->
-            <div class="char-card" data-char="grandmaster" onclick="selectCharacter('grandmaster', this)">
-                <div class="char-avatar" style="background: linear-gradient(135deg, #f6d365, #fda085);">🐉</div>
-                <div class="char-name">استاد کازوما</div>
-                <div class="char-style">قدرتی • ضربات سنگین و ویرانگر</div>
+            <!-- شخصیت ۲ -->
+            <div class="char-card" data-char="char2" onclick="selectCharacter('char2', this)">
+                <div class="char-preview-box"><canvas id="preview-char2"></canvas></div>
+                <div style="font-weight:800; font-size:16px;">استاد هیهاچی</div>
+                <label class="upload-mini-btn" onclick="event.stopPropagation()">
+                    بارگذاری عکس ۲
+                    <input type="file" accept="image/*" hidden onchange="handleCustomImage(event, 'char2')">
+                </label>
             </div>
 
-            <!-- شخصیت ۳: مرد جوان با تیشرت مشکی، تتو و شلوار سبز -->
-            <div class="char-card" data-char="street_fighter" onclick="selectCharacter('street_fighter', this)">
-                <div class="char-avatar" style="background: linear-gradient(135deg, #434343, #2b5876);">🔥</div>
-                <div class="char-name">آرش (Arash)</div>
-                <div class="char-style">متعادل • مبارز خیابانی و فنون ویژه</div>
+            <!-- شخصیت ۳ -->
+            <div class="char-card" data-char="char3" onclick="selectCharacter('char3', this)">
+                <div class="char-preview-box"><canvas id="preview-char3"></canvas></div>
+                <div style="font-weight:800; font-size:16px;">آرش (Fighter)</div>
+                <label class="upload-mini-btn" onclick="event.stopPropagation()">
+                    بارگذاری عکس ۳
+                    <input type="file" accept="image/*" hidden onchange="handleCustomImage(event, 'char3')">
+                </label>
             </div>
         </div>
 
-        <button id="btn-find-match" class="btn-main" onclick="startMatchmaking()">شروع بازی و جستجوی حریف</button>
+        <button class="btn-main" onclick="startMatchmaking()">جستجوی حریف آنلاین</button>
     </div>
 
-    <!-- صفحه ۲: در حال جستجوی حریف -->
+    <!-- صفحه جستجو -->
     <div id="search-screen" class="overlay-screen hidden">
-        <h2 style="font-size: 28px; color: #ff2a85;">در حال جستجوی حریف آنلاین...</h2>
+        <h2 style="color:#ff2a85;">در حال اتصال به حریف آنلاین...</h2>
         <div class="loader"></div>
-        <p id="search-status" style="color: #ccc; margin-bottom: 20px;">اتصال به سرور فایربیس...</p>
-        <button class="btn-main" style="background: #333; padding: 10px 30px; font-size: 16px;" onclick="cancelMatchmaking()">انصراف</button>
+        <p id="search-status" style="color:#bbb; margin-bottom:15px;">در انتظار بازیکن دوم در فایربیس...</p>
+        <button class="btn-main" style="background:#333; padding:8px 25px; font-size:14px;" onclick="cancelMatchmaking()">لغو</button>
     </div>
 
-    <!-- صفحه ۳: پایان بازی -->
+    <!-- صفحه پایان -->
     <div id="gameover-screen" class="overlay-screen hidden">
-        <h1 id="winner-title" class="game-title">شما برنده شدید!</h1>
-        <p id="winner-sub" class="subtitle">K.O. - مبارزه به پایان رسید</p>
-        <button class="btn-main" onclick="resetToMenu()">بازگشت به انتخاب شخصیت</button>
+        <h1 id="winner-title" class="game-title">K.O.</h1>
+        <p id="winner-sub" style="color:#ddd; margin-bottom:20px;"></p>
+        <button class="btn-main" onclick="resetToMenu()">مبارزه مجدد</button>
     </div>
 
-    <!-- رابط کاربری حین مبارزه -->
+    <!-- HUD -->
     <div id="hud" class="hidden">
         <div class="player-bar-box">
             <div class="player-info">
@@ -407,7 +353,10 @@
             <div class="hp-bg"><div id="p1-hp" class="hp-fill"></div></div>
         </div>
 
-        <div class="timer-box" id="match-timer">99</div>
+        <div class="center-hud">
+            <div class="timer-box" id="match-timer">99</div>
+            <div class="arena-badge" id="arena-label">میدان مبارزه • 120 FPS</div>
+        </div>
 
         <div class="player-bar-box" style="text-align: left;">
             <div class="player-info">
@@ -418,24 +367,23 @@
         </div>
     </div>
 
-    <!-- شمارش معکوس 3-2-1 -->
+    <!-- شمارش معکوس -->
     <div id="countdown-overlay" class="hidden">
         <div id="countdown-text">3</div>
     </div>
 
-    <!-- دسته بازی لمسی (Gamepad) -->
+    <!-- دسته بازی -->
     <div id="gamepad" class="hidden">
         <div class="pad-group">
             <div class="dpad">
                 <div></div>
-                <div class="pad-btn" id="btn-up" onpointerdown="setInput('up', true)" onpointerup="setInput('up', false)" onpointerleave="setInput('up', false)">▲</div>
+                <div class="pad-btn" onpointerdown="setInput('up', true)" onpointerup="setInput('up', false)" onpointerleave="setInput('up', false)">▲</div>
                 <div></div>
-                <div class="pad-btn" id="btn-left" onpointerdown="setInput('left', true)" onpointerup="setInput('left', false)" onpointerleave="setInput('left', false)">◀</div>
-                <div class="pad-btn" id="btn-down" onpointerdown="setInput('down', true)" onpointerup="setInput('down', false)" onpointerleave="setInput('down', false)">▼</div>
-                <div class="pad-btn" id="btn-right" onpointerdown="setInput('right', true)" onpointerup="setInput('right', false)" onpointerleave="setInput('right', false)">▶</div>
+                <div class="pad-btn" onpointerdown="setInput('left', true)" onpointerup="setInput('left', false)" onpointerleave="setInput('left', false)">◀</div>
+                <div class="pad-btn" onpointerdown="setInput('down', true)" onpointerup="setInput('down', false)" onpointerleave="setInput('down', false)">▼</div>
+                <div class="pad-btn" onpointerdown="setInput('right', true)" onpointerup="setInput('right', false)" onpointerleave="setInput('right', false)">▶</div>
             </div>
         </div>
-
         <div class="pad-group">
             <div class="action-pad">
                 <div class="pad-btn btn-punch" onpointerdown="triggerAction('punch')">مشت</div>
@@ -446,814 +394,822 @@
         </div>
     </div>
 
-    <!-- بوم رندر سه‌بعدی -->
     <canvas id="game-canvas"></canvas>
 </div>
 
 <script>
-    // ==========================================
-    // ۱. تنظیمات فایربیس اختصاصی شما
-    // ==========================================
-    const firebaseConfig = {
-        databaseURL: "https://crazyapp-9663a-default-rtdb.firebaseio.com"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+// ============================================================================
+// ۱. اتصال به فایربیس اختصاصی شما
+// ============================================================================
+const firebaseConfig = {
+    databaseURL: "https://crazyapp-9663a-default-rtdb.firebaseio.com"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
-    // متغیرهای وضعیت شبکه و بازی
-    const myPlayerId = 'player_' + Math.random().toString(36).substr(2, 9);
-    let selectedCharId = 'gamer_girl';
-    let currentRoomId = null;
-    let myRole = null; // 'p1' یا 'p2'
-    let opponentRole = null;
-    let gameState = 'MENU'; // MENU, SEARCHING, COUNTDOWN, PLAYING, GAMEOVER
-    let roomRef = null;
-    let queueRef = db.ref('tekken_matchmaking_queue');
+const myPlayerId = 'p_' + Math.random().toString(36).substr(2, 9);
+let selectedCharId = 'char1';
+let currentRoomId = null;
+let myRole = null;
+let opponentRole = null;
+let gameState = 'MENU';
+let roomRef = null;
+const queueRef = db.ref('tekken_realistic_queue');
 
-    const CHAR_NAMES = {
-        'gamer_girl': 'لونا (Gamer)',
-        'grandmaster': 'استاد کازوما',
-        'street_fighter': 'آرش (Fighter)'
-    };
+const CHAR_NAMES = {
+    char1: 'لونا (Gamer)',
+    char2: 'استاد هیهاچی',
+    char3: 'آرش (Fighter)'
+};
 
-    function selectCharacter(charId, el) {
-        selectedCharId = charId;
-        document.querySelectorAll('.char-card').forEach(c => c.classList.remove('selected'));
-        el.classList.add('selected');
-    }
+const ARENA_NAMES = {
+    forest: '🌲 جنگل تاریک',
+    city: '🌃 شهر شبانه',
+    cage: '⛓️ قفس مبارزه (MMA)',
+    mat: '🤼 تشک کشتی المپیک'
+};
 
-    // ==========================================
-    // ۲. سیستم مچ‌میکینگ آنی در فایربیس
-    // ==========================================
-    function startMatchmaking() {
-        gameState = 'SEARCHING';
-        document.getElementById('select-screen').classList.add('hidden');
-        document.getElementById('search-screen').classList.remove('hidden');
-        document.getElementById('search-status').innerText = 'در حال بررسی صف بازیکنان...';
+// ============================================================================
+// ۲. سیستم استخراج دقیق شخصیت‌ها از عکس‌های شما (بدون دستکاری و حذف پس‌زمینه)
+// ============================================================================
+const processedSprites = {
+    char1: { front: null, side: null, back: null },
+    char2: { front: null, side: null, back: null },
+    char3: { front: null, side: null, back: null }
+};
 
-        // استفاده از Transaction برای جلوگیری از تداخل همزمان دو بازیکن
-        queueRef.transaction((currentQueue) => {
-            if (currentQueue === null) {
-                // هیچکس در صف نیست؛ من نفر اول هستم و منتظر حریف می‌مانم
-                return {
-                    playerId: myPlayerId,
-                    charId: selectedCharId,
-                    timestamp: Date.now()
-                };
-            } else if (currentQueue.playerId !== myPlayerId) {
-                // یک نفر در صف است! صف را خالی می‌کنیم تا اتاق بسازیم
-                return null;
-            }
-            return currentQueue;
-        }, (error, committed, snapshot) => {
-            if (error) {
-                alert('خطا در اتصال به فایربیس: ' + error.message);
-                cancelMatchmaking();
-                return;
-            }
+// برش هوشمند زوایای شخصیت از شیت‌های ۴تایی و ۳تایی شما و حذف پس‌زمینه یکنواخت
+function processCharacterSheet(img, charKey) {
+    const tempCanvas = document.createElement('canvas');
+    const ctx = tempCanvas.getContext('2d');
+    tempCanvas.width = img.width;
+    tempCanvas.height = img.height;
+    ctx.drawImage(img, 0, 0);
 
-            if (committed) {
-                const data = snapshot.val();
-                if (data && data.playerId === myPlayerId) {
-                    // من نفر اول (Host / P1) هستم و منتظر می‌مانم حریف اتاق بسازد
-                    myRole = 'p1';
-                    opponentRole = 'p2';
-                    document.getElementById('search-status').innerText = 'در انتظار پیوستن بازیکن دوم...';
-                    
-                    // پاک کردن خودکار صف در صورت بسته شدن صفحه
-                    queueRef.onDisconnect().remove();
+    // تشخیص رنگ پس‌زمینه از گوشه بالا-چپ تصویر
+    const bgPixel = ctx.getImageData(2, 2, 1, 1).data;
+    const imgData = ctx.getImageData(0, 0, img.width, img.height);
+    const data = imgData.data;
 
-                    // گوش دادن به اتاقی که حریف با ID من می‌سازد
-                    const inviteRef = db.ref('tekken_invites/' + myPlayerId);
-                    inviteRef.onDisconnect().remove();
-                    inviteRef.on('value', (snap) => {
-                        const invite = snap.val();
-                        if (invite && invite.roomId) {
-                            inviteRef.off();
-                            inviteRef.remove();
-                            joinRoom(invite.roomId);
-                        }
-                    });
-                } else {
-                    // من نفر دوم (Guest / P2) هستم! پس صف را گرفتم و اتاق می‌سازم
-                    // برای پیدا کردن مشخصات نفر اول از یک گره موقت یا رویداد قبلی استفاده می‌کنیم
-                    myRole = 'p2';
-                    opponentRole = 'p1';
-                    createMatchRoom();
-                }
-            }
-        });
-    }
-
-    // اصلاح دقیق‌تر مچ‌میکینگ با ثبت وضعیت اولیه در صف برای اطمینان ۱۰۰٪ از تبادل کاراکترها
-    function startMatchmakingReliable() {
-        gameState = 'SEARCHING';
-        document.getElementById('select-screen').classList.add('hidden');
-        document.getElementById('search-screen').classList.remove('hidden');
-        document.getElementById('search-status').innerText = 'در حال جستجوی حریف...';
-
-        queueRef.once('value').then((snap) => {
-            const waitingPlayer = snap.val();
-            // اگر کسی منتظر است و بیش از ۳۰ ثانیه از زمانش نگذشته
-            if (waitingPlayer && waitingPlayer.playerId !== myPlayerId && (Date.now() - waitingPlayer.timestamp < 30000)) {
-                // حذف از صف و ساخت اتاق
-                queueRef.remove().then(() => {
-                    myRole = 'p2';
-                    opponentRole = 'p1';
-                    const newRoomId = 'room_' + waitingPlayer.playerId + '_' + myPlayerId;
-                    
-                    const initialRoomData = {
-                        status: 'countdown',
-                        startTime: firebase.database.ServerValue.TIMESTAMP,
-                        p1: {
-                            id: waitingPlayer.playerId,
-                            char: waitingPlayer.charId,
-                            x: -2.2,
-                            z: 0,
-                            hp: 100,
-                            action: 'idle',
-                            block: false,
-                            facing: 1
-                        },
-                        p2: {
-                            id: myPlayerId,
-                            char: selectedCharId,
-                            x: 2.2,
-                            z: 0,
-                            hp: 100,
-                            action: 'idle',
-                            block: false,
-                            facing: -1
-                        }
-                    };
-
-                    db.ref('tekken_rooms/' + newRoomId).set(initialRoomData).then(() => {
-                        db.ref('tekken_invites/' + waitingPlayer.playerId).set({ roomId: newRoomId });
-                        joinRoom(newRoomId);
-                    });
-                });
-            } else {
-                // قرار گرفتن در صف انتظار به عنوان P1
-                myRole = 'p1';
-                opponentRole = 'p2';
-                queueRef.set({
-                    playerId: myPlayerId,
-                    charId: selectedCharId,
-                    timestamp: Date.now()
-                });
-                queueRef.onDisconnect().remove();
-                document.getElementById('search-status').innerText = 'در انتظار اتصال بازیکن دوم...';
-
-                const inviteRef = db.ref('tekken_invites/' + myPlayerId);
-                inviteRef.onDisconnect().remove();
-                inviteRef.on('value', (invSnap) => {
-                    const inv = invSnap.val();
-                    if (inv && inv.roomId) {
-                        inviteRef.off();
-                        inviteRef.remove();
-                        joinRoom(inv.roomId);
-                    }
-                });
-            }
-        });
-    }
-
-    // جایگزینی تابع دکمه با نسخه مطمئن
-    window.startMatchmaking = startMatchmakingReliable;
-
-    function cancelMatchmaking() {
-        queueRef.once('value').then(snap => {
-            if (snap.val() && snap.val().playerId === myPlayerId) {
-                queueRef.remove();
-            }
-        });
-        db.ref('tekken_invites/' + myPlayerId).off();
-        db.ref('tekken_invites/' + myPlayerId).remove();
-        gameState = 'MENU';
-        document.getElementById('search-screen').classList.add('hidden');
-        document.getElementById('select-screen').classList.remove('hidden');
-    }
-
-    // ==========================================
-    // ۳. ورود به اتاق و شروع شمارش معکوس 3-2-1
-    // ==========================================
-    let playersData = { p1: null, p2: null };
-
-    function joinRoom(roomId) {
-        currentRoomId = roomId;
-        roomRef = db.ref('tekken_rooms/' + roomId);
-        roomRef.onDisconnect().remove();
-
-        roomRef.once('value').then((snap) => {
-            const roomData = snap.val();
-            if (!roomData) return;
-
-            playersData.p1 = roomData.p1;
-            playersData.p2 = roomData.p2;
-
-            // تنظیم اسامی در HUD
-            document.getElementById('p1-name').innerText = CHAR_NAMES[playersData.p1.char] + (myRole === 'p1' ? ' (شما)' : '');
-            document.getElementById('p2-name').innerText = CHAR_NAMES[playersData.p2.char] + (myRole === 'p2' ? ' (شما)' : '');
-
-            // ساخت مدل‌های سه‌بعدی در صحنه
-            spawnFighters(playersData.p1.char, playersData.p2.char);
-
-            // نمایش صفحه بازی و شمارش معکوس
-            document.getElementById('search-screen').classList.add('hidden');
-            document.getElementById('hud').classList.remove('hidden');
-            document.getElementById('gamepad').classList.remove('hidden');
-
-            startCountdown();
-            listenToOpponent();
-        });
-    }
-
-    function startCountdown() {
-        gameState = 'COUNTDOWN';
-        const overlay = document.getElementById('countdown-overlay');
-        const text = document.getElementById('countdown-text');
-        overlay.classList.remove('hidden');
-
-        const steps = ['3', '2', '1', 'FIGHT!'];
-        let idx = 0;
-
-        function nextStep() {
-            if (idx < steps.length) {
-                text.innerText = steps[idx];
-                text.style.animation = 'none';
-                text.offsetHeight; // trigger reflow
-                text.style.animation = 'popIn 0.4s ease';
-                idx++;
-                setTimeout(nextStep, 850);
-            } else {
-                overlay.classList.add('hidden');
-                gameState = 'PLAYING';
-                startMatchTimer();
-            }
-        }
-        nextStep();
-    }
-
-    let matchTime = 99;
-    let timerInterval = null;
-    function startMatchTimer() {
-        matchTime = 99;
-        document.getElementById('match-timer').innerText = matchTime;
-        clearInterval(timerInterval);
-        timerInterval = setInterval(() => {
-            if (gameState !== 'PLAYING') return;
-            matchTime--;
-            document.getElementById('match-timer').innerText = matchTime;
-            if (matchTime <= 0) {
-                clearInterval(timerInterval);
-                endGameByTimeout();
-            }
-        }, 1000);
-    }
-
-    // ==========================================
-    // ۴. موتور گرافیکی سه‌بعدی (Three.js) و طراحی ۳ شخصیت
-    // ==========================================
-    const canvas = document.getElementById('game-canvas');
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-    const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x120a1f, 0.035);
-
-    const camera = new THREE.PerspectiveCamera(45, 16 / 9, 0.1, 100);
-    camera.position.set(0, 3.2, 8.5);
-    camera.lookAt(0, 1.3, 0);
-
-    // نورپردازی سینمایی تیکن ۳
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.55);
-    scene.add(ambientLight);
-
-    const dirLight = new THREE.DirectionalLight(0xffe6cc, 1.1);
-    dirLight.position.set(5, 10, 7);
-    dirLight.castShadow = true;
-    dirLight.shadow.mapSize.width = 1024;
-    dirLight.shadow.mapSize.height = 1024;
-    scene.add(dirLight);
-
-    const rimLight1 = new THREE.PointLight(0xff007f, 1.5, 15);
-    rimLight1.position.set(-5, 4, -3);
-    scene.add(rimLight1);
-
-    const rimLight2 = new THREE.PointLight(0x00f2fe, 1.5, 15);
-    rimLight2.position.set(5, 4, -3);
-    scene.add(rimLight2);
-
-    // ساخت رینگ مبارزه (Arena)
-    function createArena() {
-        // سکوی اصلی
-        const floorGeo = new THREE.CylinderGeometry(7.5, 8, 0.6, 32);
-        const floorMat = new THREE.MeshStandardMaterial({
-            color: 0x1e1b2e,
-            roughness: 0.4,
-            metalness: 0.6
-        });
-        const floor = new THREE.Mesh(floorGeo, floorMat);
-        floor.position.y = -0.3;
-        floor.receiveShadow = true;
-        scene.add(floor);
-
-        // حلقه نئونی دور رینگ
-        const ringGeo = new THREE.RingGeometry(7.2, 7.45, 64);
-        const ringMat = new THREE.MeshBasicMaterial({ color: 0xff007f, side: THREE.DoubleSide });
-        const ring = new THREE.Mesh(ringGeo, ringMat);
-        ring.rotation.x = -Math.PI / 2;
-        ring.position.y = 0.01;
-        scene.add(ring);
-
-        // ستون‌های نوری پس‌زمینه
-        for (let i = 0; i < 8; i++) {
-            const angle = (i / 8) * Math.PI * 2;
-            const pillarGeo = new THREE.BoxGeometry(0.4, 8, 0.4);
-            const pillarMat = new THREE.MeshStandardMaterial({ color: 0x2b2440, emissive: 0x11051c });
-            const pillar = new THREE.Mesh(pillarGeo, pillarMat);
-            pillar.position.set(Math.cos(angle) * 9.5, 3.5, Math.sin(angle) * 9.5);
-            scene.add(pillar);
+    // حذف پس‌زمینه با حفظ کامل جزئیات خود شخصیت
+    const tolerance = 38;
+    for (let i = 0; i < data.length; i += 4) {
+        const dr = Math.abs(data[i] - bgPixel[0]);
+        const dg = Math.abs(data[i + 1] - bgPixel[1]);
+        const dbVal = Math.abs(data[i + 2] - bgPixel[2]);
+        if (dr < tolerance && dg < tolerance && dbVal < tolerance) {
+            data[i + 3] = 0; // شفاف کردن پس‌زمینه
         }
     }
-    createArena();
+    ctx.putImageData(imgData, 0, 0);
 
-    // ساخت مدل سه‌بعدی مفصل‌دار برای هر یک از ۳ شخصیت تصاویر شما
-    function buildCharacterMesh(charType) {
-        const group = new THREE.Group();
-
-        const skinMat = new THREE.MeshStandardMaterial({ color: charType === 'street_fighter' ? 0xc68642 : 0xf1c27d, roughness: 0.5 });
-        let torsoMat, legMat, shoeMat;
-
-        if (charType === 'gamer_girl') {
-            // شخصیت ۱: تیشرت تای‌دای صورتی/بنفش/سفید و شلوار کارگو مشکی
-            torsoMat = new THREE.MeshStandardMaterial({ color: 0xf4a9d8, roughness: 0.6 });
-            legMat = new THREE.MeshStandardMaterial({ color: 0x25252b, roughness: 0.7 });
-            shoeMat = new THREE.MeshStandardMaterial({ color: 0x555566 });
-        } else if (charType === 'grandmaster') {
-            // شخصیت ۲: بالاتنه برهنه عضلانی با جلیقه نارنجی-طلایی و شلوار مشکی طرح اژدها
-            torsoMat = skinMat;
-            legMat = new THREE.MeshStandardMaterial({ color: 0x1d1d22, roughness: 0.6 });
-            shoeMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.7 });
-        } else {
-            // شخصیت ۳: تیشرت مشکی، شلوار سبز زیتونی، کفش سفید
-            torsoMat = new THREE.MeshStandardMaterial({ color: 0x141414, roughness: 0.7 });
-            legMat = new THREE.MeshStandardMaterial({ color: 0x556b2f, roughness: 0.7 });
-            shoeMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
-        }
-
-        // تنه (Torso)
-        const torso = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.95, 0.42), torsoMat);
-        torso.position.y = 1.35;
-        torso.castShadow = true;
-        group.add(torso);
-
-        // جزئیات لباس خاص هر شخصیت
-        if (charType === 'grandmaster') {
-            // جلیقه نارنجی سامورایی و زره شانه طلایی
-            const vestLeft = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.98, 0.46), new THREE.MeshStandardMaterial({ color: 0xd9531e }));
-            vestLeft.position.set(-0.27, 1.35, 0);
-            group.add(vestLeft);
-            const vestRight = vestLeft.clone();
-            vestRight.position.x = 0.27;
-            group.add(vestRight);
-
-            const shoulderPad = new THREE.Mesh(new THREE.SphereGeometry(0.28, 12, 12), new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.8, roughness: 0.2 }));
-            shoulderPad.position.set(0.5, 1.75, 0);
-            group.add(shoulderPad);
-        } else if (charType === 'gamer_girl') {
-            // پچ‌های بنفش و آبی روی تیشرت تای‌دای
-            const patch = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.4, 0.44), new THREE.MeshStandardMaterial({ color: 0x9b72cf }));
-            patch.position.set(0.15, 1.45, 0);
-            group.add(patch);
-        }
-
-        // سر (Head)
-        const head = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.5, 0.48), skinMat);
-        head.position.y = 2.12;
-        head.castShadow = true;
-        group.add(head);
-
-        // موها و جزئیات چهره هر شخصیت
-        if (charType === 'gamer_girl') {
-            // موی بلوند بلند و کش موی صورتی
-            const hairMat = new THREE.MeshStandardMaterial({ color: 0xf3d27a });
-            const backHair = new THREE.Mesh(new THREE.BoxGeometry(0.54, 0.85, 0.2), hairMat);
-            backHair.position.set(0, 1.95, -0.22);
-            group.add(backHair);
-
-            const topHair = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.16, 0.52), hairMat);
-            topHair.position.set(0, 2.38, 0);
-            group.add(topHair);
-
-            // کش موی صورتی دو طرف سر
-            const bowMat = new THREE.MeshBasicMaterial({ color: 0xff4da6 });
-            const bowL = new THREE.Mesh(new THREE.SphereGeometry(0.09), bowMat);
-            bowL.position.set(-0.26, 2.38, -0.05);
-            const bowR = bowL.clone();
-            bowR.position.x = 0.26;
-            group.add(bowL, bowR);
-
-            // چسب بینی سفید
-            const bandaid = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.05, 0.04), new THREE.MeshBasicMaterial({ color: 0xffffff }));
-            bandaid.position.set(0, 2.1, 0.25);
-            group.add(bandaid);
-
-        } else if (charType === 'grandmaster') {
-            // موی سفید تیغ‌تیغی دو طرف سر (سبک هیهاچی) و سبیل سفید
-            const whiteHair = new THREE.MeshStandardMaterial({ color: 0xeeeeee });
-            const spikeL = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.55, 6), whiteHair);
-            spikeL.position.set(-0.32, 2.35, -0.05);
-            spikeL.rotation.z = 0.5;
-            const spikeR = spikeL.clone();
-            spikeR.position.x = 0.32;
-            spikeR.rotation.z = -0.5;
-            group.add(spikeL, spikeR);
-
-            const mustache = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.08, 0.08), whiteHair);
-            mustache.position.set(0, 2.0, 0.25);
-            group.add(mustache);
-
-        } else if (charType === 'street_fighter') {
-            // موی مشکی و ریش کامل مشکی
-            const blackHair = new THREE.MeshStandardMaterial({ color: 0x111111 });
-            const hairTop = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.16, 0.5), blackHair);
-            hairTop.position.set(0, 2.4, 0);
-            const beard = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.22, 0.5), blackHair);
-            beard.position.set(0, 1.98, 0.02);
-            group.add(hairTop, beard);
-        }
-
-        // دست‌ها (Arms)
-        const armGeo = new THREE.BoxGeometry(0.22, 0.8, 0.22);
-        const leftArm = new THREE.Mesh(armGeo, skinMat);
-        leftArm.position.set(-0.52, 1.38, 0);
-        leftArm.castShadow = true;
-
-        const rightArm = new THREE.Mesh(armGeo, skinMat);
-        rightArm.position.set(0.52, 1.38, 0);
-        rightArm.castShadow = true;
-
-        // گیم‌پد سفید در دست شخصیت دختر
-        if (charType === 'gamer_girl') {
-            const pad = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.14, 0.16), new THREE.MeshStandardMaterial({ color: 0xe6e6fa }));
-            pad.position.set(0, -0.4, 0.08);
-            rightArm.add(pad);
-        }
-        // ساعت نقره‌ای و تتو روی دست شخصیت آرش
-        if (charType === 'street_fighter') {
-            const watch = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.08, 12), new THREE.MeshStandardMaterial({ color: 0xcccccc, metalness: 0.9 }));
-            watch.position.set(0, -0.32, 0);
-            leftArm.add(watch);
-        }
-
-        group.add(leftArm, rightArm);
-
-        // پاها (Legs)
-        const legGeo = new THREE.BoxGeometry(0.28, 0.85, 0.3);
-        const leftLeg = new THREE.Mesh(legGeo, legMat);
-        leftLeg.position.set(-0.2, 0.45, 0);
-        leftLeg.castShadow = true;
-
-        const rightLeg = new THREE.Mesh(legGeo, legMat);
-        rightLeg.position.set(0.2, 0.45, 0);
-        rightLeg.castShadow = true;
-
-        // کفش‌ها
-        const shoeGeo = new THREE.BoxGeometry(0.3, 0.15, 0.42);
-        const leftShoe = new THREE.Mesh(shoeGeo, shoeMat);
-        leftShoe.position.set(0, -0.4, 0.06);
-        leftLeg.add(leftShoe);
-
-        const rightShoe = new THREE.Mesh(shoeGeo, shoeMat);
-        rightShoe.position.set(0, -0.4, 0.06);
-        rightLeg.add(rightShoe);
-
-        group.add(leftLeg, rightLeg);
-
-        // هاله انرژی برای ضربه ویژه
-        const auraGeo = new THREE.SphereGeometry(1.3, 16, 16);
-        const auraMat = new THREE.MeshBasicMaterial({ color: 0xff007f, transparent: true, opacity: 0, wireframe: true });
-        const aura = new THREE.Mesh(auraGeo, auraMat);
-        aura.position.y = 1.2;
-        group.add(aura);
-
-        return {
-            root: group,
-            leftArm,
-            rightArm,
-            leftLeg,
-            rightLeg,
-            torso,
-            aura
+    // برش دقیق هر زاویه بر اساس چیدمان تصاویر ارسالی شما
+    let crops = {};
+    if (charKey === 'char1') {
+        // تصویر ۱: گرید ۲ در ۲ (بالا-چپ: روبه‌رو، پایین-چپ: نیم‌رخ، پایین-راست: پشت)
+        const hw = img.width / 2;
+        const hh = img.height / 2;
+        crops = {
+            front: { x: 0, y: 0, w: hw, h: hh },
+            side:  { x: 0, y: hh, w: hw, h: hh },
+            back:  { x: hw, y: hh, w: hw, h: hh }
+        };
+    } else if (charKey === 'char2') {
+        // تصویر ۲: ۳ نمای افقی کنار هم (چپ: روبه‌رو، وسط: نیم‌رخ، راست: پشت)
+        const tw = img.width / 3;
+        crops = {
+            front: { x: 0, y: 0, w: tw, h: img.height },
+            side:  { x: tw, y: 0, w: tw, h: img.height },
+            back:  { x: tw * 2, y: 0, w: tw, h: img.height }
+        };
+    } else {
+        // تصویر ۳: ۴ نمای افقی کنار هم (اول: روبه‌رو، دوم: نیم‌رخ، سوم: پشت)
+        const qw = img.width / 4;
+        crops = {
+            front: { x: 0, y: 0, w: qw, h: img.height },
+            side:  { x: qw, y: 0, w: qw, h: img.height },
+            back:  { x: qw * 2, y: 0, w: qw, h: img.height }
         };
     }
 
-    let fighters = { p1: null, p2: null };
+    ['front', 'side', 'back'].forEach(view => {
+        const c = crops[view];
+        const partCanvas = document.createElement('canvas');
+        partCanvas.width = c.w;
+        partCanvas.height = c.h;
+        const pCtx = partCanvas.getContext('2d');
+        pCtx.drawImage(tempCanvas, c.x, c.y, c.w, c.h, 0, 0, c.w, c.h);
 
-    function spawnFighters(p1Char, p2Char) {
-        if (fighters.p1) scene.remove(fighters.p1.root);
-        if (fighters.p2) scene.remove(fighters.p2.root);
+        const tex = new THREE.CanvasTexture(partCanvas);
+        tex.minFilter = THREE.LinearFilter;
+        tex.magFilter = THREE.LinearFilter;
+        processedSprites[charKey][view] = { canvas: partCanvas, texture: tex };
+    });
 
-        fighters.p1 = buildCharacterMesh(p1Char);
-        fighters.p1.root.position.set(-2.2, 0, 0);
-        fighters.p1.root.rotation.y = Math.PI / 2;
-        scene.add(fighters.p1.root);
-
-        fighters.p2 = buildCharacterMesh(p2Char);
-        fighters.p2.root.position.set(2.2, 0, 0);
-        fighters.p2.root.rotation.y = -Math.PI / 2;
-        scene.add(fighters.p2.root);
+    // نمایش در کارت انتخاب شخصیت
+    const prevCanvas = document.getElementById('preview-' + charKey);
+    if (prevCanvas && processedSprites[charKey].front) {
+        const src = processedSprites[charKey].front.canvas;
+        prevCanvas.width = src.width;
+        prevCanvas.height = src.height;
+        prevCanvas.getContext('2d').drawImage(src, 0, 0);
     }
+}
 
-    // ==========================================
-    // ۵. کنترلر بازی (کیبورد + دسته لمسی) و فیزیک ضربات
-    // ==========================================
-    const inputState = { left: false, right: false, up: false, down: false, block: false };
-    let localState = {
-        x: 0,
-        z: 0,
-        vy: 0,
-        y: 0,
-        hp: 100,
-        action: 'idle',
-        actionTimer: 0,
-        block: false,
-        facing: 1
+// بارگذاری خودکار تصاویر اگر با نام‌های استاندارد کنار فایل باشند + امکان آپلود مستقیم
+const DEFAULT_FILES = {
+    char1: '1000025859.jpg',
+    char2: '1000025858.jpg',
+    char3: '1000025803.jpg'
+};
+
+Object.keys(DEFAULT_FILES).forEach(key => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => processCharacterSheet(img, key);
+    img.onerror = () => {
+        // اگر فایل محلی نبود، یک تصویر راهنما رسم می‌شود تا کاربر با دکمه بارگذاری عکس خود را انتخاب کند
+        const prev = document.getElementById('preview-' + key);
+        const ctx = prev.getContext('2d');
+        prev.width = 120; prev.height = 150;
+        ctx.fillStyle = '#222'; ctx.fillRect(0,0,120,150);
+        ctx.fillStyle = '#fff'; ctx.font = '12px Vazirmatn'; ctx.textAlign = 'center';
+        ctx.fillText('عکس ' + key.replace('char','') + ' را', 60, 70);
+        ctx.fillText('بارگذاری کنید', 60, 90);
     };
+    img.src = DEFAULT_FILES[key];
+});
 
-    function setInput(key, val) {
-        inputState[key] = val;
-        if (key === 'block') {
-            localState.block = val;
-            syncMyState();
-        }
-    }
+function handleCustomImage(event, charKey) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => processCharacterSheet(img, charKey);
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
 
-    // پشتیبانی از کیبورد کامپیوتر
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft' || e.key === 'a') setInput('left', true);
-        if (e.key === 'ArrowRight' || e.key === 'd') setInput('right', true);
-        if (e.key === 'ArrowUp' || e.key === 'w') setInput('up', true);
-        if (e.key === 'ArrowDown' || e.key === 's') setInput('down', true);
-        if (e.key === ' ') setInput('block', true);
-        if (e.key === 'j' || e.key === 'z') triggerAction('punch');
-        if (e.key === 'k' || e.key === 'x') triggerAction('kick');
-        if (e.key === 'l' || e.key === 'c') triggerAction('special');
-    });
+function selectCharacter(charId, el) {
+    selectedCharId = charId;
+    document.querySelectorAll('.char-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+}
 
-    window.addEventListener('keyup', (e) => {
-        if (e.key === 'ArrowLeft' || e.key === 'a') setInput('left', false);
-        if (e.key === 'ArrowRight' || e.key === 'd') setInput('right', false);
-        if (e.key === 'ArrowUp' || e.key === 'w') setInput('up', false);
-        if (e.key === 'ArrowDown' || e.key === 's') setInput('down', false);
-        if (e.key === ' ') setInput('block', false);
-    });
+// ============================================================================
+// ۳. مچ‌میکینگ فایربیس + انتخاب رندوم زمین بازی
+// ============================================================================
+function startMatchmaking() {
+    gameState = 'SEARCHING';
+    document.getElementById('select-screen').classList.add('hidden');
+    document.getElementById('search-screen').classList.remove('hidden');
 
-    function triggerAction(type) {
-        if (gameState !== 'PLAYING') return;
-        if (localState.actionTimer > 0 || localState.block) return;
+    queueRef.once('value').then((snap) => {
+        const waiting = snap.val();
+        if (waiting && waiting.playerId !== myPlayerId && (Date.now() - waiting.timestamp < 30000)) {
+            queueRef.remove().then(() => {
+                myRole = 'p2';
+                opponentRole = 'p1';
+                const newRoomId = 'room_' + waiting.playerId + '_' + myPlayerId;
+                const arenas = ['forest', 'city', 'cage', 'mat'];
+                const randomArena = arenas[Math.floor(Math.random() * arenas.length)];
 
-        localState.action = type;
-        localState.actionTimer = type === 'special' ? 0.55 : 0.35;
+                const roomData = {
+                    status: 'countdown',
+                    arena: randomArena,
+                    p1: { id: waiting.playerId, char: waiting.charId, x: -2.0, z: 0, y: 0, hp: 100, action: 'idle', hitTimer: 0, block: false, facing: 1 },
+                    p2: { id: myPlayerId, char: selectedCharId, x: 2.0, z: 0, y: 0, hp: 100, action: 'idle', hitTimer: 0, block: false, facing: -1 }
+                };
 
-        // بررسی برخورد ضربه با حریف
-        const myMesh = fighters[myRole];
-        const oppMesh = fighters[opponentRole];
-        const oppData = playersData[opponentRole];
-
-        if (myMesh && oppMesh && oppData) {
-            const dist = myMesh.root.position.distanceTo(oppMesh.root.position);
-            const reach = type === 'special' ? 2.4 : (type === 'kick' ? 1.85 : 1.55);
-
-            if (dist <= reach) {
-                let damage = type === 'special' ? 22 : (type === 'kick' ? 12 : 8);
-                if (oppData.block) {
-                    damage = Math.floor(damage * 0.2); // کاهش ۸۰٪ دمیج در حالت دفاع
-                }
-                const newOppHp = Math.max(0, oppData.hp - damage);
-                roomRef.child(opponentRole + '/hp').set(newOppHp);
-            }
-        }
-
-        syncMyState();
-    }
-
-    // همگام‌سازی وضعیت با فایربیس
-    let lastSyncTime = 0;
-    function syncMyState(force = false) {
-        if (!roomRef || !myRole) return;
-        const now = Date.now();
-        if (!force && now - lastSyncTime < 50) return; // حداکثر ۲۰ آپدیت در ثانیه برای سرعت بالا
-        lastSyncTime = now;
-
-        roomRef.child(myRole).update({
-            x: Number(localState.x.toFixed(2)),
-            y: Number(localState.y.toFixed(2)),
-            z: Number(localState.z.toFixed(2)),
-            action: localState.action,
-            block: localState.block,
-            facing: localState.facing
-        });
-    }
-
-    function listenToOpponent() {
-        // تنظیم مختصات اولیه خودمان
-        localState.x = myRole === 'p1' ? -2.2 : 2.2;
-        localState.facing = myRole === 'p1' ? 1 : -1;
-
-        roomRef.on('value', (snap) => {
-            const data = snap.val();
-            if (!data) return;
-
-            playersData.p1 = data.p1;
-            playersData.p2 = data.p2;
-
-            // آپدیت نوار سلامتی (HP)
-            updateHealthBars(data.p1.hp, data.p2.hp);
-
-            // بررسی برد و باخت
-            if (gameState === 'PLAYING') {
-                if (data.p1.hp <= 0 || data.p2.hp <= 0) {
-                    const p1Won = data.p2.hp <= 0;
-                    finishMatch(p1Won ? 'p1' : 'p2');
-                }
-            }
-        });
-    }
-
-    function updateHealthBars(hp1, hp2) {
-        document.getElementById('p1-hp').style.width = hp1 + '%';
-        document.getElementById('p1-hp-text').innerText = hp1 + '%';
-        document.getElementById('p2-hp').style.width = hp2 + '%';
-        document.getElementById('p2-hp-text').innerText = hp2 + '%';
-    }
-
-    function finishMatch(winnerRole) {
-        gameState = 'GAMEOVER';
-        clearInterval(timerInterval);
-        document.getElementById('gamepad').classList.add('hidden');
-        document.getElementById('gameover-screen').classList.remove('hidden');
-
-        const isMeWinner = (winnerRole === myRole);
-        document.getElementById('winner-title').innerText = isMeWinner ? 'شما پیروز شدید! 🏆' : 'شکست خوردید! 💀';
-        document.getElementById('winner-sub').innerText = isMeWinner ? 'ضربه نهایی (K.O.) به حریف وارد شد' : 'حریف شما برنده این راند شد';
-    }
-
-    function endGameByTimeout() {
-        const p1Hp = playersData.p1 ? playersData.p1.hp : 100;
-        const p2Hp = playersData.p2 ? playersData.p2.hp : 100;
-        finishMatch(p1Hp >= p2Hp ? 'p1' : 'p2');
-    }
-
-    function resetToMenu() {
-        if (roomRef) {
-            roomRef.off();
-            roomRef.remove();
-            roomRef = null;
-        }
-        gameState = 'MENU';
-        document.getElementById('gameover-screen').classList.add('hidden');
-        document.getElementById('hud').classList.add('hidden');
-        document.getElementById('select-screen').classList.remove('hidden');
-    }
-
-    // ==========================================
-    // ۶. حلقه رندر (Game Loop) و انیمیشن‌های سه‌بعدی
-    // ==========================================
-    const clock = new THREE.Clock();
-
-    function animate() {
-        requestAnimationFrame(animate);
-        const dt = clock.getDelta();
-
-        if (gameState === 'PLAYING' && fighters[myRole] && fighters[opponentRole]) {
-            const speed = 4.2;
-            let moved = false;
-
-            // حرکت در محور X و عمق Z (مثل تیکن ۳)
-            if (inputState.left) { localState.x -= speed * dt; moved = true; }
-            if (inputState.right) { localState.x += speed * dt; moved = true; }
-            if (inputState.down) { localState.z += speed * 0.7 * dt; moved = true; }
-            if (inputState.up && localState.y === 0) {
-                localState.vy = 6.5; // پرش
-                moved = true;
-            }
-
-            // محدودیت رینگ دایره‌ای
-            const distFromCenter = Math.hypot(localState.x, localState.z);
-            if (distFromCenter > 6.5) {
-                const angle = Math.atan2(localState.z, localState.x);
-                localState.x = Math.cos(angle) * 6.5;
-                localState.z = Math.sin(angle) * 6.5;
-            }
-
-            // جاذبه پرش
-            if (localState.y > 0 || localState.vy !== 0) {
-                localState.y += localState.vy * dt;
-                localState.vy -= 18 * dt;
-                if (localState.y <= 0) {
-                    localState.y = 0;
-                    localState.vy = 0;
-                }
-                moved = true;
-            }
-
-            // تایمر انیمیشن ضربه
-            if (localState.actionTimer > 0) {
-                localState.actionTimer -= dt;
-                if (localState.actionTimer <= 0) {
-                    localState.action = 'idle';
-                    syncMyState(true);
-                }
-            }
-
-            // جهت‌گیری خودکار به سمت حریف
-            const oppX = playersData[opponentRole] ? playersData[opponentRole].x : 0;
-            localState.facing = localState.x < oppX ? 1 : -1;
-
-            if (moved) syncMyState();
-
-            // اعمال موقعیت روی مدل خودمان
-            const myMesh = fighters[myRole];
-            myMesh.root.position.set(localState.x, localState.y, localState.z);
-            myMesh.root.rotation.y = localState.facing === 1 ? Math.PI / 2 : -Math.PI / 2;
-            applyPoseAnimation(myMesh, localState.action, localState.block, moved);
-
-            // اعمال موقعیت نرم (Interpolation) روی مدل حریف
-            const oppData = playersData[opponentRole];
-            const oppMesh = fighters[opponentRole];
-            if (oppData) {
-                oppMesh.root.position.lerp(new THREE.Vector3(oppData.x, oppData.y || 0, oppData.z || 0), 0.25);
-                oppMesh.root.rotation.y = oppData.facing === 1 ? Math.PI / 2 : -Math.PI / 2;
-                applyPoseAnimation(oppMesh, oppData.action, oppData.block, false);
-            }
-
-            // دوربین پویا که هر دو مبارز را همیشه در مرکز کادر ۱۶:۹ نگه می‌دارد
-            const midX = (myMesh.root.position.x + oppMesh.root.position.x) / 2;
-            const sep = Math.abs(myMesh.root.position.x - oppMesh.root.position.x);
-            const targetZ = Math.max(6.5, Math.min(11, sep * 1.15 + 4.5));
-            camera.position.x += (midX - camera.position.x) * 0.1;
-            camera.position.z += (targetZ - camera.position.z) * 0.1;
-            camera.lookAt(midX, 1.3, 0);
-        }
-
-        renderer.render(scene, camera);
-    }
-
-    // انیمیشن اعضای بدن هنگام مشت، لگد، دفاع و حرکت
-    function applyPoseAnimation(mesh, action, isBlocking, isMoving) {
-        const t = Date.now() * 0.01;
-        // بازگشت به حالت عادی
-        mesh.rightArm.rotation.set(0, 0, 0);
-        mesh.leftArm.rotation.set(0, 0, 0);
-        mesh.rightLeg.rotation.set(0, 0, 0);
-        mesh.leftLeg.rotation.set(0, 0, 0);
-        mesh.aura.material.opacity = 0;
-
-        if (isBlocking) {
-            mesh.rightArm.rotation.x = -1.2;
-            mesh.leftArm.rotation.x = -1.2;
-            return;
-        }
-
-        if (action === 'punch') {
-            mesh.rightArm.rotation.x = -Math.PI / 2;
-            mesh.torso.rotation.y = 0.3;
-        } else if (action === 'kick') {
-            mesh.rightLeg.rotation.x = -Math.PI / 2.1;
-            mesh.torso.rotation.x = -0.25;
-        } else if (action === 'special') {
-            mesh.rightArm.rotation.x = -Math.PI / 2;
-            mesh.leftArm.rotation.x = -Math.PI / 2;
-            mesh.aura.material.opacity = 0.6;
-            mesh.aura.rotation.y += 0.2;
-        } else if (isMoving) {
-            mesh.leftLeg.rotation.x = Math.sin(t) * 0.5;
-            mesh.rightLeg.rotation.x = -Math.sin(t) * 0.5;
-            mesh.leftArm.rotation.x = -Math.sin(t) * 0.4;
-            mesh.rightArm.rotation.x = Math.sin(t) * 0.4;
+                db.ref('tekken_realistic_rooms/' + newRoomId).set(roomData).then(() => {
+                    db.ref('tekken_realistic_invites/' + waiting.playerId).set({ roomId: newRoomId });
+                    joinRoom(newRoomId);
+                });
+            });
         } else {
-            // گارد مبارزه در حالت ایستاده
-            mesh.rightArm.rotation.x = -0.6 + Math.sin(t * 0.5) * 0.08;
-            mesh.leftArm.rotation.x = -0.8 - Math.sin(t * 0.5) * 0.08;
-            mesh.torso.rotation.y = 0;
-            mesh.torso.rotation.x = 0;
+            myRole = 'p1';
+            opponentRole = 'p2';
+            queueRef.set({ playerId: myPlayerId, charId: selectedCharId, timestamp: Date.now() });
+            queueRef.onDisconnect().remove();
+            document.getElementById('search-status').innerText = 'در انتظار بازیکن دوم...';
+
+            const invRef = db.ref('tekken_realistic_invites/' + myPlayerId);
+            invRef.onDisconnect().remove();
+            invRef.on('value', (s) => {
+                if (s.val() && s.val().roomId) {
+                    invRef.off();
+                    invRef.remove();
+                    joinRoom(s.val().roomId);
+                }
+            });
+        }
+    });
+}
+
+function cancelMatchmaking() {
+    queueRef.remove();
+    db.ref('tekken_realistic_invites/' + myPlayerId).off();
+    db.ref('tekken_realistic_invites/' + myPlayerId).remove();
+    gameState = 'MENU';
+    document.getElementById('search-screen').classList.add('hidden');
+    document.getElementById('select-screen').classList.remove('hidden');
+}
+
+// ============================================================================
+// ۴. موتور گرافیکی واقع‌گرایانه Three.js (۴ زمین رندوم با نورپردازی PBR و سایه)
+// ============================================================================
+const canvas = document.getElementById('game-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(42, 16 / 9, 0.1, 150);
+camera.position.set(0, 2.6, 8.2);
+
+let arenaGroup = new THREE.Group();
+scene.add(arenaGroup);
+
+function buildRealisticArena(type) {
+    // پاک کردن زمین قبلی
+    while (arenaGroup.children.length > 0) {
+        arenaGroup.remove(arenaGroup.children[0]);
+    }
+    scene.fog = null;
+
+    // نورپردازی پایه واقع‌گرایانه
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x222233, 0.7);
+    arenaGroup.add(hemiLight);
+
+    const sunLight = new THREE.DirectionalLight(0xfff5e4, 1.4);
+    sunLight.position.set(6, 12, 8);
+    sunLight.castShadow = true;
+    sunLight.shadow.mapSize.width = 2048;
+    sunLight.shadow.mapSize.height = 2048;
+    arenaGroup.add(sunLight);
+
+    if (type === 'forest') {
+        // ۱. زمین جنگل واقع‌گرایانه
+        scene.background = new THREE.Color(0x1a2e1a);
+        scene.fog = new THREE.FogExp2(0x1a2e1a, 0.045);
+
+        const groundGeo = new THREE.CircleGeometry(14, 48);
+        const groundMat = new THREE.MeshStandardMaterial({ color: 0x2d4222, roughness: 0.9 });
+        const ground = new THREE.Mesh(groundGeo, groundMat);
+        ground.rotation.x = -Math.PI / 2;
+        ground.receiveShadow = true;
+        arenaGroup.add(ground);
+
+        // تنه درختان و شاخ و برگ در اطراف رینگ
+        const trunkMat = new THREE.MeshStandardMaterial({ color: 0x3b2716, roughness: 0.9 });
+        const leafMat = new THREE.MeshStandardMaterial({ color: 0x1b4d1b, roughness: 0.8 });
+        for (let i = 0; i < 18; i++) {
+            const ang = (i / 18) * Math.PI * 2;
+            const dist = 7.8 + (i % 3) * 1.5;
+            const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.4, 7, 10), trunkMat);
+            trunk.position.set(Math.cos(ang) * dist, 3.5, Math.sin(ang) * dist);
+            trunk.castShadow = true;
+            arenaGroup.add(trunk);
+
+            const crown = new THREE.Mesh(new THREE.DodecahedronGeometry(1.8), leafMat);
+            crown.position.set(Math.cos(ang) * dist, 6.8, Math.sin(ang) * dist);
+            arenaGroup.add(crown);
+        }
+
+    } else if (type === 'city') {
+        // ۲. پشت‌بام / خیابان شهر شبانه با نورهای نئون و آسمان‌خراش
+        scene.background = new THREE.Color(0x090d16);
+        scene.fog = new THREE.FogExp2(0x090d16, 0.035);
+
+        const asphalt = new THREE.Mesh(
+            new THREE.BoxGeometry(16, 0.5, 12),
+            new THREE.MeshStandardMaterial({ color: 0x1c1f26, roughness: 0.45, metalness: 0.3 })
+        );
+        asphalt.position.y = -0.25;
+        asphalt.receiveShadow = true;
+        arenaGroup.add(asphalt);
+
+        // خط‌کشی خیابان و ساختمان‌های پس‌زمینه
+        for (let i = -5; i <= 5; i++) {
+            const bHeight = 8 + Math.abs(i * 2.3) % 10;
+            const bMat = new THREE.MeshStandardMaterial({ color: 0x101522, roughness: 0.3, metalness: 0.7 });
+            const building = new THREE.Mesh(new THREE.BoxGeometry(2.5, bHeight, 2.5), bMat);
+            building.position.set(i * 3.2, bHeight / 2 - 2, -9 - (Math.abs(i) % 2) * 2);
+            arenaGroup.add(building);
+        }
+
+        const neonPink = new THREE.PointLight(0xff0066, 2.5, 16);
+        neonPink.position.set(-5, 3, -2);
+        const neonCyan = new THREE.PointLight(0x00e5ff, 2.5, 16);
+        neonCyan.position.set(5, 3, -2);
+        arenaGroup.add(neonPink, neonCyan);
+
+    } else if (type === 'cage') {
+        // ۳. قفس مبارزه هشت‌ضلعی (Octagon MMA Cage)
+        scene.background = new THREE.Color(0x111115);
+        const matFloor = new THREE.Mesh(
+            new THREE.CylinderGeometry(6.8, 6.8, 0.4, 8),
+            new THREE.MeshStandardMaterial({ color: 0x2b2d33, roughness: 0.7 })
+        );
+        matFloor.position.y = -0.2;
+        matFloor.receiveShadow = true;
+        arenaGroup.add(matFloor);
+
+        // فنس توری فلزی دور قفس
+        const fenceGeo = new THREE.CylinderGeometry(6.75, 6.75, 2.6, 8, 1, true);
+        const fenceMat = new THREE.MeshStandardMaterial({
+            color: 0x888899,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.45
+        });
+        const fence = new THREE.Mesh(fenceGeo, fenceMat);
+        fence.position.y = 1.3;
+        arenaGroup.add(fence);
+
+        // ستون‌های محافظ گوشه قفس
+        for (let i = 0; i < 8; i++) {
+            const ang = (i / 8) * Math.PI * 2 + Math.PI / 8;
+            const post = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.16, 0.16, 2.8, 12),
+                new THREE.MeshStandardMaterial({ color: 0xd90429, roughness: 0.4 })
+            );
+            post.position.set(Math.cos(ang) * 6.75, 1.4, Math.sin(ang) * 6.75);
+            arenaGroup.add(post);
+        }
+
+    } else {
+        // ۴. تشک کشتی استاندارد (آبی و دایره قرمز وسط)
+        scene.background = new THREE.Color(0x141824);
+        const baseMat = new THREE.Mesh(
+            new THREE.BoxGeometry(13, 0.35, 13),
+            new THREE.MeshStandardMaterial({ color: 0x1d4ed8, roughness: 0.65 })
+        );
+        baseMat.position.y = -0.175;
+        baseMat.receiveShadow = true;
+        arenaGroup.add(baseMat);
+
+        const redRing = new THREE.Mesh(
+            new THREE.RingGeometry(4.2, 4.9, 64),
+            new THREE.MeshStandardMaterial({ color: 0xdc2626, side: THREE.DoubleSide, roughness: 0.6 })
+        );
+        redRing.rotation.x = -Math.PI / 2;
+        redRing.position.y = 0.01;
+        arenaGroup.add(redRing);
+
+        const centerCircle = new THREE.Mesh(
+            new THREE.CircleGeometry(1.1, 32),
+            new THREE.MeshStandardMaterial({ color: 0xfacc15, roughness: 0.6 })
+        );
+        centerCircle.rotation.x = -Math.PI / 2;
+        centerCircle.position.y = 0.01;
+        arenaGroup.add(centerCircle);
+    }
+}
+
+// ============================================================================
+// ۵. ساخت کاراکتر سه‌بعدی با تصویر واقعی بدون دستکاری + سایه زیر پا
+// ============================================================================
+let fighters = { p1: null, p2: null };
+
+function createRealPhotoFighter(charKey) {
+    const group = new THREE.Group();
+
+    const spriteData = processedSprites[charKey];
+    const initialTex = spriteData.side ? spriteData.side.texture : (spriteData.front ? spriteData.front.texture : null);
+
+    const mat = new THREE.MeshBasicMaterial({
+        map: initialTex,
+        transparent: true,
+        alphaTest: 0.15,
+        side: THREE.DoubleSide
+    });
+
+    const plane = new THREE.Mesh(new THREE.PlaneGeometry(1.75, 2.35), mat);
+    plane.position.y = 1.18;
+    group.add(plane);
+
+    // سایه واقعی زیر پای شخصیت روی زمین
+    const shadowGeo = new THREE.CircleGeometry(0.65, 24);
+    const shadowMat = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.45 });
+    const shadow = new THREE.Mesh(shadowGeo, shadowMat);
+    shadow.rotation.x = -Math.PI / 2;
+    shadow.position.y = 0.02;
+    group.add(shadow);
+
+    // افکت ضربه (جرقه نورانی هنگام برخورد)
+    const hitFlash = new THREE.Mesh(
+        new THREE.SphereGeometry(0.45, 12, 12),
+        new THREE.MeshBasicMaterial({ color: 0xffea00, transparent: true, opacity: 0 })
+    );
+    hitFlash.position.set(0, 1.3, 0.2);
+    group.add(hitFlash);
+
+    return { root: group, plane, mat, shadow, hitFlash, charKey };
+}
+
+function spawnFighters(p1Char, p2Char) {
+    if (fighters.p1) scene.remove(fighters.p1.root);
+    if (fighters.p2) scene.remove(fighters.p2.root);
+
+    fighters.p1 = createRealPhotoFighter(p1Char);
+    fighters.p1.root.position.set(-2.0, 0, 0);
+    scene.add(fighters.p1.root);
+
+    fighters.p2 = createRealPhotoFighter(p2Char);
+    fighters.p2.root.position.set(2.0, 0, 0);
+    scene.add(fighters.p2.root);
+}
+
+// ============================================================================
+// ۶. ورود به اتاق، فیزیک برخورد واقعی (عدم عبور از هم) و واکنش به ضربه
+// ============================================================================
+let playersData = { p1: null, p2: null };
+
+function joinRoom(roomId) {
+    currentRoomId = roomId;
+    roomRef = db.ref('tekken_realistic_rooms/' + roomId);
+    roomRef.onDisconnect().remove();
+
+    roomRef.once('value').then((snap) => {
+        const roomData = snap.val();
+        if (!roomData) return;
+
+        playersData.p1 = roomData.p1;
+        playersData.p2 = roomData.p2;
+
+        buildRealisticArena(roomData.arena || 'cage');
+        document.getElementById('arena-label').innerText = (ARENA_NAMES[roomData.arena] || 'میدان مبارزه') + ' • 120 FPS';
+
+        document.getElementById('p1-name').innerText = CHAR_NAMES[playersData.p1.char] + (myRole === 'p1' ? ' (شما)' : '');
+        document.getElementById('p2-name').innerText = CHAR_NAMES[playersData.p2.char] + (myRole === 'p2' ? ' (شما)' : '');
+
+        spawnFighters(playersData.p1.char, playersData.p2.char);
+
+        document.getElementById('search-screen').classList.add('hidden');
+        document.getElementById('hud').classList.remove('hidden');
+        document.getElementById('gamepad').classList.remove('hidden');
+
+        startCountdown();
+        listenToRoom();
+    });
+}
+
+function startCountdown() {
+    gameState = 'COUNTDOWN';
+    const overlay = document.getElementById('countdown-overlay');
+    const text = document.getElementById('countdown-text');
+    overlay.classList.remove('hidden');
+
+    const steps = ['3', '2', '1', 'FIGHT!'];
+    let idx = 0;
+    function next() {
+        if (idx < steps.length) {
+            text.innerText = steps[idx++];
+            setTimeout(next, 800);
+        } else {
+            overlay.classList.add('hidden');
+            gameState = 'PLAYING';
+            startTimer();
         }
     }
+    next();
+}
 
-    // تنظیم اندازه رندرر با تغییر سایز صفحه
-    function onResize() {
-        const wrapper = document.getElementById('game-wrapper');
-        renderer.setSize(wrapper.clientWidth, wrapper.clientHeight);
-        camera.aspect = 16 / 9;
-        camera.updateProjectionMatrix();
+let matchTime = 99;
+let timerInt = null;
+function startTimer() {
+    matchTime = 99;
+    clearInterval(timerInt);
+    timerInt = setInterval(() => {
+        if (gameState !== 'PLAYING') return;
+        matchTime--;
+        document.getElementById('match-timer').innerText = matchTime;
+        if (matchTime <= 0) {
+            clearInterval(timerInt);
+            const p1Hp = playersData.p1.hp;
+            const p2Hp = playersData.p2.hp;
+            finishMatch(p1Hp >= p2Hp ? 'p1' : 'p2');
+        }
+    }, 1000);
+}
+
+// کنترل‌ها
+const inputState = { left: false, right: false, up: false, down: false, block: false };
+let localState = {
+    x: 0, z: 0, y: 0, vy: 0,
+    action: 'idle', actionTimer: 0,
+    hitStunTimer: 0, // قفل شدن و پرتاب به عقب هنگام ضربه خوردن
+    knockbackVx: 0,
+    block: false, facing: 1
+};
+
+function setInput(key, val) {
+    inputState[key] = val;
+    if (key === 'block') {
+        localState.block = val;
+        syncState(true);
     }
-    window.addEventListener('resize', onResize);
-    onResize();
-    animate();
+}
+
+window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft' || e.key === 'a') setInput('left', true);
+    if (e.key === 'ArrowRight' || e.key === 'd') setInput('right', true);
+    if (e.key === 'ArrowUp' || e.key === 'w') setInput('up', true);
+    if (e.key === 'ArrowDown' || e.key === 's') setInput('down', true);
+    if (e.key === ' ') setInput('block', true);
+    if (e.key === 'j' || e.key === 'z') triggerAction('punch');
+    if (e.key === 'k' || e.key === 'x') triggerAction('kick');
+    if (e.key === 'l' || e.key === 'c') triggerAction('special');
+});
+
+window.addEventListener('keyup', (e) => {
+    if (e.key === 'ArrowLeft' || e.key === 'a') setInput('left', false);
+    if (e.key === 'ArrowRight' || e.key === 'd') setInput('right', false);
+    if (e.key === 'ArrowUp' || e.key === 'w') setInput('up', false);
+    if (e.key === 'ArrowDown' || e.key === 's') setInput('down', false);
+    if (e.key === ' ') setInput('block', false);
+});
+
+function triggerAction(type) {
+    if (gameState !== 'PLAYING') return;
+    if (localState.actionTimer > 0 || localState.hitStunTimer > 0 || localState.block) return;
+
+    localState.action = type;
+    localState.actionTimer = type === 'special' ? 0.5 : 0.32;
+
+    const oppData = playersData[opponentRole];
+    if (oppData) {
+        const dx = Math.abs(localState.x - oppData.x);
+        const dz = Math.abs(localState.z - (oppData.z || 0));
+        const reach = type === 'special' ? 2.1 : (type === 'kick' ? 1.65 : 1.35);
+
+        // بررسی اصابت ضربه در فاصله نزدیک و هم‌راستا در عمق
+        if (dx <= reach && dz <= 0.85) {
+            let dmg = type === 'special' ? 20 : (type === 'kick' ? 12 : 8);
+            if (oppData.block) dmg = Math.floor(dmg * 0.2);
+
+            const newHp = Math.max(0, oppData.hp - dmg);
+            // ثبت ضربه خوردن حریف در فایربیس تا واکنش نشان دهد
+            roomRef.child(opponentRole).update({
+                hp: newHp,
+                hitTimestamp: Date.now(),
+                hitPower: type === 'special' ? 2 : 1
+            });
+        }
+    }
+    syncState(true);
+}
+
+let lastHitHandled = 0;
+function listenToRoom() {
+    localState.x = myRole === 'p1' ? -2.0 : 2.0;
+    localState.facing = myRole === 'p1' ? 1 : -1;
+
+    roomRef.on('value', (snap) => {
+        const data = snap.val();
+        if (!data) return;
+        playersData.p1 = data.p1;
+        playersData.p2 = data.p2;
+
+        // آپدیت نوار جان
+        document.getElementById('p1-hp').style.width = data.p1.hp + '%';
+        document.getElementById('p1-hp-text').innerText = data.p1.hp + '%';
+        document.getElementById('p2-hp').style.width = data.p2.hp + '%';
+        document.getElementById('p2-hp-text').innerText = data.p2.hp + '%';
+
+        // واکنش فیزیکی واقعی وقتی خودمان ضربه می‌خوریم!
+        const myServerData = data[myRole];
+        if (myServerData && myServerData.hitTimestamp && myServerData.hitTimestamp > lastHitHandled) {
+            lastHitHandled = myServerData.hitTimestamp;
+            localState.hitStunTimer = 0.35; // لرزش و شوک ضربه
+            localState.action = 'hurt';
+            // پرتاب شدن به عقب در جهت مخالف حریف
+            const pushDir = localState.facing === 1 ? -1 : 1;
+            localState.knockbackVx = pushDir * (myServerData.hitPower === 2 ? 7.5 : 4.5);
+            if (myServerData.hitPower === 2) localState.vy = 3.2; // پرتاب به هوا در ضربه ویژه
+            triggerScreenShake();
+        }
+
+        if (gameState === 'PLAYING' && (data.p1.hp <= 0 || data.p2.hp <= 0)) {
+            finishMatch(data.p2.hp <= 0 ? 'p1' : 'p2');
+        }
+    });
+}
+
+let shakeIntensity = 0;
+function triggerScreenShake() {
+    shakeIntensity = 0.25;
+}
+
+let lastSync = 0;
+function syncState(force = false) {
+    if (!roomRef || !myRole) return;
+    const now = Date.now();
+    if (!force && now - lastSync < 35) return; // نرخ بالای همگام‌سازی برای روانی 120FPS
+    lastSync = now;
+
+    roomRef.child(myRole).update({
+        x: Number(localState.x.toFixed(3)),
+        y: Number(localState.y.toFixed(3)),
+        z: Number(localState.z.toFixed(3)),
+        action: localState.action,
+        block: localState.block,
+        facing: localState.facing
+    });
+}
+
+function finishMatch(winner) {
+    gameState = 'GAMEOVER';
+    clearInterval(timerInt);
+    document.getElementById('gamepad').classList.add('hidden');
+    document.getElementById('gameover-screen').classList.remove('hidden');
+    const win = (winner === myRole);
+    document.getElementById('winner-title').innerText = win ? 'K.O. - شما برنده شدید!' : 'K.O. - شکست خوردید!';
+    document.getElementById('winner-sub').innerText = win ? 'ضربه نهایی حریف را از پای درآورد' : 'حریف برنده این مبارزه شد';
+}
+
+function resetToMenu() {
+    if (roomRef) { roomRef.off(); roomRef.remove(); roomRef = null; }
+    gameState = 'MENU';
+    document.getElementById('gameover-screen').classList.add('hidden');
+    document.getElementById('hud').classList.add('hidden');
+    document.getElementById('select-screen').classList.remove('hidden');
+}
+
+// ============================================================================
+// ۷. حلقه رندر 120FPS، برخورد فیزیکی بازیکنان (عدم عبور از هم) و انیمیشن عکس‌ها
+// ============================================================================
+let lastFrameTime = performance.now();
+
+function gameLoop(now) {
+    requestAnimationFrame(gameLoop);
+
+    // محاسبه دقیق Delta Time برای اجرای نرم روی نمایشگرهای 120Hz و 60Hz
+    const dt = Math.min((now - lastFrameTime) / 1000, 0.05);
+    lastFrameTime = now;
+
+    if (gameState === 'PLAYING' && fighters[myRole] && fighters[opponentRole]) {
+        const oppData = playersData[opponentRole];
+        const oppX = oppData ? oppData.x : 0;
+        const oppZ = oppData ? (oppData.z || 0) : 0;
+
+        // ۱. مدیریت شوک ضربه خوردن (Hit Reaction & Knockback)
+        if (localState.hitStunTimer > 0) {
+            localState.hitStunTimer -= dt;
+            localState.x += localState.knockbackVx * dt;
+            localState.knockbackVx *= 0.88; // اصطکاک زمین
+            if (localState.hitStunTimer <= 0) {
+                localState.action = 'idle';
+                syncState(true);
+            }
+        } else {
+            // ۲. حرکت عادی بازیکن در صورتی که ضربه نخورده باشد
+            const moveSpeed = 4.6;
+            if (inputState.left) localState.x -= moveSpeed * dt;
+            if (inputState.right) localState.x += moveSpeed * dt;
+            if (inputState.down) localState.z += moveSpeed * 0.75 * dt;
+            if (inputState.up && localState.y === 0) localState.vy = 6.8;
+        }
+
+        // جاذبه پرش
+        if (localState.y > 0 || localState.vy !== 0) {
+            localState.y += localState.vy * dt;
+            localState.vy -= 19 * dt;
+            if (localState.y <= 0) { localState.y = 0; localState.vy = 0; }
+        }
+
+        // ۳. برخورد فیزیکی (Collision) تا بازیکنان مثل روح از هم رد نشوند!
+        const minSeparation = 0.95; // حداقل فاصله بدنی دو مبارز
+        const dx = localState.x - oppX;
+        const dz = localState.z - oppZ;
+        const dist2D = Math.hypot(dx, dz);
+
+        if (dist2D < minSeparation && localState.y < 1.2) {
+            // هل دادن نرم به بیرون از بدن حریف
+            const pushAngle = dist2D > 0.001 ? Math.atan2(dz, dx) : (myRole === 'p1' ? Math.PI : 0);
+            localState.x = oppX + Math.cos(pushAngle) * minSeparation;
+            localState.z = oppZ + Math.sin(pushAngle) * minSeparation;
+        }
+
+        // محدودیت مرزهای رینگ
+        localState.x = Math.max(-5.8, Math.min(5.8, localState.x));
+        localState.z = Math.max(-4.5, Math.min(4.5, localState.z));
+
+        // تایمر ضربه زدن
+        if (localState.actionTimer > 0) {
+            localState.actionTimer -= dt;
+            if (localState.actionTimer <= 0 && localState.action !== 'hurt') {
+                localState.action = 'idle';
+                syncState(true);
+            }
+        }
+
+        // نگاه کردن همیشگی به سمت حریف
+        localState.facing = localState.x <= oppX ? 1 : -1;
+        syncState();
+
+        // ۴. به‌روزرسانی گرافیکی خودمان و حریف با عکس‌های واقعی
+        updateFighterVisuals(fighters[myRole], localState, (inputState.left || inputState.right || inputState.down));
+
+        if (oppData) {
+            const oppMesh = fighters[opponentRole];
+            oppMesh.root.position.lerp(new THREE.Vector3(oppData.x, oppData.y || 0, oppData.z || 0), 0.35);
+            updateFighterVisuals(oppMesh, oppData, false, true);
+        }
+
+        // ۵. دوربین سینمایی پویا + لرزش هنگام اصابت ضربه
+        const p1Pos = fighters.p1.root.position;
+        const p2Pos = fighters.p2.root.position;
+        const midX = (p1Pos.x + p2Pos.x) / 2;
+        const sep = Math.abs(p1Pos.x - p2Pos.x);
+        const targetZ = Math.max(5.8, Math.min(9.8, sep * 1.1 + 4.2));
+
+        let shakeX = 0, shakeY = 0;
+        if (shakeIntensity > 0) {
+            shakeX = (Math.random() - 0.5) * shakeIntensity;
+            shakeY = (Math.random() - 0.5) * shakeIntensity;
+            shakeIntensity *= 0.85;
+            if (shakeIntensity < 0.01) shakeIntensity = 0;
+        }
+
+        camera.position.x += (midX - camera.position.x) * 0.15 + shakeX;
+        camera.position.y = 2.4 + shakeY;
+        camera.position.z += (targetZ - camera.position.z) * 0.15;
+        camera.lookAt(midX, 1.25, 0);
+    }
+
+    renderer.render(scene, camera);
+}
+
+// اعمال دقیق عکس‌ها و واکنش‌های حرکتی/ضربه روی هر کاراکتر
+function updateFighterVisuals(fighterObj, state, isMoving, isRemote = false) {
+    if (!isRemote) {
+        fighterObj.root.position.set(state.x, state.y, state.z);
+    }
+
+    const sprites = processedSprites[fighterObj.charKey];
+    // انتخاب نمای نیم‌رخ هنگام مبارزه و جهت‌دهی دقیق به سمت حریف
+    if (sprites && sprites.side) {
+        fighterObj.mat.map = sprites.side.texture;
+    }
+
+    // جهت‌گیری افقی (Flip) بدون برعکس شدن متن یا بافت
+    const dirScale = state.facing === 1 ? 1 : -1;
+    fighterObj.plane.scale.x = dirScale;
+    fighterObj.plane.rotation.z = 0;
+    fighterObj.plane.position.x = 0;
+    fighterObj.mat.color.setHex(0xffffff);
+    fighterObj.hitFlash.material.opacity = 0;
+
+    // کوچک شدن سایه هنگام پرش
+    const shadowScale = Math.max(0.4, 1 - (state.y || 0) * 0.25);
+    fighterObj.shadow.scale.set(shadowScale, shadowScale, 1);
+    fighterObj.shadow.position.y = -(state.y || 0) + 0.02;
+
+    // واکنش‌های بصری دقیق هنگام ضربه زدن و ضربه خوردن
+    if (state.action === 'hurt') {
+        // واکنش شدید به ضربه: قرمز شدن لحظه‌ای، خم شدن به عقب و جرقه برخورد
+        fighterObj.mat.color.setHex(0xff5555);
+        fighterObj.plane.rotation.z = dirScale * 0.35; // خم شدن به عقب
+        fighterObj.plane.position.x = -dirScale * 0.15;
+        fighterObj.hitFlash.material.opacity = 0.85;
+    } else if (state.action === 'punch' || state.action === 'kick') {
+        // جهش رو به جلو هنگام حمله
+        fighterObj.plane.position.x = dirScale * 0.35;
+        fighterObj.plane.rotation.z = -dirScale * 0.15;
+    } else if (state.action === 'special') {
+        // درخشش طلایی-صورتی در ضربه ویژه
+        fighterObj.mat.color.setHex(0xffe066);
+        fighterObj.plane.position.x = dirScale * 0.45;
+        fighterObj.hitFlash.material.opacity = 0.6;
+    } else if (state.block) {
+        // حالت دفاع (کمی عقب‌نشینی و سایه آبی دفاعی)
+        fighterObj.mat.color.setHex(0x88ccff);
+        fighterObj.plane.rotation.z = dirScale * 0.12;
+    } else if (isMoving) {
+        // تکان طبیعی گام برداشتن
+        fighterObj.plane.position.y = 1.18 + Math.abs(Math.sin(performance.now() * 0.015)) * 0.08;
+    } else {
+        // تنفس آرام در حالت آماده
+        fighterObj.plane.position.y = 1.18 + Math.sin(performance.now() * 0.005) * 0.02;
+    }
+}
+
+function onResize() {
+    const wrapper = document.getElementById('game-wrapper');
+    renderer.setSize(wrapper.clientWidth, wrapper.clientHeight);
+    camera.aspect = 16 / 9;
+    camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', onResize);
+onResize();
+requestAnimationFrame(gameLoop);
 </script>
 </body>
 </html>
