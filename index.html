@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Negin Lash | رزرو آنلاین کاشت مژه</title>
+    <title>Negin Lash | رزرو نوبت مژه نگین</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -11,16 +11,17 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
         :root {
-            --bg-main: #fff7fb;
-            --glass-bg: rgba(255, 255, 255, 0.82);
-            --glass-border: rgba(255, 255, 255, 0.96);
-            --pink-primary: #eb5b9b;
-            --pink-dark: #c42f72;
-            --pink-soft: #ffe2f0;
-            --pink-glow: rgba(235, 91, 155, 0.28);
-            --text-dark: #261621;
-            --text-muted: #6e5565;
-            --shadow-card: 0 12px 28px rgba(214, 108, 156, 0.15);
+            --bg-main: #fdf5fa;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.98);
+            --pink-primary: #e55b9b;
+            --pink-dark: #c02d71;
+            --pink-soft: #ffe3f1;
+            --lavender-soft: #f6e8ff;
+            --pink-glow: rgba(229, 91, 155, 0.25);
+            --text-dark: #281622;
+            --text-muted: #6f5666;
+            --shadow-soft: 0 12px 28px rgba(212, 106, 156, 0.14);
         }
 
         * {
@@ -33,15 +34,15 @@
 
         html, body {
             background:
-                radial-gradient(circle at 12% 10%, #ffd6e9 0%, transparent 42%),
-                radial-gradient(circle at 88% 18%, #f3d8ff 0%, transparent 44%),
-                radial-gradient(circle at 50% 90%, #ffe3f0 0%, transparent 48%),
+                radial-gradient(circle at 15% 10%, #ffd6ea 0%, transparent 45%),
+                radial-gradient(circle at 88% 16%, #efd7ff 0%, transparent 45%),
+                radial-gradient(circle at 50% 90%, #ffe4f1 0%, transparent 50%),
                 var(--bg-main);
             color: var(--text-dark);
             min-height: 100vh;
             line-height: 1.65;
             overflow-x: hidden;
-            padding-bottom: 96px;
+            padding-bottom: 98px;
         }
 
         .glass {
@@ -49,11 +50,11 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1.5px solid var(--glass-border);
-            box-shadow: var(--shadow-card);
+            box-shadow: var(--shadow-soft);
         }
 
         /* هدر موبایل */
-        .top-bar {
+        .top-header {
             position: sticky;
             top: 0;
             z-index: 80;
@@ -65,17 +66,17 @@
             border-bottom-right-radius: 22px;
         }
 
-        .brand-wrap {
+        .brand-row {
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .brand-icon {
+        .brand-logo-box {
             width: 38px;
             height: 38px;
             border-radius: 13px;
-            background: linear-gradient(135deg, #ff85bc, #d4367d);
+            background: linear-gradient(135deg, #ff85bc, #cf3479);
             color: #fff;
             display: flex;
             align-items: center;
@@ -83,18 +84,18 @@
             box-shadow: 0 6px 16px var(--pink-glow);
         }
 
-        .brand-wrap strong {
+        .brand-row strong {
             display: block;
-            font-size: 16px;
+            font-size: 15.5px;
             font-weight: 900;
         }
 
-        .brand-wrap span {
+        .brand-row span {
             font-size: 11px;
             color: var(--text-muted);
         }
 
-        .online-badge {
+        .online-tag {
             background: var(--pink-soft);
             color: var(--pink-dark);
             font-size: 11px;
@@ -103,13 +104,13 @@
             border-radius: 999px;
         }
 
-        /* صفحات */
+        /* کانتینر صفحات */
         .page-view {
             display: none;
             padding: 16px;
             max-width: 560px;
             margin: 0 auto;
-            animation: fadePage 0.22s ease;
+            animation: fadePage 0.2s ease;
         }
 
         .page-view.active {
@@ -121,40 +122,51 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* بنر خانه */
-        .hero-box {
-            border-radius: 24px;
+        /* بنر خوشامدگویی و آمار صفحه اصلی */
+        .welcome-banner {
+            border-radius: 26px;
             padding: 20px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             background:
-                radial-gradient(circle at 85% 20%, rgba(255, 138, 195, 0.34), transparent 55%),
+                radial-gradient(circle at 85% 20%, rgba(255, 138, 195, 0.32), transparent 55%),
                 var(--glass-bg);
         }
 
-        .pill-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--pink-soft);
-            color: var(--pink-dark);
-            font-size: 11.5px;
-            font-weight: 800;
-            padding: 4px 12px;
-            border-radius: 999px;
-            margin-bottom: 10px;
-        }
-
-        .hero-box h1 {
-            font-size: 21px;
+        .welcome-banner h1 {
+            font-size: 20px;
             font-weight: 900;
-            line-height: 1.35;
-            margin-bottom: 8px;
+            line-height: 1.4;
+            color: var(--text-dark);
+            margin-bottom: 14px;
+            text-align: center;
         }
 
-        .hero-box p {
-            font-size: 13.5px;
-            color: var(--text-muted);
+        .stats-two-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
             margin-bottom: 14px;
+        }
+
+        .stat-highlight {
+            background: rgba(255, 255, 255, 0.92);
+            border: 1.5px solid rgba(229, 91, 155, 0.26);
+            border-radius: 20px;
+            padding: 13px 10px;
+            text-align: center;
+        }
+
+        .stat-highlight strong {
+            display: block;
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--pink-dark);
+        }
+
+        .stat-highlight span {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
         }
 
         .btn-main {
@@ -175,10 +187,10 @@
         }
 
         .btn-sec {
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.94);
             color: var(--text-dark);
-            border: 1.5px solid rgba(235, 91, 155, 0.3);
-            padding: 12px 16px;
+            border: 1.5px solid rgba(229, 91, 155, 0.3);
+            padding: 11px 14px;
             border-radius: 15px;
             font-size: 13px;
             font-weight: 800;
@@ -189,19 +201,19 @@
             gap: 6px;
         }
 
-        /* کارت تایید و شمارش معکوس کاربر */
-        .tracker-card {
+        /* کارت وضعیت تایید نوبت و شمارش معکوس */
+        .tracker-box {
             border-radius: 22px;
             padding: 16px;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
             display: none;
         }
 
-        .tracker-card.show {
+        .tracker-box.show {
             display: block;
         }
 
-        .state-pill {
+        .state-badge {
             padding: 9px 12px;
             border-radius: 13px;
             font-size: 12.5px;
@@ -209,17 +221,17 @@
             margin-bottom: 10px;
         }
 
-        .state-pill.wait {
+        .state-badge.wait {
             background: #fefcbf;
             color: #975a16;
         }
 
-        .state-pill.ok {
+        .state-badge.ok {
             background: #c6f6d5;
             color: #22543d;
         }
 
-        .cd-row {
+        .cd-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 7px;
@@ -227,56 +239,161 @@
             text-align: center;
         }
 
-        .cd-box {
+        .cd-cell {
             background: #fff;
-            border: 1.5px solid rgba(235, 91, 155, 0.25);
+            border: 1.5px solid rgba(229, 91, 155, 0.25);
             border-radius: 14px;
             padding: 9px 4px;
         }
 
-        .cd-box strong {
+        .cd-cell strong {
             display: block;
             font-size: 17px;
             font-weight: 900;
             color: var(--pink-dark);
         }
 
-        .cd-box span {
+        .cd-cell span {
             font-size: 10.5px;
             color: var(--text-muted);
         }
 
-        /* اسلایدرهای اسکرولی چپ و راست */
-        .sec-head {
+        /* سکشن خدمات در صفحه اصلی */
+        .sec-title-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
+            margin-top: 6px;
         }
 
-        .sec-head h2 {
-            font-size: 18px;
+        .sec-title-row h2 {
+            font-size: 17.5px;
             font-weight: 900;
         }
 
-        .nav-arrows {
+        .services-accordion-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .srv-row-card {
+            border-radius: 20px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .srv-row-info strong {
+            display: block;
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .srv-row-info span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .srv-row-right {
+            text-align: left;
+        }
+
+        .srv-price-text {
+            display: block;
+            font-size: 13.5px;
+            font-weight: 900;
+            color: var(--pink-dark);
+            margin-bottom: 4px;
+        }
+
+        .pick-srv-btn {
+            background: var(--pink-soft);
+            color: var(--pink-dark);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 11px;
+            font-size: 11.5px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        /* کشوهای رازهای مراقبت از مژه در پایین صفحه اصلی */
+        .secrets-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .secret-drawer {
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .secret-trigger {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.92);
+            border: none;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text-dark);
+            cursor: pointer;
+            text-align: right;
+        }
+
+        .secret-arrow {
+            font-size: 14px;
+            color: var(--pink-dark);
+            transition: transform 0.22s ease;
+        }
+
+        .secret-drawer.open .secret-arrow {
+            transform: rotate(180deg);
+        }
+
+        .secret-body {
+            display: none;
+            padding: 12px 16px 15px;
+            font-size: 13px;
+            color: var(--text-muted);
+            background: rgba(255, 245, 250, 0.78);
+            border-top: 1px dashed rgba(229, 91, 155, 0.25);
+        }
+
+        .secret-drawer.open .secret-body {
+            display: block;
+            animation: fadePage 0.2s ease;
+        }
+
+        /* اسکرول افقی نمونه‌کارها (عکس، لینک عکس، فیلم و کلیپ) */
+        .arrow-group {
             display: flex;
             gap: 6px;
         }
 
-        .arrow-ico {
+        .arrow-btn {
             width: 35px;
             height: 35px;
             border-radius: 12px;
-            border: 1.5px solid rgba(235, 91, 155, 0.35);
+            border: 1.5px solid rgba(229, 91, 155, 0.35);
             background: #fff;
             color: var(--pink-dark);
-            font-size: 15px;
             font-weight: 900;
+            font-size: 15px;
             cursor: pointer;
         }
 
-        .scroll-track {
+        .portfolio-scroller {
             display: flex;
             gap: 12px;
             overflow-x: auto;
@@ -286,64 +403,56 @@
             scrollbar-width: none;
         }
 
-        .scroll-track::-webkit-scrollbar {
+        .portfolio-scroller::-webkit-scrollbar {
             display: none;
         }
 
-        .srv-card {
-            flex: 0 0 88%;
-            scroll-snap-align: center;
-            border-radius: 22px;
-            padding: 18px;
-        }
-
-        .srv-card h3 {
-            font-size: 17px;
-            font-weight: 800;
-            margin-bottom: 5px;
-        }
-
-        .srv-card p {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-        }
-
-        .srv-foot {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-top: 1px dashed rgba(235, 91, 155, 0.25);
-            padding-top: 10px;
-        }
-
-        .port-card {
-            flex: 0 0 82%;
+        .media-post-card {
+            flex: 0 0 85%;
             scroll-snap-align: center;
             border-radius: 22px;
             overflow: hidden;
         }
 
-        .port-img {
+        .media-stage {
             width: 100%;
-            height: 235px;
+            height: 245px;
             background: #fcebf3;
+            position: relative;
         }
 
-        .port-img img {
+        .media-stage img,
+        .media-stage video {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
         }
 
-        .port-cap {
+        .media-caption-bar {
             padding: 12px 15px;
-            font-weight: 800;
-            font-size: 14.5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
         }
 
-        .empty-msg {
+        .media-caption-bar strong {
+            font-size: 14.5px;
+            font-weight: 800;
+        }
+
+        .media-type-chip {
+            background: var(--pink-soft);
+            color: var(--pink-dark);
+            font-size: 10.5px;
+            font-weight: 800;
+            padding: 3px 9px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        .empty-note {
             width: 100%;
             border-radius: 20px;
             padding: 22px 14px;
@@ -352,102 +461,101 @@
             color: var(--text-muted);
         }
 
-        /* رزرو مرحله به مرحله */
-        .wizard-card {
+        /* رزرو مرحله‌به‌مرحله با تقویم شمسی شیشه‌ای */
+        .wizard-box {
             border-radius: 24px;
             padding: 20px;
         }
 
-        .step-progress {
+        .step-bars {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 6px;
             margin: 12px 0 18px;
         }
 
-        .step-dot {
+        .step-bar {
             height: 6px;
             border-radius: 999px;
-            background: rgba(235, 91, 155, 0.2);
-            transition: background 0.25s;
+            background: rgba(229, 91, 155, 0.2);
         }
 
-        .step-dot.done {
-            background: linear-gradient(90deg, #ff7eb6, #d4367d);
+        .step-bar.active {
+            background: linear-gradient(90deg, #ff85bc, #cf3479);
         }
 
-        .wizard-step {
+        .w-step {
             display: none;
         }
 
-        .wizard-step.active {
+        .w-step.active {
             display: block;
             animation: fadePage 0.2s ease;
         }
 
-        .input-group {
+        .field-box {
             display: flex;
             flex-direction: column;
             gap: 6px;
-            margin-bottom: 14px;
+            margin-bottom: 13px;
         }
 
-        .input-group label {
+        .field-box label {
             font-size: 13px;
             font-weight: 800;
         }
 
-        .input-group input, .input-group select, .input-group textarea {
+        .field-box input, .field-box select, .field-box textarea {
             background: rgba(255, 255, 255, 0.95);
-            border: 1.5px solid rgba(235, 91, 155, 0.28);
+            border: 1.5px solid rgba(229, 91, 155, 0.28);
             border-radius: 14px;
-            padding: 12px 14px;
+            padding: 11px 14px;
             font-size: 14px;
             color: var(--text-dark);
             outline: none;
             width: 100%;
         }
 
-        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+        .field-box input:focus, .field-box select:focus, .field-box textarea:focus {
             border-color: var(--pink-primary);
         }
 
-        /* تقویم شیشه‌ای و گرافیکی مرحله دوم */
-        .glass-calendar {
+        /* تقویم شمسی شیشه‌ای و گرافیکی */
+        .shamsi-glass-cal {
             border-radius: 22px;
             padding: 16px;
             background: rgba(255, 255, 255, 0.72);
             backdrop-filter: blur(16px);
-            border: 1.5px solid rgba(255, 255, 255, 0.95);
+            border: 1.5px solid rgba(255, 255, 255, 0.96);
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 10px 24px rgba(214, 90, 148, 0.14);
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
-        .cal-header {
+        .cal-top {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 12px;
         }
 
-        .cal-header strong {
+        .cal-top strong {
             font-size: 15px;
             font-weight: 900;
             color: var(--pink-dark);
         }
 
-        .cal-nav-btn {
+        .cal-btn {
             width: 34px;
             height: 34px;
             border-radius: 11px;
-            border: 1.5px solid rgba(235, 91, 155, 0.3);
+            border: 1.5px solid rgba(229, 91, 155, 0.3);
             background: #fff;
             color: var(--pink-dark);
             font-weight: 900;
             cursor: pointer;
         }
 
-        .cal-weekdays {
+        .cal-week-names {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             text-align: center;
@@ -457,17 +565,17 @@
             margin-bottom: 8px;
         }
 
-        .cal-days-grid {
+        .cal-days {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 6px;
         }
 
-        .cal-day-btn {
+        .cal-day {
             aspect-ratio: 1 / 1;
             border-radius: 13px;
-            border: 1px solid rgba(235, 91, 155, 0.2);
-            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(229, 91, 155, 0.2);
+            background: rgba(255, 255, 255, 0.88);
             color: var(--text-dark);
             font-weight: 800;
             font-size: 13px;
@@ -475,42 +583,35 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.15s;
         }
 
-        .cal-day-btn:hover:not(:disabled) {
-            border-color: var(--pink-primary);
-            background: var(--pink-soft);
-        }
-
-        .cal-day-btn.selected {
-            background: linear-gradient(135deg, #ff7eb6, #d4367d);
+        .cal-day.selected {
+            background: linear-gradient(135deg, #ff85bc, #cf3479);
             color: #fff;
             border-color: transparent;
             box-shadow: 0 6px 14px var(--pink-glow);
         }
 
-        .cal-day-btn:disabled {
+        .cal-day:disabled {
             opacity: 0.35;
             cursor: not-allowed;
         }
 
-        /* انتخاب خدمات مرحله سوم */
-        .service-choice-list {
+        .srv-options {
             display: flex;
             flex-direction: column;
             gap: 8px;
-            margin-bottom: 14px;
+            margin-bottom: 13px;
         }
 
-        .srv-choice-btn {
+        .srv-opt-btn {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 12px 14px;
             border-radius: 16px;
-            border: 1.5px solid rgba(235, 91, 155, 0.25);
-            background: rgba(255, 255, 255, 0.9);
+            border: 1.5px solid rgba(229, 91, 155, 0.25);
+            background: rgba(255, 255, 255, 0.92);
             color: var(--text-dark);
             font-size: 13.5px;
             font-weight: 800;
@@ -518,13 +619,13 @@
             text-align: right;
         }
 
-        .srv-choice-btn.active {
-            background: linear-gradient(135deg, #ffe3f0, #fff4fa);
+        .srv-opt-btn.active {
+            background: linear-gradient(135deg, #ffe3f1, #fff6fb);
             border-color: var(--pink-primary);
             color: var(--pink-dark);
         }
 
-        .srv-choice-price {
+        .srv-opt-price {
             background: var(--pink-soft);
             color: var(--pink-dark);
             padding: 4px 10px;
@@ -533,29 +634,27 @@
             font-weight: 900;
         }
 
-        /* خلاصه تایید نهایی مرحله چهارم */
-        .summary-box {
-            background: rgba(255, 255, 255, 0.9);
-            border: 1.5px solid rgba(235, 91, 155, 0.32);
+        .confirm-card {
+            background: rgba(255, 255, 255, 0.92);
+            border: 1.5px solid rgba(229, 91, 155, 0.32);
             border-radius: 20px;
-            padding: 16px;
-            margin-bottom: 14px;
+            padding: 15px;
+            margin-bottom: 12px;
         }
 
-        .summary-row {
+        .confirm-line {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px dashed rgba(235, 91, 155, 0.22);
-            font-size: 13.5px;
+            padding: 7px 0;
+            border-bottom: 1px dashed rgba(229, 91, 155, 0.22);
+            font-size: 13px;
         }
 
-        .summary-row:last-child {
+        .confirm-line:last-child {
             border-bottom: none;
         }
 
-        .friendly-check {
+        .ready-banner {
             text-align: center;
             font-size: 15px;
             font-weight: 900;
@@ -563,17 +662,17 @@
             background: var(--pink-soft);
             padding: 11px 14px;
             border-radius: 15px;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
-        .wizard-btns {
+        .two-btns {
             display: grid;
             grid-template-columns: 1fr 1.4fr;
             gap: 10px;
         }
 
-        /* بخش ادمین */
-        .adm-card {
+        /* ادمین */
+        .adm-panel-card {
             border-radius: 22px;
             padding: 16px;
             margin-bottom: 14px;
@@ -604,16 +703,16 @@
             color: var(--text-muted);
         }
 
-        .adm-booking-box {
+        .adm-bk-card {
             background: rgba(255, 255, 255, 0.95);
-            border: 1.5px solid rgba(235, 91, 155, 0.22);
+            border: 1.5px solid rgba(229, 91, 155, 0.22);
             border-radius: 18px;
             padding: 14px;
             margin-bottom: 10px;
             font-size: 13px;
         }
 
-        .btn-confirm-time {
+        .btn-approve-now {
             background: #2f855a;
             color: #fff;
             border: none;
@@ -626,7 +725,7 @@
             margin-top: 8px;
         }
 
-        .btn-del-small {
+        .btn-del {
             background: #fed7d7;
             color: #9b2c2c;
             border: none;
@@ -637,7 +736,7 @@
             cursor: pointer;
         }
 
-        .notif-row {
+        .notif-item {
             background: #fff5f9;
             border: 1px solid #f8cde2;
             border-radius: 13px;
@@ -646,13 +745,13 @@
             font-size: 12.5px;
         }
 
-        .notif-row.unread {
+        .notif-item.unread {
             border-right: 4px solid var(--pink-primary);
             background: #ffe6f1;
         }
 
-        /* تولبار ثابت پایین با آیکون‌های SVG دخترونه */
-        .bottom-nav {
+        /* تولبار پایین با آیکون‌های SVG دخترونه */
+        .bottom-toolbar {
             position: fixed;
             bottom: 10px;
             left: 10px;
@@ -661,7 +760,7 @@
             margin: 0 auto;
             height: 70px;
             border-radius: 24px;
-            background: rgba(255, 255, 255, 0.93);
+            background: rgba(255, 255, 255, 0.94);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1.5px solid rgba(255, 255, 255, 0.98);
@@ -673,7 +772,7 @@
             padding: 0 4px;
         }
 
-        .nav-tab {
+        .tb-btn {
             background: none;
             border: none;
             display: flex;
@@ -689,24 +788,24 @@
             text-decoration: none;
         }
 
-        .nav-tab svg {
+        .tb-btn svg {
             width: 22px;
             height: 22px;
         }
 
-        .nav-tab.active {
+        .tb-btn.active {
             color: var(--pink-dark);
         }
 
-        .nav-center-home {
+        .tb-center-home {
             transform: translateY(-11px);
         }
 
-        .nav-center-home .home-badge {
+        .tb-center-home .home-circle {
             width: 48px;
             height: 48px;
             border-radius: 18px;
-            background: linear-gradient(135deg, #ff85bc, #d4367d);
+            background: linear-gradient(135deg, #ff85bc, #cf3479);
             color: #fff;
             display: flex;
             align-items: center;
@@ -714,12 +813,12 @@
             box-shadow: 0 8px 20px var(--pink-glow);
         }
 
-        .nav-center-home span {
+        .tb-center-home span {
             color: var(--pink-dark);
             font-weight: 900;
         }
 
-        .nav-count-badge {
+        .tb-badge {
             position: absolute;
             top: 2px;
             right: 11px;
@@ -736,11 +835,11 @@
             font-weight: 900;
         }
 
-        .nav-count-badge.show {
+        .tb-badge.show {
             display: inline-flex;
         }
 
-        .toast-popup {
+        .toast-banner {
             position: fixed;
             top: 66px;
             left: 14px;
@@ -756,7 +855,7 @@
             display: none;
         }
 
-        .toast-popup.show {
+        .toast-banner.show {
             display: block;
         }
     </style>
@@ -764,118 +863,154 @@
 <body>
 
     <!-- هدر -->
-    <header class="glass top-bar">
-        <div class="brand-wrap">
-            <div class="brand-icon" aria-hidden="true">
-                <!-- آیکون مژه و قلب دخترونه -->
-                <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                    <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6Z"/>
-                    <path d="M12 9.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z"/>
-                    <path d="m6 17-1.5 2.5M12 18v3M18 17l1.5 2.5"/>
+    <header class="glass top-header">
+        <div class="brand-row">
+            <div class="brand-logo-box" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                 </svg>
             </div>
             <div>
                 <strong>Negin Lash</strong>
-                <span>استودیو تخصصی مژه</span>
+                <span>مژه نگین</span>
             </div>
         </div>
-        <div class="online-badge" id="top-online-badge">آنلاین: ۰</div>
+        <div class="online-tag" id="top-online-tag">آنلاین: ۰</div>
     </header>
 
     <!-- اعلان لحظه‌ای برای ادمین -->
-    <div id="toast-popup" class="toast-popup">
-        <strong style="color:#ff94c7; font-size:13.5px; display:block;" id="toast-title">🔔 نوبت جدید ثبت شد</strong>
-        <span style="font-size:12.5px;" id="toast-body"></span>
+    <div id="toast-banner" class="toast-banner">
+        <strong style="color:#ff94c7; font-size:13.5px; display:block;" id="toast-head">🔔 نوبت جدید ثبت شد</strong>
+        <span style="font-size:12.5px;" id="toast-msg"></span>
     </div>
 
     <!-- ======================= ۱. صفحه خانه ======================= -->
     <main id="tab-home" class="page-view active">
-        <div class="glass hero-box">
-            <span class="pill-tag">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                </svg>
-                Negin Lash Studio
-            </span>
-            <h1>نگاهی جذاب و لطیف با کاشت مژه اصولی</h1>
-            <p>نوبت خود را مرحله‌به‌مرحله رزرو کنید و بلافاصله وضعیت تایید و زمان‌سنج نوبتتان را ببینید.</p>
+        <div class="glass welcome-banner">
+            <h1>به سایت رزرو نوبت مژه نگین خوش آمدید</h1>
+
+            <div class="stats-two-grid">
+                <div class="stat-highlight">
+                    <strong>+۹۹۹</strong>
+                    <span>مشتریان راضی</span>
+                </div>
+                <div class="stat-highlight">
+                    <strong>4 سال</strong>
+                    <span>سابقه کار</span>
+                </div>
+            </div>
+
             <button type="button" class="btn-main" onclick="openTab('booking')">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    <rect x="3" y="4" width="18" height="17" rx="4"/>
+                    <path d="M16 2v4M8 2v4M3 9h18"/>
                 </svg>
-                شروع رزرو نوبت
+                رزرو نوبت آنلاین
             </button>
         </div>
 
-        <!-- وضعیت تایید نوبت و شمارش معکوس برای کاربر -->
-        <div id="user-tracker-card" class="glass tracker-card">
-            <div id="user-state-pill" class="state-pill wait">در انتظار تایید نوبت توسط ادمین...</div>
-            <div id="user-appt-info" style="font-size:13px;"></div>
+        <!-- کارت تایید نوبت و زمان‌سنج زنده برای کاربر -->
+        <div id="user-tracker-box" class="glass tracker-box">
+            <div id="user-state-badge" class="state-badge wait">در انتظار تایید نوبت توسط ادمین...</div>
+            <div id="user-appt-detail" style="font-size:13px;"></div>
 
-            <div id="user-timer-wrap" style="display:none; margin-top:10px;">
+            <div id="user-countdown-area" style="display:none; margin-top:10px;">
                 <div style="font-size:12.5px; font-weight:800; color:var(--pink-dark);">
                     ⏳ زمان باقی‌مانده تا نوبت تاییدشده شما:
                 </div>
-                <div class="cd-row">
-                    <div class="cd-box"><strong id="t-days">0</strong><span>روز</span></div>
-                    <div class="cd-box"><strong id="t-hours">00</strong><span>ساعت</span></div>
-                    <div class="cd-box"><strong id="t-mins">00</strong><span>دقیقه</span></div>
-                    <div class="cd-box"><strong id="t-secs">00</strong><span>ثانیه</span></div>
+                <div class="cd-grid">
+                    <div class="cd-cell"><strong id="c-days">0</strong><span>روز</span></div>
+                    <div class="cd-cell"><strong id="c-hours">00</strong><span>ساعت</span></div>
+                    <div class="cd-cell"><strong id="c-mins">00</strong><span>دقیقه</span></div>
+                    <div class="cd-cell"><strong id="c-secs">00</strong><span>ثانیه</span></div>
                 </div>
             </div>
         </div>
 
-        <!-- منوی خدمات (خالی در ابتدا + اسکرول صفحه به صفحه چپ و راست) -->
+        <!-- لیست خدمات (شامل خدمات درخواستی + خدمات ثبت‌شده توسط ادمین) -->
         <section>
-            <div class="sec-head">
-                <h2>خدمات ثبت‌شده</h2>
-                <div class="nav-arrows">
-                    <button type="button" class="arrow-ico" onclick="scrollTrack('home-services-track', -1)">→</button>
-                    <button type="button" class="arrow-ico" onclick="scrollTrack('home-services-track', 1)">←</button>
-                </div>
+            <div class="sec-title-row">
+                <h2>خدمات و تعرفه‌ها</h2>
             </div>
-            <div id="home-services-track" class="scroll-track">
-                <div class="glass empty-msg">هنوز خدمتی توسط ادمین ثبت نشده است.</div>
+            <div id="home-services-list" class="services-accordion-list"></div>
+        </section>
+
+        <!-- کشوهای رازهای مراقبت از مژه در پایین صفحه اصلی -->
+        <section>
+            <div class="sec-title-row">
+                <h2>رازهای مراقبت از مژه</h2>
+            </div>
+            <div class="secrets-list">
+                <div class="glass secret-drawer">
+                    <button type="button" class="secret-trigger" onclick="toggleSecretDrawer(this)">
+                        <span>۱. راز ماندگاری بالای مژه در ۲۴ ساعت اول</span>
+                        <span class="secret-arrow">⌄</span>
+                    </button>
+                    <div class="secret-body">
+                        تا ۲۴ ساعت پس از کاشت یا لیفت، مژه‌ها را از تماس مستقیم با آب زیاد، بخار داغ و سونا دور نگه دارید تا چسب و مواد به طور کامل تثبیت شوند و ماندگاری کار چند برابر شود.
+                    </div>
+                </div>
+
+                <div class="glass secret-drawer">
+                    <button type="button" class="secret-trigger" onclick="toggleSecretDrawer(this)">
+                        <span>۲. راز شست‌وشوی اصولی و جلوگیری از ریزش زودهنگام</span>
+                        <span class="secret-arrow">⌄</span>
+                    </button>
+                    <div class="secret-body">
+                        چربی و آلودگی روی پلک باعث تضعیف اتصال مژه می‌شود. روزانه مژه‌ها را با فوم شست‌وشوی فاقد چربی (Oil-Free) به آرامی بشویید، آبکشی کنید و پس از خشک شدن با براش تمیز شانه بزنید.
+                    </div>
+                </div>
+
+                <div class="glass secret-drawer">
+                    <button type="button" class="secret-trigger" onclick="toggleSecretDrawer(this)">
+                        <span>۳. راز حفظ سلامت مژه‌های طبیعی هنگام خواب و آرایش</span>
+                        <span class="secret-arrow">⌄</span>
+                    </button>
+                    <div class="secret-body">
+                        از روبالشی ساتن یا ابریشم استفاده کنید تا اصطکاک مژه‌ها به حداقل برسد، مژه‌ها را نکنید و برای پاک کردن آرایش چشم از محصولات روغنی استفاده ننمایید.
+                    </div>
+                </div>
             </div>
         </section>
     </main>
 
-    <!-- ======================= ۲. صفحه رزرو نوبت مرحله‌به‌مرحله ======================= -->
+    <!-- ======================= ۲. صفحه رزرو نوبت مرحله‌به‌مرحله (تقویم شمسی) ======================= -->
     <section id="tab-booking" class="page-view">
-        <div class="glass wizard-card">
-            <span class="pill-tag" id="wizard-step-label">مرحله ۱ از ۴ • نام و شماره تماس</span>
+        <div class="glass wizard-box">
+            <span class="pill-tag" id="step-pill">مرحله ۱ از ۴ • ثبت نام و شماره</span>
 
-            <div class="step-progress">
-                <div id="prog-1" class="step-dot done"></div>
-                <div id="prog-2" class="step-dot"></div>
-                <div id="prog-3" class="step-dot"></div>
-                <div id="prog-4" class="step-dot"></div>
+            <div class="step-bars">
+                <div id="bar-1" class="step-bar active"></div>
+                <div id="bar-2" class="step-bar"></div>
+                <div id="bar-3" class="step-bar"></div>
+                <div id="bar-4" class="step-bar"></div>
             </div>
 
-            <!-- مرحله ۱: نام و شماره کاربر -->
-            <div id="step-1" class="wizard-step active">
-                <h2 style="font-size:18px; font-weight:900; margin-bottom:10px;">مرحله اول: ثبت نام و شماره تماس</h2>
-                <div class="input-group">
-                    <label for="w-name">نام و نام خانوادگی</label>
-                    <input type="text" id="w-name" placeholder="نام شما">
+            <!-- مرحله اول: نام و شماره کاربر -->
+            <div id="w-step-1" class="w-step active">
+                <h2 style="font-size:18px; font-weight:900; margin-bottom:10px;">مرحله اول: ثبت نام و شماره کاربر</h2>
+                <div class="field-box">
+                    <label for="in-name">نام و نام خانوادگی</label>
+                    <input type="text" id="in-name" placeholder="نام شما">
                 </div>
-                <div class="input-group">
-                    <label for="w-phone">شماره تماس</label>
-                    <input type="tel" id="w-phone" placeholder="09123456789">
+                <div class="field-box">
+                    <label for="in-phone">شماره تماس</label>
+                    <input type="tel" id="in-phone" placeholder="09123456789">
                 </div>
-                <button type="button" class="btn-main" onclick="goStep(2)">مرحله بعد: انتخاب تاریخ در تقویم</button>
+                <button type="button" class="btn-main" onclick="moveWizard(2)">مرحله دوم: تقویم شمسی</button>
             </div>
 
-            <!-- مرحله ۲: تقویم شیشه‌ای و گرافیکی -->
-            <div id="step-2" class="wizard-step">
-                <h2 style="font-size:18px; font-weight:900; margin-bottom:10px;">مرحله دوم: انتخاب تاریخ روز نوبت</h2>
-                <div class="glass-calendar">
-                    <div class="cal-header">
-                        <button type="button" class="cal-nav-btn" onclick="changeCalendarMonth(-1)">→</button>
-                        <strong id="cal-month-title">ماه</strong>
-                        <button type="button" class="cal-nav-btn" onclick="changeCalendarMonth(1)">←</button>
+            <!-- مرحله دوم: تقویم شمسی شیشه‌ای و گرافیکی -->
+            <div id="w-step-2" class="w-step">
+                <h2 style="font-size:18px; font-weight:900; margin-bottom:10px;">مرحله دوم: تاریخ روز نوبت (تقویم شمسی)</h2>
+
+                <div class="shamsi-glass-cal">
+                    <div class="cal-top">
+                        <button type="button" class="cal-btn" onclick="shiftShamsiMonth(-1)">→</button>
+                        <strong id="shamsi-month-label">ماه شمسی</strong>
+                        <button type="button" class="cal-btn" onclick="shiftShamsiMonth(1)">←</button>
                     </div>
-                    <div class="cal-weekdays">
+                    <div class="cal-week-names">
                         <span>ش</span>
                         <span>ی</span>
                         <span>د</span>
@@ -884,229 +1019,222 @@
                         <span>پ</span>
                         <span>ج</span>
                     </div>
-                    <div id="cal-days-grid" class="cal-days-grid"></div>
+                    <div id="shamsi-days-grid" class="cal-days"></div>
                 </div>
-                <div style="font-size:12.5px; color:var(--pink-dark); font-weight:800; margin-bottom:12px;" id="selected-cal-text">
-                    تاریخ انتخاب‌شده: هنوز انتخاب نشده
+
+                <div id="picked-shamsi-text" style="font-size:12.5px; font-weight:800; color:var(--pink-dark); margin-bottom:12px;">
+                    تاریخ شمسی انتخاب‌شده: هنوز انتخاب نشده
                 </div>
-                <div class="wizard-btns">
-                    <button type="button" class="btn-sec" onclick="goStep(1)">بازگشت</button>
-                    <button type="button" class="btn-main" onclick="goStep(3)">مرحله بعد: خدمات و توضیحات</button>
+
+                <div class="two-btns">
+                    <button type="button" class="btn-sec" onclick="moveWizard(1)">بازگشت</button>
+                    <button type="button" class="btn-main" onclick="moveWizard(3)">مرحله سوم: خدمات و توضیحات</button>
                 </div>
             </div>
 
-            <!-- مرحله ۳: توضیحات و انتخاب خدمات با قیمت‌های مشخص -->
-            <div id="step-3" class="wizard-step">
+            <!-- مرحله سوم: توضیحات و انتخاب خدمات با قیمت‌های مشخص -->
+            <div id="w-step-3" class="w-step">
                 <h2 style="font-size:18px; font-weight:900; margin-bottom:10px;">مرحله سوم: انتخاب خدمات و توضیحات</h2>
 
-                <div class="service-choice-list" id="preset-services-list">
-                    <button type="button" class="srv-choice-btn active" data-name="اکستنشن" data-price="1.500 تومان" onclick="pickPresetService(this)">
-                        <span>اکستنشن</span>
-                        <span class="srv-choice-price">1.500 تومان</span>
-                    </button>
-                    <button type="button" class="srv-choice-btn" data-name="لیفت و لمینت" data-price="1.500 تومان" onclick="pickPresetService(this)">
-                        <span>لیفت و لمینت</span>
-                        <span class="srv-choice-price">1.500 تومان</span>
-                    </button>
-                    <button type="button" class="srv-choice-btn" data-name="ریمو" data-price="500 تومان" onclick="pickPresetService(this)">
-                        <span>ریمو</span>
-                        <span class="srv-choice-price">500 تومان</span>
-                    </button>
-                    <button type="button" class="srv-choice-btn" data-name="کاشیت هیدن" data-price="700 تومان" onclick="pickPresetService(this)">
-                        <span>کاشیت هیدن</span>
-                        <span class="srv-choice-price">700 تومان</span>
-                    </button>
-                    <button type="button" class="srv-choice-btn" data-name="ترمیم" data-price="1.200 تومان" onclick="pickPresetService(this)">
-                        <span>ترمیم</span>
-                        <span class="srv-choice-price">1.200 تومان</span>
-                    </button>
+                <div class="srv-options" id="wizard-services-container"></div>
+
+                <div class="field-box">
+                    <label for="in-desc">توضیحات</label>
+                    <textarea id="in-desc" rows="2" placeholder="توضیحات خود را بنویسید..."></textarea>
                 </div>
 
-                <div class="input-group">
-                    <label for="w-desc">توضیحات</label>
-                    <textarea id="w-desc" rows="2" placeholder="توضیحات دلخواه شما..."></textarea>
-                </div>
-
-                <div class="wizard-btns">
-                    <button type="button" class="btn-sec" onclick="goStep(2)">بازگشت</button>
-                    <button type="button" class="btn-main" onclick="goStep(4)">مشاهده قیمت و تایید نهایی</button>
+                <div class="two-btns">
+                    <button type="button" class="btn-sec" onclick="moveWizard(2)">بازگشت</button>
+                    <button type="button" class="btn-main" onclick="moveWizard(4)">مشاهده قیمت و تایید</button>
                 </div>
             </div>
 
-            <!-- مرحله ۴: نمایش قیمت، تاریخ، شماره ثبت‌شده و تایید نهایی -->
-            <div id="step-4" class="wizard-step">
-                <h2 style="font-size:18px; font-weight:900; margin-bottom:10px;">تایید اطلاعات و ثبت نوبت</h2>
+            <!-- مرحله چهارم: نمایش قیمت، تاریخ شمسی، شماره ثبت‌شده و تایید نهایی -->
+            <div id="w-step-4" class="w-step">
+                <h2 style="font-size:18px; font-weight:900; margin-bottom:10px;">تایید نهایی و ثبت نوبت</h2>
 
-                <div class="summary-box">
-                    <div class="summary-row">
+                <div class="confirm-card">
+                    <div class="confirm-line">
                         <span>نام کاربر:</span>
-                        <strong id="sum-name">-</strong>
+                        <strong id="chk-name">-</strong>
                     </div>
-                    <div class="summary-row">
+                    <div class="confirm-line">
                         <span>شماره ثبت‌شده:</span>
-                        <strong id="sum-phone">-</strong>
+                        <strong id="chk-phone">-</strong>
                     </div>
-                    <div class="summary-row">
-                        <span>تاریخ روز نوبت:</span>
-                        <strong id="sum-date">-</strong>
+                    <div class="confirm-line">
+                        <span>تاریخ شمسی نوبت:</span>
+                        <strong id="chk-date">-</strong>
                     </div>
-                    <div class="summary-row">
+                    <div class="confirm-line">
                         <span>خدمت انتخابی:</span>
-                        <strong id="sum-service">-</strong>
+                        <strong id="chk-service">-</strong>
                     </div>
-                    <div class="summary-row">
+                    <div class="confirm-line">
                         <span>قیمت خدمت:</span>
-                        <strong style="color:var(--pink-dark);" id="sum-price">-</strong>
+                        <strong style="color:var(--pink-dark);" id="chk-price">-</strong>
                     </div>
-                    <div class="summary-row">
+                    <div class="confirm-line">
                         <span>توضیحات:</span>
-                        <strong id="sum-desc">-</strong>
+                        <strong id="chk-desc">-</strong>
                     </div>
                 </div>
 
-                <div class="friendly-check">همه چی ردیفه دوست خوبم؟</div>
+                <div class="ready-banner">همه چی ردیفه دوست خوبم؟</div>
 
-                <div class="wizard-btns">
-                    <button type="button" class="btn-sec" onclick="goStep(3)">ویرایش</button>
-                    <button type="button" class="btn-main" onclick="finalizeBooking()">ثبت کنید</button>
+                <div class="two-btns">
+                    <button type="button" class="btn-sec" onclick="moveWizard(3)">ویرایش</button>
+                    <button type="button" class="btn-main" onclick="submitWizardBooking()">ثبت کنید</button>
                 </div>
             </div>
 
-            <div id="wizard-done-box" style="display:none; margin-top:14px; padding:12px; border-radius:14px; background:#e6fffa; border:1px solid #38b2ac; font-size:13px; color:#234e52;">
-                ✓ نوبت شما با موفقیت ثبت شد و پیام برای ادمین ارسال گردید.
+            <div id="wizard-success-box" style="display:none; margin-top:14px; padding:12px; border-radius:14px; background:#e6fffa; border:1px solid #38b2ac; font-size:13px; color:#234e52;">
+                ✓ نوبت شما ثبت شد و پیام برای ادمین ارسال گردید.
             </div>
         </div>
     </section>
 
-    <!-- ======================= ۳. صفحه نمونه کار ======================= -->
+    <!-- ======================= ۳. صفحه نمونه کار (عکس، لینک عکس، فیلم و کلیپ) ======================= -->
     <section id="tab-portfolio" class="page-view">
-        <div class="sec-head">
-            <h2>نمونه‌کارهای Negin Lash</h2>
-            <div class="nav-arrows">
-                <button type="button" class="arrow-ico" onclick="scrollTrack('portfolio-track', -1)">→</button>
-                <button type="button" class="arrow-ico" onclick="scrollTrack('portfolio-track', 1)">←</button>
+        <div class="sec-title-row">
+            <h2>نمونه‌کارهای مژه نگین</h2>
+            <div class="arrow-group">
+                <button type="button" class="arrow-btn" onclick="scrollPortfolio(-1)">→</button>
+                <button type="button" class="arrow-btn" onclick="scrollPortfolio(1)">←</button>
             </div>
         </div>
-        <div id="portfolio-track" class="scroll-track">
-            <div class="glass empty-msg">هنوز نمونه‌کاری توسط ادمین منتشر نشده است.</div>
+        <div id="portfolio-gallery" class="portfolio-scroller">
+            <div class="glass empty-note">هنوز نمونه‌کاری توسط ادمین منتشر نشده است.</div>
         </div>
     </section>
 
     <!-- ======================= ۴. صفحه ادمین ======================= -->
     <section id="tab-admin" class="page-view">
-        <div id="adm-login-panel" class="glass adm-card">
+        <div id="adm-login-card" class="glass adm-panel-card">
             <span class="pill-tag">🔐 پنل ادمین</span>
-            <h2 style="font-size:18px; font-weight:900; margin-bottom:8px;">ورود به پنل مدیریت Negin Lash</h2>
-            <form onsubmit="submitAdminLogin(event)">
-                <div class="input-group">
-                    <label for="adm-pass">رمز عبور</label>
-                    <input type="password" id="adm-pass" placeholder="رمز عبور را وارد کنید" required>
-                    <span id="adm-err-msg" style="color:#c53030; font-size:12px; display:none;">رمز عبور اشتباه است!</span>
+            <h2 style="font-size:18px; font-weight:900; margin-bottom:8px;">ورود به پنل مدیریت مژه نگین</h2>
+            <form onsubmit="loginAdminPanel(event)">
+                <div class="field-box">
+                    <label for="adm-pass-field">رمز عبور</label>
+                    <input type="password" id="adm-pass-field" placeholder="رمز عبور را وارد کنید" required>
+                    <span id="adm-login-error" style="color:#c53030; font-size:12px; display:none;">رمز عبور اشتباه است!</span>
                 </div>
                 <button type="submit" class="btn-main">ورود به پنل</button>
             </form>
         </div>
 
-        <div id="adm-main-panel" style="display:none;">
-            <div class="glass adm-card" style="display:flex; justify-content:space-between; align-items:center;">
+        <div id="adm-dashboard" style="display:none;">
+            <div class="glass adm-panel-card" style="display:flex; justify-content:space-between; align-items:center;">
                 <div>
-                    <strong style="font-size:16px; font-weight:900;">مدیریت Negin Lash</strong>
-                    <span style="display:block; font-size:11.5px; color:var(--text-muted);">تایید نوبت، تعیین روز و ساعت و انتشار پست</span>
+                    <strong style="font-size:16px; font-weight:900;">پنل مدیریت Negin Lash</strong>
+                    <span style="display:block; font-size:11.5px; color:var(--text-muted);">تایید نوبت، تعیین زمان شمسی و انتشار عکس/فیلم/خدمت</span>
                 </div>
-                <button type="button" class="btn-sec" onclick="doAdminLogout()">خروج</button>
+                <button type="button" class="btn-sec" onclick="logoutAdminPanel()">خروج</button>
             </div>
 
             <div class="adm-kpis">
                 <div class="glass adm-kpi">
-                    <strong id="kpi-on">0</strong>
+                    <strong id="adm-on-count">0</strong>
                     <span>آنلاین</span>
                 </div>
                 <div class="glass adm-kpi">
-                    <strong id="kpi-bk">0</strong>
+                    <strong id="adm-bk-count">0</strong>
                     <span>نوبت‌ها</span>
                 </div>
                 <div class="glass adm-kpi">
-                    <strong id="kpi-un">0</strong>
+                    <strong id="adm-un-count">0</strong>
                     <span>پیام جدید</span>
                 </div>
             </div>
 
             <!-- پیام‌های دریافتی رزرو -->
-            <div class="glass adm-card">
+            <div class="glass adm-panel-card">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                     <h3 style="font-size:15px; font-weight:900;">پیام‌های رزرو دریافت‌شده</h3>
-                    <button type="button" class="mini-pick-btn" onclick="clearUnreadNotifs()">خوانده شد</button>
+                    <button type="button" class="pick-srv-btn" onclick="markNotifsAsRead()">خوانده شد</button>
                 </div>
-                <div id="adm-notifs-list"></div>
+                <div id="adm-notifs-box"></div>
             </div>
 
-            <!-- لیست نوبت‌ها + تعیین تاریخ و ساعت قطعی -->
-            <div class="glass adm-card">
-                <h3 style="font-size:15px; font-weight:900; margin-bottom:10px;">نوبت‌های ثبت‌شده و تایید وقت</h3>
-                <div id="adm-bookings-list"></div>
+            <!-- مدیریت و تایید نوبت‌ها -->
+            <div class="glass adm-panel-card">
+                <h3 style="font-size:15px; font-weight:900; margin-bottom:10px;">نوبت‌ها و تعیین زمان تاییدشده</h3>
+                <div id="adm-bookings-box"></div>
             </div>
 
-            <!-- انتشار پست جدید در خدمات یا نمونه کار -->
-            <div class="glass adm-card">
+            <!-- فرم انتشار پست جدید در خدمات یا نمونه کار (عکس، لینک عکس، فیلم، کلیپ) -->
+            <div class="glass adm-panel-card">
                 <h3 style="font-size:15px; font-weight:900; margin-bottom:10px;">انتشار پست جدید در سایت</h3>
-                <form onsubmit="createNewPost(event)">
-                    <div class="input-group">
-                        <label for="post-menu">انتخاب منو</label>
-                        <select id="post-menu" onchange="switchPostFormFields()">
+                <form onsubmit="publishSitePost(event)">
+                    <div class="field-box">
+                        <label for="post-target-menu">انتخاب منو</label>
+                        <select id="post-target-menu" onchange="toggleAdminPostInputs()">
                             <option value="service">منوی خدمات</option>
-                            <option value="portfolio">منوی نمونه کار</option>
+                            <option value="portfolio">منوی نمونه کار (عکس / لینک عکس / فیلم / کلیپ)</option>
                         </select>
                     </div>
 
-                    <div id="post-srv-box">
-                        <div class="input-group">
-                            <label for="post-srv-name">اسم خدمات</label>
-                            <input type="text" id="post-srv-name" placeholder="اسم خدمات">
+                    <!-- فیلدهای خدمات -->
+                    <div id="admin-post-service-wrap">
+                        <div class="field-box">
+                            <label for="p-srv-name">اسم خدمات</label>
+                            <input type="text" id="p-srv-name" placeholder="مثلاً: کاشت والیوم">
                         </div>
-                        <div class="input-group">
-                            <label for="post-srv-price">قیمت</label>
-                            <input type="text" id="post-srv-price" placeholder="قیمت">
+                        <div class="field-box">
+                            <label for="p-srv-price">قیمت</label>
+                            <input type="text" id="p-srv-price" placeholder="مثلاً: 1.500 تومان">
                         </div>
-                        <div class="input-group">
-                            <label for="post-srv-desc">توضیح کوتاه (اختیاری)</label>
-                            <input type="text" id="post-srv-desc" placeholder="توضیح کوتاه">
-                        </div>
-                    </div>
-
-                    <div id="post-port-box" style="display:none;">
-                        <div class="input-group">
-                            <label for="post-port-name">اسم نمونه کار</label>
-                            <input type="text" id="post-port-name" placeholder="اسم نمونه کار">
-                        </div>
-                        <div class="input-group">
-                            <label for="post-port-file">عکس نمونه کار (آپلود یا لینک)</label>
-                            <input type="file" id="post-port-file" accept="image/*">
-                            <input type="url" id="post-port-url" placeholder="یا لینک عکس (https://...)" style="margin-top:8px;">
+                        <div class="field-box">
+                            <label for="p-srv-desc">توضیح کوتاه (اختیاری)</label>
+                            <input type="text" id="p-srv-desc" placeholder="توضیح کوتاه">
                         </div>
                     </div>
 
-                    <button type="submit" class="btn-main">انتشار پست</button>
+                    <!-- فیلدهای نمونه کار (عکس، لینک عکس، فیلم، کلیپ) -->
+                    <div id="admin-post-portfolio-wrap" style="display:none;">
+                        <div class="field-box">
+                            <label for="p-port-title">اسم نمونه کار</label>
+                            <input type="text" id="p-port-title" placeholder="مثلاً: لیفت و لمینت مژه">
+                        </div>
+                        <div class="field-box">
+                            <label for="p-port-kind">نوع رسانه نمونه کار</label>
+                            <select id="p-port-kind">
+                                <option value="image">عکس (آپلود عکس یا لینک عکس)</option>
+                                <option value="video">فیلم / کلیپ (آپلود کلیپ یا لینک مستقیم فیلم)</option>
+                            </select>
+                        </div>
+                        <div class="field-box">
+                            <label for="p-port-file">آپلود عکس یا فیلم/کلیپ از گوشی</label>
+                            <input type="file" id="p-port-file" accept="image/*,video/*">
+                        </div>
+                        <div class="field-box">
+                            <label for="p-port-link">یا وارد کردن لینک مستقیم عکس / فیلم / کلیپ</label>
+                            <input type="url" id="p-port-link" placeholder="https://... (لینک عکس یا ویدیو)">
+                        </div>
+                    </div>
+
+                    <button type="submit" id="publish-post-btn" class="btn-main">انتشار پست</button>
                 </form>
             </div>
 
-            <!-- حذف آیتم‌های منتشرشده -->
-            <div class="glass adm-card">
+            <!-- حذف پست‌های منتشرشده -->
+            <div class="glass adm-panel-card">
                 <h3 style="font-size:15px; font-weight:900; margin-bottom:8px;">خدمات منتشرشده</h3>
-                <div id="adm-srv-published"></div>
+                <div id="adm-pub-services"></div>
                 <h3 style="font-size:15px; font-weight:900; margin:12px 0 8px;">نمونه‌کارهای منتشرشده</h3>
-                <div id="adm-port-published"></div>
+                <div id="adm-pub-portfolio"></div>
             </div>
         </div>
     </section>
 
-    <!-- ======================= تولبار پایین با آیکون‌های SVG دخترونه ======================= -->
-    <nav class="bottom-nav" aria-label="تولبار پایین">
+    <!-- ======================= تولبار ثابت پایین با آیکون‌های SVG دخترونه ======================= -->
+    <nav class="bottom-toolbar" aria-label="تولبار پایین">
         <!-- ۱. اینستاگرام -->
         <a
             href="https://www.instagram.com/eyelash_nigino?avpt=MXJlems0cWlyZWl6Mw=="
             target="_blank"
             rel="noopener noreferrer"
-            class="nav-tab"
+            class="tb-btn"
             style="color:#d63384;"
         >
             <svg viewBox="0 0 24 24" fill="currentColor">
@@ -1115,8 +1243,8 @@
             <span>اینستاگرام</span>
         </a>
 
-        <!-- ۲. نمونه کار (آیکون قلب و قاب عکس دخترونه) -->
-        <button type="button" id="nav-portfolio" class="nav-tab" onclick="openTab('portfolio')">
+        <!-- ۲. نمونه کار -->
+        <button type="button" id="tb-portfolio" class="tb-btn" onclick="openTab('portfolio')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="3" y="4" width="18" height="16" rx="4"/>
                 <path d="M12 15.5s-3.5-2.2-3.5-4.4a2 2 0 0 1 3.5-1.3 2 2 0 0 1 3.5 1.3c0 2.2-3.5 4.4-3.5 4.4Z" fill="currentColor"/>
@@ -1124,9 +1252,9 @@
             <span>نمونه کار</span>
         </button>
 
-        <!-- ۳. خانه (وسط تولبار با آیکون قلب و خانه دخترونه) -->
-        <button type="button" id="nav-home" class="nav-tab nav-center-home active" onclick="openTab('home')">
-            <div class="home-badge">
+        <!-- ۳. خانه (وسط تولبار) -->
+        <button type="button" id="tb-home" class="tb-btn tb-center-home active" onclick="openTab('home')">
+            <div class="home-circle">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                     <path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5z"/>
                 </svg>
@@ -1134,8 +1262,8 @@
             <span>خانه</span>
         </button>
 
-        <!-- ۴. رزرو نوبت (آیکون تقویم و قلب دخترونه) -->
-        <button type="button" id="nav-booking" class="nav-tab" onclick="openTab('booking')">
+        <!-- ۴. رزرو نوبت -->
+        <button type="button" id="tb-booking" class="tb-btn" onclick="openTab('booking')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="3" y="4" width="18" height="17" rx="4"/>
                 <path d="M16 2v4M8 2v4M3 9h18"/>
@@ -1144,9 +1272,9 @@
             <span>رزرو نوبت</span>
         </button>
 
-        <!-- ۵. ادمین (آیکون تاج/پرنسس دخترونه) -->
-        <button type="button" id="nav-admin" class="nav-tab" onclick="openTab('admin')">
-            <span id="nav-adm-badge" class="nav-count-badge">0</span>
+        <!-- ۵. ادمین -->
+        <button type="button" id="tb-admin" class="tb-btn" onclick="openTab('admin')">
+            <span id="tb-adm-badge" class="tb-badge">0</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="m3 8 4.5 9h9L21 8l-5 3.5L12 6l-4 5.5L3 8Z"/>
                 <path d="M7 20h10"/>
@@ -1157,7 +1285,7 @@
 
     <script>
         // =====================================================================
-        // ۱. فایربیس و رمز ادمین
+        // ۱. تنظیمات فایربیس و رمز ادمین
         // =====================================================================
         const firebaseConfig = {
             databaseURL: "https://crazyapp-9663a-default-rtdb.firebaseio.com"
@@ -1165,268 +1293,419 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        const ADMIN_PASSWORD = "negfer8679";
+        const ADMIN_PASS = "negfer8679";
 
-        const servicesRef = db.ref("negin_lash_v3/services");
-        const portfolioRef = db.ref("negin_lash_v3/portfolio");
-        const bookingsRef = db.ref("negin_lash_v3/bookings");
-        const notifsRef = db.ref("negin_lash_v3/notifications");
-        const onlineRef = db.ref("negin_lash_v3/online");
+        const servicesRef = db.ref("negin_lash_v4/services");
+        const portfolioRef = db.ref("negin_lash_v4/portfolio");
+        const bookingsRef = db.ref("negin_lash_v4/bookings");
+        const notifsRef = db.ref("negin_lash_v4/notifications");
+        const onlineRef = db.ref("negin_lash_v4/online");
+
+        // خدمات پایه طبق سفارش با قیمت‌های مشخص (به ترتیب)
+        const baseServices = [
+            { id: "base_1", name: "اکستنشن", price: "1.500 تومان", desc: "اکستنشن ظریف و اصولی مژه", isBase: true },
+            { id: "base_2", name: "لیفت و لمینت", price: "1.500 تومان", desc: "فر و تقویت مژه‌های طبیعی", isBase: true },
+            { id: "base_3", name: "ریمو", price: "500 تومان", desc: "ریموو ایمن و بدون آسیب به مژه", isBase: true },
+            { id: "base_4", name: "کاشیت هیدن", price: "700 تومان", desc: "کاشت هیدن سبک و طبیعی", isBase: true },
+            { id: "base_5", name: "ترمیم", price: "1.200 تومان", desc: "ترمیم و مرتب‌سازی مژه‌ها", isBase: true }
+        ];
 
         let adminAuthed = false;
-        let servicesArr = [];
-        let portfolioArr = [];
-        let bookingsArr = [];
-        let notifsArr = [];
-        let notifsReady = false;
+        let customServices = [];
+        let portfolioPosts = [];
+        let bookingsList = [];
+        let notifsList = [];
+        let notifsLoadedOnce = false;
 
-        // داده‌های مرحله‌به‌مرحله رزرو
-        let currentWizardStep = 1;
-        let selectedCalendarDate = "";
-        let chosenServiceName = "اکستنشن";
-        let chosenServicePrice = "1.500 تومان";
+        let currentStep = 1;
+        let selectedShamsiDateStr = "";
+        let selectedGregorianIso = "";
+        let pickedServiceName = baseServices[0].name;
+        let pickedServicePrice = baseServices[0].price;
 
-        // شناسه آخرین نوبت ثبت‌شده توسط همین کاربر
-        const USER_BOOKING_KEY = "negin_lash_v3_my_booking";
-        let mySavedBookingId = localStorage.getItem(USER_BOOKING_KEY) || null;
-
-        // =====================================================================
-        // ۲. جابه‌جایی بین تب‌ها و رفع کامل مشکل باز نشدن پنل ادمین
-        // =====================================================================
-        function openTab(tabKey) {
-            document.querySelectorAll(".page-view").forEach(v => v.classList.remove("active"));
-            const targetView = document.getElementById("tab-" + tabKey);
-            if (targetView) targetView.classList.add("active");
-
-            document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
-            const targetNav = document.getElementById("nav-" + tabKey);
-            if (targetNav) targetNav.classList.add("active");
-
-            if (tabKey === "admin") {
-                syncAdminPanelVisibility();
-            }
-
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        }
-
-        function syncAdminPanelVisibility() {
-            const loginBox = document.getElementById("adm-login-panel");
-            const mainBox = document.getElementById("adm-main-panel");
-            if (adminAuthed) {
-                loginBox.style.display = "none";
-                mainBox.style.display = "block";
-            } else {
-                loginBox.style.display = "block";
-                mainBox.style.display = "none";
-            }
-        }
-
-        function scrollTrack(id, dir) {
-            const el = document.getElementById(id);
-            if (!el) return;
-            el.scrollBy({ left: dir * Math.max(240, el.clientWidth * 0.9), behavior: "smooth" });
-        }
+        const MY_BOOKING_STORAGE = "negin_lash_v4_my_booking_id";
+        let myBookingKey = localStorage.getItem(MY_BOOKING_STORAGE) || null;
 
         // =====================================================================
-        // ۳. کاربران آنلاین
+        // ۲. تبدیل دقیق تاریخ میلادی به شمسی و برعکس (تقویم شمسی)
         // =====================================================================
-        const sid = "u_" + Math.random().toString(36).slice(2, 10);
-        const sRef = onlineRef.child(sid);
-        db.ref(".info/connected").on("value", (snap) => {
-            if (snap.val() === true) {
-                sRef.onDisconnect().remove();
-                sRef.set({ at: Date.now() });
-            }
-        });
-        onlineRef.on("value", (snap) => {
-            const cnt = Object.keys(snap.val() || {}).length;
-            document.getElementById("top-online-badge").innerText = "آنلاین: " + cnt;
-            document.getElementById("kpi-on").innerText = cnt;
-        });
-
-        // =====================================================================
-        // ۴. تقویم شیشه‌ای و گرافیکی مرحله دوم
-        // =====================================================================
-        const persianMonths = [
-            "ژانویه", "فوریه", "مارس", "آوریل", "مه", "ژوئن",
-            "ژوئیه", "آگوست", "سپتامبر", "اکتبر", "نوامبر", "دسامبر"
+        const shamsiMonthNames = [
+            "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
+            "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"
         ];
-        const nowObj = new Date();
-        let calYear = nowObj.getFullYear();
-        let calMonth = nowObj.getMonth();
-        const todayMidnight = new Date(nowObj.getFullYear(), nowObj.getMonth(), nowObj.getDate()).getTime();
 
-        function renderGlassCalendar() {
-            const titleEl = document.getElementById("cal-month-title");
-            const gridEl = document.getElementById("cal-days-grid");
-            titleEl.innerText = `${persianMonths[calMonth]} ${calYear}`;
+        function gregorianToJalali(gy, gm, gd) {
+            const g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+            let jy = (gy <= 1600) ? 0 : 979;
+            gy -= (gy <= 1600) ? 621 : 1600;
+            const gy2 = (gm > 2) ? (gy + 1) : gy;
+            let days = (365 * gy) + Math.floor((gy2 + 3) / 4) - Math.floor((gy2 + 99) / 100) +
+                Math.floor((gy2 + 399) / 400) - 80 + gd + g_d_m[gm - 1];
+            jy += 33 * Math.floor(days / 12053);
+            days %= 12053;
+            jy += 4 * Math.floor(days / 1461);
+            days %= 1461;
+            jy += Math.floor((days - 1) / 365);
+            if (days > 365) days = (days - 1) % 365;
+            let jm, jd;
+            if (days < 186) {
+                jm = 1 + Math.floor(days / 31);
+                jd = 1 + (days % 31);
+            } else {
+                jm = 7 + Math.floor((days - 186) / 30);
+                jd = 1 + ((days - 186) % 30);
+            }
+            return [jy, jm, jd];
+        }
 
-            const firstDay = new Date(calYear, calMonth, 1);
-            // تبدیل یکشنبه=0 به شنبه=0
-            const startOffset = (firstDay.getDay() + 1) % 7;
-            const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+        function jalaliToGregorian(jy, jm, jd) {
+            jy += 1595;
+            let days = -355668 + (365 * jy) + (Math.floor(jy / 33) * 8) + Math.floor(((jy % 33) + 3) / 4) + jd +
+                ((jm < 7) ? (jm - 1) * 31 : ((jm - 7) * 30) + 186);
+            let gy = 400 * Math.floor(days / 146097);
+            days %= 146097;
+            if (days > 36524) {
+                days--;
+                gy += 100 * Math.floor(days / 36524);
+                days %= 36524;
+                if (days >= 365) days++;
+            }
+            gy += 4 * Math.floor(days / 1461);
+            days %= 1461;
+            if (days > 365) {
+                gy += Math.floor((days - 1) / 365);
+                days = (days - 1) % 365;
+            }
+            let gd = days + 1;
+            const sal_a = [0, 31, ((gy % 4 === 0 && gy % 100 !== 0) || (gy % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            let gm = 0;
+            for (gm = 1; gm <= 12 && gd > sal_a[gm]; gm++) {
+                gd -= sal_a[gm];
+            }
+            return [gy, gm, gd];
+        }
+
+        function isJalaliLeap(jy) {
+            const breaks = [-61, 9, 38, 199, 426, 686, 756, 818, 1111, 1181, 1210, 1635, 2060, 2097, 2192, 2262, 2324, 2394, 2456, 3178];
+            let bl = breaks.length, gy = jy + 621, leapJ = -14, jp = breaks[0], jump, n, i;
+            if (jy < jp || jy >= breaks[bl - 1]) return false;
+            for (i = 1; i < bl; i++) {
+                jump = breaks[i] - jp;
+                if (jy < breaks[i]) break;
+                leapJ = leapJ + Math.floor(jump / 33) * 8 + Math.floor((jump % 33) / 4);
+                jp = breaks[i];
+            }
+            n = jy - jp;
+            leapJ = leapJ + Math.floor(n / 33) * 8 + Math.floor(((n % 33) + 3) / 4);
+            if (jump % 33 === 4 && jump - n === 4) leapJ++;
+            const leapG = Math.floor(gy / 4) - Math.floor((Math.floor(gy / 100) + 1) * 3 / 4) - 150;
+            return ((leapJ - leapG + 20) % 4) === 0;
+        }
+
+        function getShamsiMonthDays(jy, jm) {
+            if (jm <= 6) return 31;
+            if (jm <= 11) return 30;
+            return isJalaliLeap(jy) ? 30 : 29;
+        }
+
+        const nowDate = new Date();
+        const [todayJY, todayJM, todayJD] = gregorianToJalali(nowDate.getFullYear(), nowDate.getMonth() + 1, nowDate.getDate());
+        const todayMidnightMs = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate()).getTime();
+
+        let viewJY = todayJY;
+        let viewJM = todayJM;
+
+        function renderShamsiCalendar() {
+            const labelEl = document.getElementById("shamsi-month-label");
+            const gridEl = document.getElementById("shamsi-days-grid");
+            labelEl.innerText = `${shamsiMonthNames[viewJM - 1]} ${viewJY}`;
+
+            const [gy1, gm1, gd1] = jalaliToGregorian(viewJY, viewJM, 1);
+            const firstGDate = new Date(gy1, gm1 - 1, gd1);
+            // شنبه = 0
+            const offset = (firstGDate.getDay() + 1) % 7;
+            const totalDays = getShamsiMonthDays(viewJY, viewJM);
 
             let html = "";
-            for (let i = 0; i < startOffset; i++) {
+            for (let i = 0; i < offset; i++) {
                 html += `<span></span>`;
             }
 
-            for (let d = 1; d <= daysInMonth; d++) {
-                const iso = `${calYear}-${String(calMonth + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
-                const dayMs = new Date(calYear, calMonth, d).getTime();
-                const isPast = dayMs < todayMidnight;
-                const isSelected = selectedCalendarDate === iso;
+            for (let d = 1; d <= totalDays; d++) {
+                const [gy, gm, gd] = jalaliToGregorian(viewJY, viewJM, d);
+                const cellMs = new Date(gy, gm - 1, gd).getTime();
+                const isPast = cellMs < todayMidnightMs;
+                const shamsiStr = `${viewJY}/${String(viewJM).padStart(2, "0")}/${String(d).padStart(2, "0")}`;
+                const gIso = `${gy}-${String(gm).padStart(2, "0")}-${String(gd).padStart(2, "0")}`;
+                const isPicked = selectedShamsiDateStr === shamsiStr;
 
                 html += `
                     <button
                         type="button"
-                        class="cal-day-btn ${isSelected ? "selected" : ""}"
-                        ${isPast ? "disabled" : `onclick="pickCalendarDate('${iso}')"`}
+                        class="cal-day ${isPicked ? "selected" : ""}"
+                        ${isPast ? "disabled" : `onclick="selectShamsiDay('${shamsiStr}', '${gIso}')"`}
                     >${d}</button>
                 `;
             }
             gridEl.innerHTML = html;
         }
 
-        function changeCalendarMonth(delta) {
-            calMonth += delta;
-            if (calMonth > 11) { calMonth = 0; calYear++; }
-            if (calMonth < 0) { calMonth = 11; calYear--; }
-            renderGlassCalendar();
+        function shiftShamsiMonth(delta) {
+            viewJM += delta;
+            if (viewJM > 12) { viewJM = 1; viewJY++; }
+            if (viewJM < 1) { viewJM = 12; viewJY--; }
+            renderShamsiCalendar();
         }
 
-        function pickCalendarDate(isoDate) {
-            selectedCalendarDate = isoDate;
-            document.getElementById("selected-cal-text").innerText = "تاریخ انتخاب‌شده: " + isoDate;
-            renderGlassCalendar();
+        function selectShamsiDay(shamsiFormatted, gIso) {
+            selectedShamsiDateStr = shamsiFormatted;
+            selectedGregorianIso = gIso;
+            document.getElementById("picked-shamsi-text").innerText = "تاریخ شمسی انتخاب‌شده: " + shamsiFormatted;
+            renderShamsiCalendar();
         }
 
-        renderGlassCalendar();
+        renderShamsiCalendar();
 
         // =====================================================================
-        // ۵. کنترل مراحل رزرو و نمایش قیمت و تایید نهایی
+        // ۳. ناوبری تب‌ها و کشوهای راز مراقبت از مژه
         // =====================================================================
-        const stepTitles = {
-            1: "مرحله ۱ از ۴ • نام و شماره تماس",
-            2: "مرحله ۲ از ۴ • تقویم شیشه‌ای روز نوبت",
+        function openTab(tabKey) {
+            document.querySelectorAll(".page-view").forEach(p => p.classList.remove("active"));
+            const el = document.getElementById("tab-" + tabKey);
+            if (el) el.classList.add("active");
+
+            document.querySelectorAll(".tb-btn").forEach(b => b.classList.remove("active"));
+            const navBtn = document.getElementById("tb-" + tabKey);
+            if (navBtn) navBtn.classList.add("active");
+
+            if (tabKey === "admin") {
+                syncAdminView();
+            }
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function syncAdminView() {
+            document.getElementById("adm-login-card").style.display = adminAuthed ? "none" : "block";
+            document.getElementById("adm-dashboard").style.display = adminAuthed ? "block" : "none";
+        }
+
+        function toggleSecretDrawer(btnEl) {
+            const drawer = btnEl.closest(".secret-drawer");
+            if (drawer) drawer.classList.toggle("open");
+        }
+
+        function scrollPortfolio(dir) {
+            const gal = document.getElementById("portfolio-gallery");
+            if (!gal) return;
+            gal.scrollBy({ left: dir * Math.max(240, gal.clientWidth * 0.88), behavior: "smooth" });
+        }
+
+        // =====================================================================
+        // ۴. کاربران آنلاین
+        // =====================================================================
+        const onlineUid = "m4_" + Math.random().toString(36).slice(2, 10);
+        const onlineUserRef = onlineRef.child(onlineUid);
+        db.ref(".info/connected").on("value", (snap) => {
+            if (snap.val() === true) {
+                onlineUserRef.onDisconnect().remove();
+                onlineUserRef.set({ at: Date.now() });
+            }
+        });
+        onlineRef.on("value", (snap) => {
+            const cnt = Object.keys(snap.val() || {}).length;
+            document.getElementById("top-online-tag").innerText = "آنلاین: " + cnt;
+            document.getElementById("adm-on-count").innerText = cnt;
+        });
+
+        // =====================================================================
+        // ۵. خدمات (۵ خدمت درخواستی + خدمات ثبت‌شده توسط ادمین)
+        // =====================================================================
+        servicesRef.on("value", (snap) => {
+            const raw = snap.val() || {};
+            customServices = Object.entries(raw)
+                .map(([id, val]) => ({ id, ...val, isBase: false }))
+                .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+            renderAllServicesUI();
+            renderAdminPublishedPosts();
+        });
+
+        function getCombinedServices() {
+            return [...baseServices, ...customServices];
+        }
+
+        function renderAllServicesUI() {
+            const allSrv = getCombinedServices();
+
+            // لیست صفحه اصلی
+            const homeList = document.getElementById("home-services-list");
+            homeList.innerHTML = allSrv.map(s => `
+                <div class="glass srv-row-card">
+                    <div class="srv-row-info">
+                        <strong>${esc(s.name)}</strong>
+                        <span>${esc(s.desc || "خدمت تخصصی مژه نگین")}</span>
+                    </div>
+                    <div class="srv-row-right">
+                        <span class="srv-price-text">${esc(s.price)}</span>
+                        <button type="button" class="pick-srv-btn" onclick="chooseServiceAndBook('${escAttr(s.name)}', '${escAttr(s.price)}')">رزرو</button>
+                    </div>
+                </div>
+            `).join("");
+
+            // لیست مرحله سوم رزرو
+            const wizContainer = document.getElementById("wizard-services-container");
+            wizContainer.innerHTML = allSrv.map((s, idx) => {
+                const isAct = s.name === pickedServiceName || (!pickedServiceName && idx === 0);
+                return `
+                    <button
+                        type="button"
+                        class="srv-opt-btn ${isAct ? "active" : ""}"
+                        data-name="${escAttr(s.name)}"
+                        data-price="${escAttr(s.price)}"
+                        onclick="selectWizardService(this)"
+                    >
+                        <span>${esc(s.name)}</span>
+                        <span class="srv-opt-price">${esc(s.price)}</span>
+                    </button>
+                `;
+            }).join("");
+        }
+
+        function chooseServiceAndBook(name, price) {
+            pickedServiceName = name;
+            pickedServicePrice = price;
+            renderAllServicesUI();
+            openTab("booking");
+        }
+
+        function selectWizardService(btnEl) {
+            document.querySelectorAll(".srv-opt-btn").forEach(b => b.classList.remove("active"));
+            btnEl.classList.add("active");
+            pickedServiceName = btnEl.getAttribute("data-name");
+            pickedServicePrice = btnEl.getAttribute("data-price");
+        }
+
+        // =====================================================================
+        // ۶. مراحل رزرو نوبت و ثبت نهایی
+        // =====================================================================
+        const stepLabels = {
+            1: "مرحله ۱ از ۴ • ثبت نام و شماره",
+            2: "مرحله ۲ از ۴ • تقویم شمسی",
             3: "مرحله ۳ از ۴ • خدمات و توضیحات",
-            4: "مرحله ۴ از ۴ • نمایش قیمت و تایید نهایی"
+            4: "مرحله ۴ از ۴ • نمایش قیمت و تایید"
         };
 
-        function goStep(stepNum) {
-            if (stepNum > 1) {
-                const nameVal = document.getElementById("w-name").value.trim();
-                const phoneVal = document.getElementById("w-phone").value.trim();
-                if (!nameVal || !phoneVal) {
-                    alert("لطفاً در مرحله اول نام و شماره تماس خود را وارد کنید.");
+        function moveWizard(stepNo) {
+            if (stepNo > 1) {
+                const n = document.getElementById("in-name").value.trim();
+                const p = document.getElementById("in-phone").value.trim();
+                if (!n || !p) {
+                    alert("لطفاً در مرحله اول نام و شماره تماس را وارد کنید.");
                     return;
                 }
             }
-            if (stepNum > 2) {
-                if (!selectedCalendarDate) {
-                    alert("لطفاً در مرحله دوم روز نوبت را در تقویم انتخاب کنید.");
+            if (stepNo > 2) {
+                if (!selectedShamsiDateStr) {
+                    alert("لطفاً در مرحله دوم تاریخ روز نوبت را در تقویم شمسی انتخاب کنید.");
                     return;
                 }
             }
-            if (stepNum === 4) {
-                const nameVal = document.getElementById("w-name").value.trim();
-                const phoneVal = document.getElementById("w-phone").value.trim();
-                const descVal = document.getElementById("w-desc").value.trim() || "-";
+            if (stepNo === 4) {
+                const n = document.getElementById("in-name").value.trim();
+                const p = document.getElementById("in-phone").value.trim();
+                const d = document.getElementById("in-desc").value.trim() || "-";
 
-                document.getElementById("sum-name").innerText = nameVal;
-                document.getElementById("sum-phone").innerText = phoneVal;
-                document.getElementById("sum-date").innerText = selectedCalendarDate;
-                document.getElementById("sum-service").innerText = chosenServiceName;
-                document.getElementById("sum-price").innerText = chosenServicePrice;
-                document.getElementById("sum-desc").innerText = descVal;
+                document.getElementById("chk-name").innerText = n;
+                document.getElementById("chk-phone").innerText = p;
+                document.getElementById("chk-date").innerText = selectedShamsiDateStr;
+                document.getElementById("chk-service").innerText = pickedServiceName;
+                document.getElementById("chk-price").innerText = pickedServicePrice;
+                document.getElementById("chk-desc").innerText = d;
             }
 
-            currentWizardStep = stepNum;
-            document.querySelectorAll(".wizard-step").forEach(s => s.classList.remove("active"));
-            document.getElementById("step-" + stepNum).classList.add("active");
-            document.getElementById("wizard-step-label").innerText = stepTitles[stepNum];
+            currentStep = stepNo;
+            document.querySelectorAll(".w-step").forEach(s => s.classList.remove("active"));
+            document.getElementById("w-step-" + stepNo).classList.add("active");
+            document.getElementById("step-pill").innerText = stepLabels[stepNo];
 
             for (let i = 1; i <= 4; i++) {
-                const p = document.getElementById("prog-" + i);
-                if (i <= stepNum) p.classList.add("done");
-                else p.classList.remove("done");
+                const bar = document.getElementById("bar-" + i);
+                if (i <= stepNo) bar.classList.add("active");
+                else bar.classList.remove("active");
             }
         }
 
-        function pickPresetService(btnEl) {
-            document.querySelectorAll(".srv-choice-btn").forEach(b => b.classList.remove("active"));
-            btnEl.classList.add("active");
-            chosenServiceName = btnEl.getAttribute("data-name");
-            chosenServicePrice = btnEl.getAttribute("data-price");
-        }
+        function submitWizardBooking() {
+            const n = document.getElementById("in-name").value.trim();
+            const p = document.getElementById("in-phone").value.trim();
+            const d = document.getElementById("in-desc").value.trim() || "-";
+            const nowTs = Date.now();
 
-        function finalizeBooking() {
-            const nameVal = document.getElementById("w-name").value.trim();
-            const phoneVal = document.getElementById("w-phone").value.trim();
-            const descVal = document.getElementById("w-desc").value.trim() || "-";
-            const ts = Date.now();
+            const newBkRef = bookingsRef.push();
+            myBookingKey = newBkRef.key;
+            localStorage.setItem(MY_BOOKING_STORAGE, myBookingKey);
 
-            const refItem = bookingsRef.push();
-            mySavedBookingId = refItem.key;
-            localStorage.setItem(USER_BOOKING_KEY, mySavedBookingId);
-
-            refItem.set({
-                name: nameVal,
-                phone: phoneVal,
-                date: selectedCalendarDate,
-                service: chosenServiceName,
-                price: chosenServicePrice,
-                description: descVal,
+            newBkRef.set({
+                name: n,
+                phone: p,
+                shamsiDate: selectedShamsiDateStr,
+                gregorianIso: selectedGregorianIso,
+                service: pickedServiceName,
+                price: pickedServicePrice,
+                description: d,
                 status: "pending",
-                approvedDate: "",
+                approvedShamsiDate: "",
                 approvedTime: "",
-                createdAt: ts
+                approvedTargetMs: 0,
+                createdAt: nowTs
             }).then(() => {
                 notifsRef.push({
                     title: "نوبت جدید رزرو شد!",
-                    message: `${nameVal} (${phoneVal}) برای «${chosenServiceName}» (${chosenServicePrice}) در تاریخ ${selectedCalendarDate} نوبت رزرو کرد.`,
+                    message: `${n} (${p}) برای «${pickedServiceName}» (${pickedServicePrice}) در تاریخ ${selectedShamsiDateStr} نوبت رزرو کرد.`,
                     read: false,
-                    createdAt: ts
+                    createdAt: nowTs
                 });
 
-                document.getElementById("wizard-done-box").style.display = "block";
-                document.getElementById("w-name").value = "";
-                document.getElementById("w-phone").value = "";
-                document.getElementById("w-desc").value = "";
-                selectedCalendarDate = "";
-                document.getElementById("selected-cal-text").innerText = "تاریخ انتخاب‌شده: هنوز انتخاب نشده";
-                renderGlassCalendar();
-                updateUserTracker();
+                document.getElementById("wizard-success-box").style.display = "block";
+                document.getElementById("in-name").value = "";
+                document.getElementById("in-phone").value = "";
+                document.getElementById("in-desc").value = "";
+                selectedShamsiDateStr = "";
+                selectedGregorianIso = "";
+                document.getElementById("picked-shamsi-text").innerText = "تاریخ شمسی انتخاب‌شده: هنوز انتخاب نشده";
+                renderShamsiCalendar();
+                moveWizard(1);
+                updateUserTrackerView();
             });
         }
 
         // =====================================================================
-        // ۶. وضعیت تایید و زمان‌سنج زنده برای کاربر + لیست نوبت‌ها برای ادمین
+        // ۷. وضعیت تایید و زمان‌سنج زنده برای کاربر + مدیریت نوبت توسط ادمین
         // =====================================================================
         bookingsRef.on("value", (snap) => {
             const raw = snap.val() || {};
-            bookingsArr = Object.entries(raw)
+            bookingsList = Object.entries(raw)
                 .map(([id, val]) => ({ id, ...val }))
                 .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
-            document.getElementById("kpi-bk").innerText = bookingsArr.length;
-            renderAdminBookings();
-            updateUserTracker();
+            document.getElementById("adm-bk-count").innerText = bookingsList.length;
+            renderAdminBookingsList();
+            updateUserTrackerView();
         });
 
-        let userTimerInterval = null;
+        let trackerInterval = null;
 
-        function updateUserTracker() {
-            const card = document.getElementById("user-tracker-card");
-            const pill = document.getElementById("user-state-pill");
-            const info = document.getElementById("user-appt-info");
-            const timerWrap = document.getElementById("user-timer-wrap");
+        function updateUserTrackerView() {
+            const card = document.getElementById("user-tracker-box");
+            const badge = document.getElementById("user-state-badge");
+            const detail = document.getElementById("user-appt-detail");
+            const cdArea = document.getElementById("user-countdown-area");
 
-            if (!mySavedBookingId) {
+            if (!myBookingKey) {
                 card.classList.remove("show");
                 return;
             }
-            const mine = bookingsArr.find(b => b.id === mySavedBookingId);
+            const mine = bookingsList.find(b => b.id === myBookingKey);
             if (!mine) {
                 card.classList.remove("show");
                 return;
@@ -1434,51 +1713,122 @@
 
             card.classList.add("show");
             if (mine.status === "approved") {
-                const fDate = mine.approvedDate || mine.date;
-                const fTime = mine.approvedTime || "10:00";
+                const appDate = mine.approvedShamsiDate || mine.shamsiDate;
+                const appTime = mine.approvedTime || "10:00";
 
-                pill.className = "state-pill ok";
-                pill.innerText = "✓ نوبت شما توسط ادمین تایید شد!";
-                info.innerHTML =
-                    `${esc(mine.name)} عزیز، نوبت <strong>${esc(mine.service)}</strong> (${esc(mine.price)}) شما در روز <strong>${esc(fDate)}</strong> ساعت <strong>${esc(fTime)}</strong> تایید شد.`;
+                badge.className = "state-badge ok";
+                badge.innerText = "✓ نوبت شما توسط ادمین تایید شد!";
+                detail.innerHTML =
+                    `${esc(mine.name)} عزیز، نوبت <strong>${esc(mine.service)}</strong> (${esc(mine.price)}) شما در روز <strong>${esc(appDate)}</strong> ساعت <strong>${esc(appTime)}</strong> تایید شد.`;
 
-                const targetTime = new Date(`${fDate}T${fTime}:00`).getTime();
-                if (!Number.isNaN(targetTime)) {
-                    timerWrap.style.display = "block";
-                    runUserCountdown(targetTime);
+                if (mine.approvedTargetMs && mine.approvedTargetMs > 0) {
+                    cdArea.style.display = "block";
+                    startTrackerCountdown(mine.approvedTargetMs);
                 } else {
-                    timerWrap.style.display = "none";
+                    cdArea.style.display = "none";
                 }
             } else {
-                pill.className = "state-pill wait";
-                pill.innerText = "⏳ نوبت شما ثبت شد؛ در انتظار تایید ادمین...";
-                info.innerHTML =
-                    `خدمت: <strong>${esc(mine.service)}</strong> (${esc(mine.price)}) | تاریخ: <strong>${esc(mine.date)}</strong>`;
-                timerWrap.style.display = "none";
-                if (userTimerInterval) clearInterval(userTimerInterval);
+                badge.className = "state-badge wait";
+                badge.innerText = "⏳ نوبت شما ثبت شد؛ در انتظار تایید ادمین...";
+                detail.innerHTML =
+                    `خدمت: <strong>${esc(mine.service)}</strong> (${esc(mine.price)}) | تاریخ: <strong>${esc(mine.shamsiDate)}</strong>`;
+                cdArea.style.display = "none";
+                if (trackerInterval) clearInterval(trackerInterval);
             }
         }
 
-        function runUserCountdown(targetMs) {
-            if (userTimerInterval) clearInterval(userTimerInterval);
-            const updateNow = () => {
-                const rem = Math.max(0, targetMs - Date.now());
-                const d = Math.floor(rem / 86400000);
-                const h = Math.floor((rem / 3600000) % 24);
-                const m = Math.floor((rem / 60000) % 60);
-                const s = Math.floor((rem / 1000) % 60);
+        function startTrackerCountdown(targetMs) {
+            if (trackerInterval) clearInterval(trackerInterval);
+            const run = () => {
+                const left = Math.max(0, targetMs - Date.now());
+                const days = Math.floor(left / 86400000);
+                const hours = Math.floor((left / 3600000) % 24);
+                const mins = Math.floor((left / 60000) % 60);
+                const secs = Math.floor((left / 1000) % 60);
 
-                document.getElementById("t-days").innerText = d;
-                document.getElementById("t-hours").innerText = String(h).padStart(2, "0");
-                document.getElementById("t-mins").innerText = String(m).padStart(2, "0");
-                document.getElementById("t-secs").innerText = String(s).padStart(2, "0");
+                document.getElementById("c-days").innerText = days;
+                document.getElementById("c-hours").innerText = String(hours).padStart(2, "0");
+                document.getElementById("c-mins").innerText = String(mins).padStart(2, "0");
+                document.getElementById("c-secs").innerText = String(secs).padStart(2, "0");
             };
-            updateNow();
-            userTimerInterval = setInterval(updateNow, 1000);
+            run();
+            trackerInterval = setInterval(run, 1000);
+        }
+
+        function renderAdminBookingsList() {
+            const box = document.getElementById("adm-bookings-box");
+            if (!bookingsList.length) {
+                box.innerHTML = `<p style="font-size:12px; color:var(--text-muted);">نوبتی ثبت نشده است.</p>`;
+                return;
+            }
+            const todayShamsi = `${todayJY}/${String(todayJM).padStart(2, "0")}/${String(todayJD).padStart(2, "0")}`;
+
+            box.innerHTML = bookingsList.map(b => {
+                const isApp = b.status === "approved";
+                const dVal = b.approvedShamsiDate || b.shamsiDate || todayShamsi;
+                const tVal = b.approvedTime || "11:00";
+
+                return `
+                    <div class="adm-bk-card">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <strong>${esc(b.name)} (${esc(b.phone)})</strong>
+                            <span style="font-size:11.5px; font-weight:800; color:${isApp ? "#2f855a" : "#b7791f"};">
+                                ${isApp ? "تایید شده" : "در انتظار تایید"}
+                            </span>
+                        </div>
+                        <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">
+                            خدمت: <strong>${esc(b.service)}</strong> (${esc(b.price || "")}) | تاریخ شمسی: ${esc(b.shamsiDate)}
+                        </div>
+                        <div style="font-size:12px; margin-top:3px;">توضیحات: ${esc(b.description || "-")}</div>
+
+                        <div style="display:grid; grid-template-columns:1.2fr 0.8fr; gap:8px; margin-top:8px;">
+                            <div class="field-box" style="margin-bottom:0;">
+                                <label style="font-size:11px;">روز تایید (شمسی YYYY/MM/DD)</label>
+                                <input type="text" id="app-shamsi-${b.id}" value="${escAttr(dVal)}" placeholder="1405/09/05">
+                            </div>
+                            <div class="field-box" style="margin-bottom:0;">
+                                <label style="font-size:11px;">ساعت تایید</label>
+                                <input type="time" id="app-clock-${b.id}" value="${escAttr(tVal)}">
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn-approve-now" onclick="confirmBookingTime('${b.id}')">
+                            تایید نوبت و ارسال زمان به کاربر
+                        </button>
+                        <div style="margin-top:6px; text-align:left;">
+                            <button type="button" class="btn-del" onclick="bookingsRef.child('${b.id}').remove()">حذف</button>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function confirmBookingTime(id) {
+            const sInput = document.getElementById("app-shamsi-" + id);
+            const tInput = document.getElementById("app-clock-" + id);
+            const shamsiTxt = (sInput ? sInput.value.trim() : "") || `${todayJY}/${String(todayJM).padStart(2, "0")}/${String(todayJD).padStart(2, "0")}`;
+            const clockTxt = (tInput ? tInput.value.trim() : "") || "11:00";
+
+            let targetMs = 0;
+            const parts = shamsiTxt.split(/[\/\-]/).map(Number);
+            if (parts.length === 3 && parts[0] > 1200) {
+                const [gy, gm, gd] = jalaliToGregorian(parts[0], parts[1], parts[2]);
+                const [hh, mm] = clockTxt.split(":").map(Number);
+                targetMs = new Date(gy, gm - 1, gd, hh || 10, mm || 0, 0).getTime();
+            }
+
+            bookingsRef.child(id).update({
+                status: "approved",
+                approvedShamsiDate: shamsiTxt,
+                approvedTime: clockTxt,
+                approvedTargetMs: targetMs || 0
+            }).then(() => {
+                alert("نوبت تایید شد و زمان شمسی برای کاربر ارسال گردید.");
+            });
         }
 
         // =====================================================================
-        // ۷. ورود ادمین، پیام‌ها و انتشار پست
+        // ۸. پیام‌های لحظه‌ای و ورود ادمین
         // =====================================================================
         notifsRef.on("value", (snap) => {
             const raw = snap.val() || {};
@@ -1486,278 +1836,254 @@
                 .map(([id, val]) => ({ id, ...val }))
                 .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
-            if (notifsReady && sorted.length > notifsArr.length && adminAuthed && sorted[0]) {
-                showToastAlert(sorted[0].title, sorted[0].message);
+            if (notifsLoadedOnce && sorted.length > notifsList.length && adminAuthed && sorted[0]) {
+                showToast(sorted[0].title, sorted[0].message);
             }
-            notifsArr = sorted;
-            notifsReady = true;
+            notifsList = sorted;
+            notifsLoadedOnce = true;
 
-            const unread = notifsArr.filter(n => !n.read).length;
-            document.getElementById("kpi-un").innerText = unread;
+            const unread = notifsList.filter(n => !n.read).length;
+            document.getElementById("adm-un-count").innerText = unread;
 
-            const badge = document.getElementById("nav-adm-badge");
+            const badge = document.getElementById("tb-adm-badge");
             if (adminAuthed && unread > 0) {
                 badge.innerText = unread;
                 badge.classList.add("show");
             } else {
                 badge.classList.remove("show");
             }
-            renderAdminNotifs();
+            renderNotifsList();
         });
 
-        function showToastAlert(title, msg) {
-            const el = document.getElementById("toast-popup");
-            document.getElementById("toast-title").innerText = "🔔 " + title;
-            document.getElementById("toast-body").innerText = msg;
+        function showToast(head, body) {
+            const el = document.getElementById("toast-banner");
+            document.getElementById("toast-head").innerText = "🔔 " + head;
+            document.getElementById("toast-msg").innerText = body;
             el.classList.add("show");
             setTimeout(() => el.classList.remove("show"), 5500);
         }
 
-        function submitAdminLogin(e) {
+        function loginAdminPanel(e) {
             e.preventDefault();
-            const entered = document.getElementById("adm-pass").value;
-            if (entered === ADMIN_PASSWORD) {
+            const pw = document.getElementById("adm-pass-field").value;
+            if (pw === ADMIN_PASS) {
                 adminAuthed = true;
-                document.getElementById("adm-err-msg").style.display = "none";
-                syncAdminPanelVisibility();
-                const unread = notifsArr.filter(n => !n.read).length;
-                const badge = document.getElementById("nav-adm-badge");
+                document.getElementById("adm-login-error").style.display = "none";
+                syncAdminView();
+                const unread = notifsList.filter(n => !n.read).length;
+                const badge = document.getElementById("tb-adm-badge");
                 if (unread > 0) {
                     badge.innerText = unread;
                     badge.classList.add("show");
                 }
             } else {
-                document.getElementById("adm-err-msg").style.display = "block";
+                document.getElementById("adm-login-error").style.display = "block";
             }
         }
 
-        function doAdminLogout() {
+        function logoutAdminPanel() {
             adminAuthed = false;
-            document.getElementById("adm-pass").value = "";
-            document.getElementById("nav-adm-badge").classList.remove("show");
-            syncAdminPanelVisibility();
+            document.getElementById("adm-pass-field").value = "";
+            document.getElementById("tb-adm-badge").classList.remove("show");
+            syncAdminView();
         }
 
-        function renderAdminNotifs() {
-            const box = document.getElementById("adm-notifs-list");
-            if (!notifsArr.length) {
+        function renderNotifsList() {
+            const box = document.getElementById("adm-notifs-box");
+            if (!notifsList.length) {
                 box.innerHTML = `<p style="font-size:12px; color:var(--text-muted);">پیامی وجود ندارد.</p>`;
                 return;
             }
-            box.innerHTML = notifsArr.map(n => `
-                <div class="notif-row ${n.read ? "" : "unread"}">
+            box.innerHTML = notifsList.map(n => `
+                <div class="notif-item ${n.read ? "" : "unread"}">
                     <strong>${esc(n.title)}</strong>
                     <div style="margin-top:3px;">${esc(n.message)}</div>
                 </div>
             `).join("");
         }
 
-        function clearUnreadNotifs() {
-            notifsArr.forEach(n => {
+        function markNotifsAsRead() {
+            notifsList.forEach(n => {
                 if (!n.read) notifsRef.child(n.id).update({ read: true });
             });
         }
 
-        function renderAdminBookings() {
-            const box = document.getElementById("adm-bookings-list");
-            if (!bookingsArr.length) {
-                box.innerHTML = `<p style="font-size:12px; color:var(--text-muted);">نوبتی ثبت نشده است.</p>`;
+        // =====================================================================
+        // ۹. رفع کامل افزودن عکس، لینک عکس، فیلم و کلیپ به عنوان نمونه کار
+        // =====================================================================
+        portfolioRef.on("value", (snap) => {
+            const raw = snap.val() || {};
+            portfolioPosts = Object.entries(raw)
+                .map(([id, val]) => ({ id, ...val }))
+                .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+            renderPortfolioGallery();
+            renderAdminPublishedPosts();
+        });
+
+        function renderPortfolioGallery() {
+            const gal = document.getElementById("portfolio-gallery");
+            if (!portfolioPosts.length) {
+                gal.innerHTML = `<div class="glass empty-note">هنوز نمونه‌کاری توسط ادمین منتشر نشده است.</div>`;
                 return;
             }
-            const defDate = nowObj.toISOString().split("T")[0];
-            box.innerHTML = bookingsArr.map(b => {
-                const isOk = b.status === "approved";
-                const dVal = b.approvedDate || b.date || defDate;
-                const tVal = b.approvedTime || "11:00";
+
+            gal.innerHTML = portfolioPosts.map(item => {
+                const isVid = item.mediaType === "video" || /\.(mp4|webm|mov|m4v)(\?|$)/i.test(item.mediaUrl || "");
+                const mediaHtml = isVid
+                    ? `<video src="${escAttr(item.mediaUrl)}" controls playsinline preload="metadata"></video>`
+                    : `<img src="${escAttr(item.mediaUrl)}" alt="${escAttr(item.title)}" loading="lazy">`;
+
                 return `
-                    <div class="adm-booking-box">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <strong>${esc(b.name)} (${esc(b.phone)})</strong>
-                            <span style="font-size:11.5px; font-weight:800; color:${isOk ? "#2f855a" : "#b7791f"};">
-                                ${isOk ? "تایید شده" : "در انتظار تایید"}
-                            </span>
-                        </div>
-                        <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">
-                            خدمت: <strong>${esc(b.service)}</strong> (${esc(b.price || "")}) | روز درخواستی: ${esc(b.date)}
-                        </div>
-                        <div style="font-size:12px; margin-top:3px;">توضیحات: ${esc(b.description || "-")}</div>
-
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px;">
-                            <div class="input-group" style="margin-bottom:0;">
-                                <label style="font-size:11px;">روز نوبت</label>
-                                <input type="date" id="set-d-${b.id}" value="${escAttr(dVal)}">
-                            </div>
-                            <div class="input-group" style="margin-bottom:0;">
-                                <label style="font-size:11px;">ساعت نوبت</label>
-                                <input type="time" id="set-t-${b.id}" value="${escAttr(tVal)}">
-                            </div>
-                        </div>
-
-                        <button type="button" class="btn-confirm-time" onclick="approveUserBooking('${b.id}')">
-                            تایید نوبت و ارسال زمان به کاربر
-                        </button>
-                        <div style="margin-top:6px; text-align:left;">
-                            <button type="button" class="btn-del-small" onclick="bookingsRef.child('${b.id}').remove()">حذف</button>
+                    <div class="glass media-post-card">
+                        <div class="media-stage">${mediaHtml}</div>
+                        <div class="media-caption-bar">
+                            <strong>${esc(item.title)}</strong>
+                            <span class="media-type-chip">${isVid ? "فیلم / کلیپ" : "عکس"}</span>
                         </div>
                     </div>
                 `;
             }).join("");
         }
 
-        function approveUserBooking(id) {
-            const dEl = document.getElementById("set-d-" + id);
-            const tEl = document.getElementById("set-t-" + id);
-            bookingsRef.child(id).update({
-                status: "approved",
-                approvedDate: dEl ? dEl.value : "",
-                approvedTime: tEl ? tEl.value : "11:00"
-            }).then(() => {
-                alert("نوبت تایید شد و روز و ساعت برای کاربر ارسال گردید.");
-            });
+        function toggleAdminPostInputs() {
+            const target = document.getElementById("post-target-menu").value;
+            document.getElementById("admin-post-service-wrap").style.display = target === "service" ? "block" : "none";
+            document.getElementById("admin-post-portfolio-wrap").style.display = target === "portfolio" ? "block" : "none";
         }
 
-        // انتشار پست توسط ادمین
-        servicesRef.on("value", (snap) => {
-            const raw = snap.val() || {};
-            servicesArr = Object.entries(raw)
-                .map(([id, val]) => ({ id, ...val }))
-                .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-            renderHomeServicesTrack();
-            renderAdmPublished();
-        });
-
-        portfolioRef.on("value", (snap) => {
-            const raw = snap.val() || {};
-            portfolioArr = Object.entries(raw)
-                .map(([id, val]) => ({ id, ...val }))
-                .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-            renderPortfolioTrack();
-            renderAdmPublished();
-        });
-
-        function renderHomeServicesTrack() {
-            const track = document.getElementById("home-services-track");
-            if (!servicesArr.length) {
-                track.innerHTML = `<div class="glass empty-msg">هنوز خدمتی توسط ادمین ثبت نشده است.</div>`;
-                return;
-            }
-            track.innerHTML = servicesArr.map(s => `
-                <div class="glass srv-card">
-                    <h3>${esc(s.name)}</h3>
-                    <p>${esc(s.desc || "خدمت تخصصی کاشت و زیبایی مژه")}</p>
-                    <div class="srv-foot">
-                        <strong style="color:var(--pink-dark);">${esc(s.price)}</strong>
-                        <button type="button" class="mini-pick-btn" onclick="openTab('booking')">رزرو نوبت</button>
-                    </div>
-                </div>
-            `).join("");
-        }
-
-        function renderPortfolioTrack() {
-            const track = document.getElementById("portfolio-track");
-            if (!portfolioArr.length) {
-                track.innerHTML = `<div class="glass empty-msg">هنوز نمونه‌کاری توسط ادمین منتشر نشده است.</div>`;
-                return;
-            }
-            track.innerHTML = portfolioArr.map(p => `
-                <div class="glass port-card">
-                    <div class="port-img">
-                        <img src="${escAttr(p.image)}" alt="${escAttr(p.title)}" loading="lazy">
-                    </div>
-                    <div class="port-cap">${esc(p.title)}</div>
-                </div>
-            `).join("");
-        }
-
-        function switchPostFormFields() {
-            const m = document.getElementById("post-menu").value;
-            document.getElementById("post-srv-box").style.display = m === "service" ? "block" : "none";
-            document.getElementById("post-port-box").style.display = m === "portfolio" ? "block" : "none";
-        }
-
-        function compressUploadedImage(file) {
+        function compressImageFile(file) {
             return new Promise((resolve, reject) => {
-                const fr = new FileReader();
-                fr.onload = (ev) => {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
                     const img = new Image();
                     img.onload = () => {
-                        const maxDim = 760;
-                        const k = Math.min(1, maxDim / Math.max(img.width, img.height));
-                        const c = document.createElement("canvas");
-                        c.width = Math.round(img.width * k);
-                        c.height = Math.round(img.height * k);
-                        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
-                        resolve(c.toDataURL("image/jpeg", 0.75));
+                        const maxSide = 720;
+                        const k = Math.min(1, maxSide / Math.max(img.width, img.height));
+                        const canvas = document.createElement("canvas");
+                        canvas.width = Math.round(img.width * k);
+                        canvas.height = Math.round(img.height * k);
+                        canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+                        resolve(canvas.toDataURL("image/jpeg", 0.72));
                     };
                     img.onerror = reject;
                     img.src = ev.target.result;
                 };
-                fr.onerror = reject;
-                fr.readAsDataURL(file);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
             });
         }
 
-        async function createNewPost(e) {
+        function fileToDataUrl(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (ev) => resolve(ev.target.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function publishSitePost(e) {
             e.preventDefault();
-            const m = document.getElementById("post-menu").value;
-            if (m === "service") {
-                const name = document.getElementById("post-srv-name").value.trim();
-                const price = document.getElementById("post-srv-price").value.trim();
-                const desc = document.getElementById("post-srv-desc").value.trim();
-                if (!name || !price) {
-                    alert("لطفاً اسم خدمات و قیمت را وارد کنید.");
-                    return;
+            const target = document.getElementById("post-target-menu").value;
+            const btn = document.getElementById("publish-post-btn");
+            btn.disabled = true;
+            btn.innerText = "در حال انتشار...";
+
+            try {
+                if (target === "service") {
+                    const name = document.getElementById("p-srv-name").value.trim();
+                    const price = document.getElementById("p-srv-price").value.trim();
+                    const desc = document.getElementById("p-srv-desc").value.trim();
+
+                    if (!name || !price) {
+                        alert("لطفاً اسم خدمات و قیمت را وارد کنید.");
+                        return;
+                    }
+
+                    await servicesRef.push({
+                        name,
+                        price,
+                        desc,
+                        createdAt: Date.now()
+                    });
+
+                    document.getElementById("p-srv-name").value = "";
+                    document.getElementById("p-srv-price").value = "";
+                    document.getElementById("p-srv-desc").value = "";
+                    alert("خدمت جدید با موفقیت منتشر شد.");
+                } else {
+                    const title = document.getElementById("p-port-title").value.trim();
+                    const kind = document.getElementById("p-port-kind").value;
+                    const fileEl = document.getElementById("p-port-file");
+                    const linkVal = document.getElementById("p-port-link").value.trim();
+
+                    if (!title) {
+                        alert("لطفاً اسم نمونه کار را وارد کنید.");
+                        return;
+                    }
+
+                    let finalMedia = linkVal;
+                    let finalKind = kind;
+
+                    if (fileEl.files && fileEl.files[0]) {
+                        const f = fileEl.files[0];
+                        if (f.type.startsWith("video/")) {
+                            finalKind = "video";
+                            if (f.size > 6 * 1024 * 1024) {
+                                alert("حجم کلیپ آپلودی زیاد است؛ لطفاً لینک مستقیم فیلم را وارد کنید یا کلیپ کوتاه‌تری انتخاب نمایید.");
+                                return;
+                            }
+                            finalMedia = await fileToDataUrl(f);
+                        } else {
+                            finalKind = "image";
+                            finalMedia = await compressImageFile(f);
+                        }
+                    }
+
+                    if (!finalMedia) {
+                        alert("لطفاً عکس یا فیلم/کلیپ را آپلود کنید یا لینک آن را وارد نمایید.");
+                        return;
+                    }
+
+                    await portfolioRef.push({
+                        title,
+                        mediaType: finalKind,
+                        mediaUrl: finalMedia,
+                        createdAt: Date.now()
+                    });
+
+                    document.getElementById("p-port-title").value = "";
+                    fileEl.value = "";
+                    document.getElementById("p-port-link").value = "";
+                    alert("پست نمونه کار با موفقیت برای همه کاربران منتشر شد.");
                 }
-                await servicesRef.push({ name, price, desc, createdAt: Date.now() });
-                document.getElementById("post-srv-name").value = "";
-                document.getElementById("post-srv-price").value = "";
-                document.getElementById("post-srv-desc").value = "";
-                alert("خدمت در سایت منتشر شد.");
-            } else {
-                const title = document.getElementById("post-port-name").value.trim();
-                const fileEl = document.getElementById("post-port-file");
-                const urlVal = document.getElementById("post-port-url").value.trim();
-                if (!title) {
-                    alert("لطفاً اسم نمونه کار را وارد کنید.");
-                    return;
-                }
-                let imgData = urlVal;
-                if (fileEl.files && fileEl.files[0]) {
-                    imgData = await compressUploadedImage(fileEl.files[0]);
-                }
-                if (!imgData) {
-                    alert("لطفاً عکس نمونه کار را آپلود کنید یا لینک آن را وارد نمایید.");
-                    return;
-                }
-                await portfolioRef.push({ title, image: imgData, createdAt: Date.now() });
-                document.getElementById("post-port-name").value = "";
-                fileEl.value = "";
-                document.getElementById("post-port-url").value = "";
-                alert("نمونه کار در سایت منتشر شد.");
+            } catch (err) {
+                alert("خطا در انتشار پست: " + (err && err.message ? err.message : "دوباره تلاش کنید"));
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "انتشار پست";
             }
         }
 
-        function renderAdmPublished() {
-            const sDiv = document.getElementById("adm-srv-published");
-            const pDiv = document.getElementById("adm-port-published");
+        function renderAdminPublishedPosts() {
+            const srvBox = document.getElementById("adm-pub-services");
+            const portBox = document.getElementById("adm-pub-portfolio");
 
-            sDiv.innerHTML = servicesArr.length
-                ? servicesArr.map(s => `
+            srvBox.innerHTML = customServices.length
+                ? customServices.map(s => `
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:7px 0; border-bottom:1px solid #f7e4ee; font-size:12.5px;">
                         <span><strong>${esc(s.name)}</strong> — ${esc(s.price)}</span>
-                        <button type="button" class="btn-del-small" onclick="servicesRef.child('${s.id}').remove()">حذف</button>
+                        <button type="button" class="btn-del" onclick="servicesRef.child('${s.id}').remove()">حذف</button>
                     </div>
                 `).join("")
-                : `<p style="font-size:12px; color:var(--text-muted);">خدمتی ثبت نشده است.</p>`;
+                : `<p style="font-size:12px; color:var(--text-muted);">خدمت اضافی ثبت نشده است.</p>`;
 
-            pDiv.innerHTML = portfolioArr.length
-                ? portfolioArr.map(p => `
+            portBox.innerHTML = portfolioPosts.length
+                ? portfolioPosts.map(p => `
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:7px 0; border-bottom:1px solid #f7e4ee; font-size:12.5px;">
-                        <span style="display:flex; align-items:center; gap:8px;">
-                            <img src="${escAttr(p.image)}" alt="" style="width:34px; height:34px; border-radius:8px; object-fit:cover;">
-                            <strong>${esc(p.title)}</strong>
-                        </span>
-                        <button type="button" class="btn-del-small" onclick="portfolioRef.child('${p.id}').remove()">حذف</button>
+                        <span><strong>${esc(p.title)}</strong> (${p.mediaType === "video" ? "فیلم/کلیپ" : "عکس"})</span>
+                        <button type="button" class="btn-del" onclick="portfolioRef.child('${p.id}').remove()">حذف</button>
                     </div>
                 `).join("")
                 : `<p style="font-size:12px; color:var(--text-muted);">نمونه‌کاری ثبت نشده است.</p>`;
